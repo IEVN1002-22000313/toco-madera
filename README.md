@@ -419,4 +419,6 @@ El orden exacto puede ajustarse según dependencias y prioridades del equipo, ma
 
 **Política de documentación:** al terminar cada etapa numerada completa se actualiza **todo este README general**, con información verificable sobre funcionalidades terminadas, pruebas realizadas y pendientes. No se documentan como concluidos módulos aún no construidos.
 
+Actualizacion Ejemplo
+
 **Proyecto académico — Toco Madera, León, Guanajuato, México.**
