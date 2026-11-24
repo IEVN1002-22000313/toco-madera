@@ -228,7 +228,9 @@ La base usada en desarrollo se llama `toco_madera`. Para migrar a otro equipo, p
 ## Autor
 
 **Angel Torres**
-
+**Braulio Ríos**
+**Arturo Landeros**
+**Emiliano Barajas**
 ---
 
 *Nota de verificación: este README integra el estado descrito en el proyecto y las últimas etapas implementadas durante la conversación. No constituye una certificación de pruebas automatizadas ni de despliegue en producción.*
