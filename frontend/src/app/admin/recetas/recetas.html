@@ -4,610 +4,878 @@
      ETAPA 3.17.7
 ===================================================== -->
 
-<div class="min-h-screen bg-crema">
-  <!-- ================================================
-       1. ENCABEZADO
-  ================================================ -->
-
-  <header class="bg-nogal px-6 py-5 text-white">
-    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
+<div class="min-h-screen bg-crema text-nogal selection:bg-terracota/20 selection:text-nogal">
+  <!-- BOTÓN TOGGLE SIDEBAR EN MÓVIL (FLOWBITE DRAWER) -->
+  <div class="sticky top-0 z-40 flex items-center justify-between border-b border-[#E8D6BF] bg-nogal px-4 py-3 text-white lg:hidden">
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        data-drawer-target="toco-madera-sidebar"
+        data-drawer-toggle="toco-madera-sidebar"
+        aria-controls="toco-madera-sidebar"
+        class="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 p-2 text-[#F9E9D5] transition duration-200 hover:bg-terracota hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <span class="sr-only">Abrir menú de administración</span>
+        <svg class="h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <div>
-        <h1 class="font-brand text-xl font-bold">Toco Madera | Administración</h1>
+        <span class="font-brand text-base font-bold tracking-wide">Toco Madera</span>
+        <span class="ml-1.5 rounded-full bg-terracota/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+          Admin
+        </span>
+      </div>
+    </div>
 
-        <p class="mt-1 text-sm text-[#F9E9D5]">Recetas de fabricación</p>
+    <a
+      routerLink="/admin/inventario"
+      class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#F9E9D5] transition duration-200 hover:bg-white hover:text-nogal"
+    >
+      <span>Inventario</span>
+    </a>
+  </div>
+
+  <!-- ==================================================
+       BARRA LATERAL ADMINISTRATIVA
+  ================================================== -->
+  <aside
+    id="toco-madera-sidebar"
+    aria-label="Navegación de administración"
+    class="fixed top-0 left-0 z-40 flex h-screen w-72 -translate-x-full flex-col justify-between border-r border-[#3A2216] bg-gradient-to-b from-[#4B2E1F] via-nogal to-[#2B1910] text-white shadow-2xl transition-transform duration-300 ease-out lg:translate-x-0"
+  >
+    <!-- PARTE SUPERIOR: MARCA + MÓDULOS -->
+    <div class="flex-1 overflow-y-auto px-4 py-6">
+      <div class="mb-6 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-terracota to-[#8C4825] text-white shadow-md ring-1 ring-[#E8C8AB]/30">
+            <img
+              src="/logo-icono.png"
+              alt="Logo Toco Madera"
+              width="48"
+              height="48"
+              class="h-full w-full object-contain"
+            />
+          </div>
+          <div class="min-w-0">
+            <p class="font-brand truncate text-base font-bold tracking-tight text-white">
+              Toco Madera
+            </p>
+            <p class="text-[11px] font-medium uppercase tracking-[0.14em] text-[#E8C8AB]">
+              Panel Administrador
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div class="flex flex-wrap gap-3">
-        <a
-          routerLink="/admin/dashboard"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Dashboard
-        </a>
+      <div class="space-y-5">
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Principal
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/dashboard"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <a
-          routerLink="/admin/productos"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Productos
-        </a>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Ventas y Taller
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/pedidos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <span>Pedidos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/operaciones"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                <span>Operaciones / Taller</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/clientes"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Clientes</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <a
-          routerLink="/admin/inventario"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Inventario
-        </a>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Catálogo y Producción
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/productos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Productos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/recetas"
+                class="group flex items-center justify-between rounded-xl bg-gradient-to-r from-terracota to-[#8C4825] px-3.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-black/20 transition-all duration-200"
+              >
+                <span class="flex items-center gap-3">
+                  <svg class="h-4 w-4 text-[#F9E9D5] transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <span>Recetas</span>
+                </span>
+                <span class="h-2 w-2 rounded-full bg-[#F9E9D5]"></span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/inventario"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                </svg>
+                <span>Inventario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <button
-          type="button"
-          (click)="cerrarSesion()"
-          class="rounded-lg bg-terracota px-4 py-2 text-sm font-semibold hover:bg-[#8C4825]"
-        >
-          Cerrar sesión
-        </button>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Abastecimiento
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/materiales"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Materias primas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/proveedores"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                </svg>
+                <span>Proveedores</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/compras"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Compras</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </nav>
-  </header>
+    </div>
 
-  <!-- ================================================
-       2. ENCABEZADO DE CONTENIDO
-  ================================================ -->
-
-  <main class="mx-auto max-w-7xl px-6 py-10">
-    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <div>
-        <h2 class="font-brand text-3xl font-bold text-nogal">Recetas de fabricación</h2>
-
-        <p class="mt-2 text-gray-600">
-          Gestiona los materiales y tiempos necesarios para fabricar una unidad de cada producto.
-        </p>
-      </div>
+    <!-- PARTE INFERIOR DEL SIDEBAR -->
+    <div class="space-y-2 border-t border-white/10 bg-black/15 p-4">
+      <a
+        routerLink="/admin/dashboard"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-[#F9E9D5] transition-all duration-200 hover:bg-white hover:text-nogal focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <span>Dashboard</span>
+      </a>
 
       <button
         type="button"
-        (click)="nuevaReceta()"
-        [disabled]="cargandoCatalogos() || guardando()"
-        class="rounded-lg bg-terracota px-5 py-3 font-semibold text-white hover:bg-nogal disabled:opacity-50"
+        (click)="cerrarSesion()"
+        class="flex w-full items-center justify-center gap-2 rounded-xl bg-terracota px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/50"
       >
-        + Nueva receta
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span>Cerrar sesión</span>
       </button>
     </div>
+  </aside>
 
+  <!-- ==================================================
+       ÁREA PRINCIPAL DE CONTENIDO
+  ================================================== -->
+  <div class="transition-all duration-300 lg:pl-72">
     <!-- ================================================
-         3. MENSAJES
+         1. ENCABEZADO
     ================================================ -->
-
-    @if (mensaje()) {
-      <div
-        role="status"
-        class="mb-5 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800"
-      >
-        {{ mensaje() }}
-      </div>
-    }
-
-    @if (error()) {
-      <div role="alert" class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
-        {{ error() }}
-      </div>
-    }
-
-    <!-- ================================================
-         4. RESUMEN
-    ================================================ -->
-
-    <section class="mb-8 grid gap-4 md:grid-cols-3">
-      <div class="rounded-xl bg-white p-6 shadow-sm">
-        <p class="text-sm text-gray-600">Recetas registradas</p>
-        <p class="mt-3 text-3xl font-bold text-nogal">
-          {{ recetas().length }}
-        </p>
-      </div>
-
-      <div class="rounded-xl bg-white p-6 shadow-sm">
-        <p class="text-sm text-gray-600">Versiones vigentes</p>
-        <p class="mt-3 text-3xl font-bold text-salvia">
-          {{ vigentes() }}
-        </p>
-      </div>
-
-      <div class="rounded-xl bg-white p-6 shadow-sm">
-        <p class="text-sm text-gray-600">Productos del catálogo</p>
-        <p class="mt-3 text-3xl font-bold text-nogal">
-          {{ productos().length }}
-        </p>
-      </div>
-    </section>
-
-    <!-- ================================================
-         5. FILTROS
-    ================================================ -->
-
-    <section class="mb-6 grid gap-4 rounded-xl bg-white p-5 shadow-sm md:grid-cols-2">
-      <div>
-        <label for="productoFiltro" class="mb-2 block text-sm font-medium text-nogal">
-          Filtrar por producto
-        </label>
-
-        <select
-          id="productoFiltro"
-          [ngModel]="filtroProducto()"
-          (ngModelChange)="filtroProducto.set($event)"
-          class="w-full rounded-lg border border-gray-300 p-3"
-        >
-          <option [ngValue]="0">Todos los productos</option>
-
-          @for (producto of productos(); track producto.id_producto) {
-            <option [ngValue]="producto.id_producto">
-              {{ producto.nombre }}
-            </option>
-          }
-        </select>
-      </div>
-
-      <div>
-        <label for="vigenciaFiltro" class="mb-2 block text-sm font-medium text-nogal">
-          Vigencia
-        </label>
-
-        <select
-          id="vigenciaFiltro"
-          [ngModel]="filtroVigencia()"
-          (ngModelChange)="filtroVigencia.set($event)"
-          class="w-full rounded-lg border border-gray-300 p-3"
-        >
-          <option value="TODAS">Todas las versiones</option>
-          <option value="VIGENTES">Solo vigentes</option>
-          <option value="HISTORICAS">Solo históricas</option>
-        </select>
-      </div>
-    </section>
-
-    <!-- ================================================
-         6. LISTADO DE RECETAS
-    ================================================ -->
-
-    <section class="rounded-xl bg-white shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 p-5">
-        <h3 class="text-lg font-bold text-nogal">Recetas registradas</h3>
-
-        <p class="text-sm text-gray-600">
-          Mostrando {{ recetasFiltradas().length }} de {{ recetas().length }}
-        </p>
-      </div>
-
-      @if (cargando()) {
-        <div class="p-10 text-center text-gray-600">Consultando recetas...</div>
-      } @else if (recetasFiltradas().length === 0) {
-        <div class="p-10 text-center text-gray-600">
-          No existen recetas para el filtro seleccionado.
+    <header class="sticky top-0 z-30 border-b border-[#E8D6BF]/80 bg-crema/90 backdrop-blur-md">
+      <nav class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+            Toco Madera | Administración
+          </p>
+          <h1 class="font-brand text-xl font-bold text-nogal sm:text-2xl">
+            Recetas de fabricación
+          </h1>
         </div>
-      } @else {
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-[#F9E9D5] text-nogal">
-              <tr>
-                <th class="px-5 py-4">Producto</th>
-                <th class="px-5 py-4">Versión</th>
-                <th class="px-5 py-4">Materiales</th>
-                <th class="px-5 py-4">Tiempo</th>
-                <th class="px-5 py-4">Costo proceso</th>
-                <th class="px-5 py-4">Acciones</th>
-              </tr>
-            </thead>
 
-            <tbody>
-              @for (receta of recetasFiltradas(); track receta.id_receta) {
-                <tr class="border-t border-gray-100 align-top hover:bg-[#FFF9F2]">
-                  <td class="px-5 py-4">
-                    <p class="font-semibold text-nogal">
-                      {{ receta.nombre_producto }}
-                    </p>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a
+            routerLink="/admin/dashboard"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Dashboard
+          </a>
 
-                    <p class="mt-1 text-xs text-gray-500">
-                      {{ receta.sku_producto }}
-                    </p>
+          <a
+            routerLink="/admin/productos"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Productos
+          </a>
 
-                    @if (receta.observaciones) {
-                      <p class="mt-2 max-w-xs text-xs text-gray-600">
-                        {{ receta.observaciones }}
-                      </p>
-                    }
-                  </td>
-
-                  <td class="px-5 py-4">
-                    <p class="font-bold text-nogal">v{{ receta.version }}</p>
-
-                    @if (receta.vigente) {
-                      <span
-                        class="mt-2 inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
-                      >
-                        Vigente
-                      </span>
-                    } @else {
-                      <span
-                        class="mt-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600"
-                      >
-                        Histórica
-                      </span>
-                    }
-                  </td>
-
-                  <td class="px-5 py-4">
-                    <details class="max-w-xs">
-                      <summary class="cursor-pointer font-semibold text-terracota">
-                        Ver {{ receta.materiales.length }}
-                        materiales
-                      </summary>
-
-                      <div class="mt-3 space-y-2">
-                        @for (item of receta.materiales; track item.id_material) {
-                          <p class="rounded-lg bg-gray-50 p-3 text-xs text-gray-700">
-                            <strong>{{ item.nombre_material }}</strong>
-                            <span class="block mt-1"> Cantidad: {{ item.cantidad }} </span>
-                          </p>
-                        }
-                      </div>
-                    </details>
-                  </td>
-
-                  <td class="px-5 py-4 text-gray-700">
-                    <p>
-                      Fabricación:
-                      {{ receta.minutos_fabricacion }} min
-                    </p>
-
-                    <p class="mt-1">
-                      Grabado:
-                      {{ receta.minutos_grabado }} min
-                    </p>
-                  </td>
-
-                  <td class="px-5 py-4">
-                    <p class="font-bold text-nogal">${{ costoProceso(receta).toFixed(2) }}</p>
-
-                    <p class="mt-1 text-xs text-gray-500">Mano de obra + indirectos</p>
-                  </td>
-
-                  <td class="px-5 py-4">
-                    <div class="flex flex-col gap-2">
-                      <button
-                        type="button"
-                        (click)="copiarReceta(receta)"
-                        [disabled]="guardando()"
-                        class="rounded-lg border border-terracota px-3 py-2 text-xs font-semibold text-terracota hover:bg-crema"
-                      >
-                        Nueva versión
-                      </button>
-
-                      @if (!receta.vigente) {
-                        <button
-                          type="button"
-                          (click)="solicitarActivacion(receta)"
-                          [disabled]="guardando()"
-                          class="rounded-lg bg-salvia px-3 py-2 text-xs font-semibold text-white"
-                        >
-                          Activar versión
-                        </button>
-                      }
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    </section>
-
-    <!-- ================================================
-         7. FORMULARIO DE RECETA
-    ================================================ -->
-
-    @if (mostrarFormulario()) {
-      <section
-        id="formulario-receta"
-        class="mt-8 scroll-mt-6 rounded-xl border border-[#E8D6BF] bg-white p-6 shadow-sm"
-      >
-        <div class="mb-6 flex flex-wrap justify-between gap-3">
-          <h3 class="text-xl font-bold text-nogal">Crear nueva versión de receta</h3>
+          <a
+            routerLink="/admin/inventario"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Inventario
+          </a>
 
           <button
             type="button"
-            (click)="cerrarFormulario()"
-            [disabled]="guardando()"
-            class="text-sm font-semibold text-gray-600"
+            (click)="cerrarSesion()"
+            class="rounded-xl bg-terracota px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] sm:text-sm"
           >
-            Cerrar
+            Cerrar sesión
           </button>
         </div>
+      </nav>
+    </header>
 
-        <form (ngSubmit)="guardarReceta()">
-          <div class="grid gap-5 md:grid-cols-2">
-            <!-- PRODUCTO -->
-            <div class="md:col-span-2">
-              <label for="productoReceta" class="mb-2 block font-medium text-nogal">
-                Producto *
-              </label>
+    <!-- ================================================
+         2. ENCABEZADO DE CONTENIDO
+    ================================================ -->
+    <main class="mx-auto max-w-7xl space-y-6 px-6 py-8">
+      <div class="flex flex-col justify-between gap-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm sm:flex-row sm:items-center">
+        <div>
+          <h2 class="font-brand text-2xl font-bold text-nogal sm:text-3xl">
+            Recetas de fabricación
+          </h2>
 
-              <select
-                id="productoReceta"
-                name="producto"
-                [(ngModel)]="formulario.id_producto"
-                required
-                class="w-full rounded-lg border border-gray-300 p-3"
-              >
-                <option [ngValue]="0">Selecciona un producto</option>
+          <p class="mt-1.5 text-sm text-gray-600">
+            Gestiona los materiales y tiempos necesarios para fabricar una unidad de cada producto.
+          </p>
+        </div>
 
-                @for (producto of productosActivos(); track producto.id_producto) {
-                  <option [ngValue]="producto.id_producto">
-                    {{ producto.nombre }}
-                  </option>
-                }
-              </select>
-            </div>
+        <button
+          type="button"
+          (click)="nuevaReceta()"
+          [disabled]="cargandoCatalogos() || guardando()"
+          class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-terracota px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span aria-hidden="true" class="text-base leading-none">+</span>
+          <span>Nueva receta</span>
+        </button>
+      </div>
 
-            <!-- MINUTOS FABRICACIÓN -->
-            <div>
-              <label for="minutosFabricacion" class="mb-2 block font-medium text-nogal">
-                Minutos de fabricación
-              </label>
+      <!-- ================================================
+           3. MENSAJES
+      ================================================ -->
+      @if (mensaje()) {
+        <div
+          role="status"
+          class="flex items-start gap-3 rounded-2xl border border-salvia/40 bg-green-50 p-4 text-sm font-medium text-green-900 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-salvia" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ mensaje() }}</span>
+        </div>
+      }
 
-              <input
-                id="minutosFabricacion"
-                name="minutosFabricacion"
-                type="number"
-                min="0"
-                max="65535"
-                step="1"
-                [(ngModel)]="formulario.minutos_fabricacion"
-                required
-                class="w-full rounded-lg border border-gray-300 p-3"
-              />
-            </div>
+      @if (error()) {
+        <div
+          role="alert"
+          class="flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-800 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>{{ error() }}</span>
+        </div>
+      }
 
-            <!-- MINUTOS GRABADO -->
-            <div>
-              <label for="minutosGrabado" class="mb-2 block font-medium text-nogal">
-                Minutos de grabado
-              </label>
+      <!-- ================================================
+           4. RESUMEN
+      ================================================ -->
+      <section class="grid gap-4 md:grid-cols-3" aria-label="Resumen de recetas">
+        <div class="rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+            Recetas registradas
+          </p>
+          <p class="mt-2 font-brand text-3xl font-bold text-nogal">
+            {{ recetas().length }}
+          </p>
+        </div>
 
-              <input
-                id="minutosGrabado"
-                name="minutosGrabado"
-                type="number"
-                min="0"
-                max="65535"
-                step="1"
-                [(ngModel)]="formulario.minutos_grabado"
-                required
-                class="w-full rounded-lg border border-gray-300 p-3"
-              />
-            </div>
+        <div class="rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+            Versiones vigentes
+          </p>
+          <p class="mt-2 font-brand text-3xl font-bold text-salvia">
+            {{ vigentes() }}
+          </p>
+        </div>
 
-            <!-- COSTO MANO DE OBRA -->
-            <div>
-              <label for="costoHora" class="mb-2 block font-medium text-nogal">
-                Costo por hora de mano de obra
-              </label>
+        <div class="rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+            Productos del catálogo
+          </p>
+          <p class="mt-2 font-brand text-3xl font-bold text-nogal">
+            {{ productos().length }}
+          </p>
+        </div>
+      </section>
 
-              <input
-                id="costoHora"
-                name="costoHora"
-                type="text"
-                inputmode="decimal"
-                [(ngModel)]="formulario.costo_hora_mano_obra"
-                required
-                placeholder="75.00"
-                class="w-full rounded-lg border border-gray-300 p-3"
-              />
-            </div>
+      <!-- ================================================
+           5. FILTROS
+      ================================================ -->
+      <section
+        aria-label="Filtros de recetas"
+        class="grid gap-4 rounded-2xl border border-[#E8D6BF] bg-white p-5 shadow-sm md:grid-cols-2"
+      >
+        <div>
+          <label for="productoFiltro" class="mb-2 block text-sm font-semibold text-nogal">
+            Filtrar por producto
+          </label>
 
-            <!-- COSTO INDIRECTO -->
-            <div>
-              <label for="costoIndirecto" class="mb-2 block font-medium text-nogal">
-                Costo indirecto por unidad
-              </label>
+          <select
+            id="productoFiltro"
+            [ngModel]="filtroProducto()"
+            (ngModelChange)="filtroProducto.set($event)"
+            class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+          >
+            <option [ngValue]="0">Todos los productos</option>
 
-              <input
-                id="costoIndirecto"
-                name="costoIndirecto"
-                type="text"
-                inputmode="decimal"
-                [(ngModel)]="formulario.costo_indirecto_unitario"
-                required
-                placeholder="10.00"
-                class="w-full rounded-lg border border-gray-300 p-3"
-              />
-            </div>
-
-            <!-- OBSERVACIONES -->
-            <div class="md:col-span-2">
-              <label for="observacionesReceta" class="mb-2 block font-medium text-nogal">
-                Observaciones
-              </label>
-
-              <textarea
-                id="observacionesReceta"
-                name="observaciones"
-                rows="3"
-                maxlength="300"
-                [(ngModel)]="formulario.observaciones"
-                class="w-full rounded-lg border border-gray-300 p-3"
-              ></textarea>
-            </div>
-          </div>
-
-          <!-- ===========================================
-               MATERIALES DE LA RECETA
-          ============================================ -->
-
-          <div class="mt-8">
-            <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <h4 class="text-lg font-bold text-nogal">Materias primas por unidad</h4>
-
-              <button
-                type="button"
-                (click)="agregarMaterial()"
-                [disabled]="formulario.materiales.length >= 100"
-                class="rounded-lg border border-terracota px-4 py-2 text-sm font-semibold text-terracota hover:bg-crema"
-              >
-                + Agregar material
-              </button>
-            </div>
-
-            @for (ingrediente of formulario.materiales; track ingrediente; let i = $index) {
-              <div
-                class="mb-4 grid gap-4 rounded-lg border border-gray-200 bg-[#FFF9F2] p-4 md:grid-cols-3"
-              >
-                <!-- SELECCIONAR MATERIAL -->
-                <div>
-                  <label
-                    [for]="'ingrediente-' + i"
-                    class="mb-2 block text-sm font-medium text-nogal"
-                  >
-                    Materia prima
-                  </label>
-
-                  <select
-                    [id]="'ingrediente-' + i"
-                    [name]="'ingrediente-' + i"
-                    [(ngModel)]="ingrediente.id_material"
-                    required
-                    class="w-full rounded-lg border border-gray-300 p-3"
-                  >
-                    <option [ngValue]="0">Selecciona material</option>
-
-                    @for (material of materialesActivos(); track material.id_material) {
-                      <option [ngValue]="material.id_material">
-                        {{ material.nombre }}
-                      </option>
-                    }
-                  </select>
-                </div>
-
-                <!-- CANTIDAD -->
-                <div>
-                  <label
-                    [for]="'cantidadIngrediente-' + i"
-                    class="mb-2 block text-sm font-medium text-nogal"
-                  >
-                    Cantidad por unidad *
-                  </label>
-
-                  <input
-                    [id]="'cantidadIngrediente-' + i"
-                    [name]="'cantidadIngrediente-' + i"
-                    type="text"
-                    inputmode="decimal"
-                    [(ngModel)]="ingrediente.cantidad"
-                    required
-                    placeholder="1.0000"
-                    class="w-full rounded-lg border border-gray-300 p-3"
-                  />
-                </div>
-
-                <!-- QUITAR -->
-                <div class="flex items-end">
-                  <button
-                    type="button"
-                    (click)="quitarMaterial(i)"
-                    [disabled]="formulario.materiales.length <= 1"
-                    class="w-full rounded-lg border border-red-300 px-3 py-3 font-semibold text-red-700 disabled:opacity-40"
-                  >
-                    Quitar
-                  </button>
-                </div>
-              </div>
+            @for (producto of productos(); track producto.id_producto) {
+              <option [ngValue]="producto.id_producto">
+                {{ producto.nombre }}
+              </option>
             }
+          </select>
+        </div>
+
+        <div>
+          <label for="vigenciaFiltro" class="mb-2 block text-sm font-semibold text-nogal">
+            Vigencia
+          </label>
+
+          <select
+            id="vigenciaFiltro"
+            [ngModel]="filtroVigencia()"
+            (ngModelChange)="filtroVigencia.set($event)"
+            class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+          >
+            <option value="TODAS">Todas las versiones</option>
+            <option value="VIGENTES">Solo vigentes</option>
+            <option value="HISTORICAS">Solo históricas</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- ================================================
+           6. LISTADO DE RECETAS
+      ================================================ -->
+      <section class="overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] bg-[#FFF9F2]/60 px-6 py-4">
+          <h3 class="text-lg font-bold text-nogal">Recetas registradas</h3>
+
+          <span class="rounded-full border border-[#E8D6BF] bg-white px-3 py-1 text-xs font-semibold text-nogal">
+            Mostrando {{ recetasFiltradas().length }} de {{ recetas().length }}
+          </span>
+        </div>
+
+        @if (cargando()) {
+          <div class="flex items-center justify-center gap-3 p-10 text-sm font-medium text-gray-600">
+            <svg class="h-5 w-5 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Consultando recetas...</span>
           </div>
-
-          <!-- NOTA DE INVENTARIO -->
-          <div class="mt-6 rounded-lg border border-[#E8D6BF] bg-[#FFF9F2] p-4">
-            <p class="text-sm font-semibold text-nogal">Recetas e inventario</p>
-
-            <p class="mt-2 text-sm text-gray-600">
-              Guardar esta receta no modificará las existencias. Los consumos se registrarán cuando
-              la orden de producción utilice los materiales.
-            </p>
+        } @else if (recetasFiltradas().length === 0) {
+          <div class="p-10 text-center text-sm text-gray-600">
+            No existen recetas para el filtro seleccionado.
           </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="border-b border-[#E8D6BF] bg-[#F9E9D5] text-xs uppercase tracking-wider text-nogal">
+                <tr>
+                  <th class="px-5 py-4 font-bold">Producto</th>
+                  <th class="px-5 py-4 font-bold">Versión</th>
+                  <th class="px-5 py-4 font-bold">Materiales</th>
+                  <th class="px-5 py-4 font-bold">Tiempo</th>
+                  <th class="px-5 py-4 font-bold">Costo proceso</th>
+                  <th class="px-5 py-4 font-bold">Acciones</th>
+                </tr>
+              </thead>
 
-          <!-- ACCIONES -->
-          <div class="mt-6 flex flex-wrap justify-end gap-3 border-t border-gray-200 pt-6">
+              <tbody class="divide-y divide-[#F3E6D6]">
+                @for (receta of recetasFiltradas(); track receta.id_receta) {
+                  <tr class="align-top transition-colors duration-200 hover:bg-[#FFF9F2]">
+                    <td class="px-5 py-4">
+                      <p class="font-bold text-nogal">
+                        {{ receta.nombre_producto }}
+                      </p>
+
+                      <p class="mt-1 inline-block rounded-md bg-crema px-2 py-0.5 font-mono text-xs text-nogal/80">
+                        {{ receta.sku_producto }}
+                      </p>
+
+                      @if (receta.observaciones) {
+                        <p class="mt-2 max-w-xs text-xs text-gray-600">
+                          {{ receta.observaciones }}
+                        </p>
+                      }
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <p class="font-mono text-sm font-bold text-nogal">v{{ receta.version }}</p>
+
+                      @if (receta.vigente) {
+                        <span
+                          class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                          <span>Vigente</span>
+                        </span>
+                      } @else {
+                        <span
+                          class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-gray-500"></span>
+                          <span>Histórica</span>
+                        </span>
+                      }
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <details class="group max-w-xs">
+                        <summary class="cursor-pointer font-semibold text-terracota transition-colors hover:text-nogal">
+                          Ver {{ receta.materiales.length }} materiales
+                        </summary>
+
+                        <div class="mt-3 space-y-2">
+                          @for (item of receta.materiales; track item.id_material) {
+                            <div class="rounded-xl border border-[#E8D6BF]/80 bg-[#FFF9F2] p-3 text-xs text-gray-700">
+                              <strong class="font-bold text-nogal">{{ item.nombre_material }}</strong>
+                              <span class="mt-1 block font-mono text-gray-600">
+                                Cantidad: {{ item.cantidad }}
+                              </span>
+                            </div>
+                          }
+                        </div>
+                      </details>
+                    </td>
+
+                    <td class="px-5 py-4 text-xs text-gray-700 sm:text-sm">
+                      <p>
+                        Fabricación: <strong class="font-semibold text-nogal">{{ receta.minutos_fabricacion }} min</strong>
+                      </p>
+
+                      <p class="mt-1">
+                        Grabado: <strong class="font-semibold text-nogal">{{ receta.minutos_grabado }} min</strong>
+                      </p>
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <p class="text-base font-bold text-nogal">${{ costoProceso(receta).toFixed(2) }}</p>
+
+                      <p class="mt-1 text-xs text-gray-500">Mano de obra + indirectos</p>
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <div class="flex flex-col gap-2">
+                        <button
+                          type="button"
+                          (click)="copiarReceta(receta)"
+                          [disabled]="guardando()"
+                          class="rounded-xl border border-terracota bg-white px-3.5 py-2 text-xs font-semibold text-terracota shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-crema focus:outline-none focus:ring-2 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          Nueva versión
+                        </button>
+
+                        @if (!receta.vigente) {
+                          <button
+                            type="button"
+                            (click)="solicitarActivacion(receta)"
+                            [disabled]="guardando()"
+                            class="rounded-xl bg-salvia px-3.5 py-2 text-xs font-semibold text-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5d6b52] focus:outline-none focus:ring-2 focus:ring-salvia/40 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            Activar versión
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+
+      <!-- ================================================
+           7. FORMULARIO DE RECETA
+      ================================================ -->
+      @if (mostrarFormulario()) {
+        <section
+          id="formulario-receta"
+          class="scroll-mt-24 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-md transition-all duration-300"
+        >
+          <div class="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] pb-4">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+                Ingeniería de taller
+              </p>
+              <h3 class="mt-0.5 text-xl font-bold text-nogal">
+                Crear nueva versión de receta
+              </h3>
+            </div>
+
             <button
               type="button"
               (click)="cerrarFormulario()"
               [disabled]="guardando()"
-              class="rounded-lg border border-gray-300 px-5 py-3 font-semibold text-gray-700"
+              class="rounded-xl border border-[#E8D6BF] bg-crema/60 px-3.5 py-2 text-xs font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50 sm:text-sm"
             >
-              Cancelar
-            </button>
-
-            <button
-              type="submit"
-              [disabled]="guardando() || cargandoCatalogos()"
-              class="rounded-lg bg-terracota px-6 py-3 font-semibold text-white hover:bg-nogal disabled:opacity-50"
-            >
-              {{ guardando() ? 'Guardando...' : 'Guardar nueva versión' }}
+              Cerrar
             </button>
           </div>
-        </form>
-      </section>
-    }
 
-    <!-- ================================================
-         8. CONFIRMACIÓN DE ACTIVACIÓN
-    ================================================ -->
+          <form (ngSubmit)="guardarReceta()">
+            <div class="grid gap-5 md:grid-cols-2">
+              <!-- PRODUCTO -->
+              <div class="md:col-span-2">
+                <label for="productoReceta" class="mb-2 block text-sm font-semibold text-nogal">
+                  Producto *
+                </label>
 
-    @if (recetaPendiente(); as receta) {
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <section
-          role="alertdialog"
-          aria-modal="true"
-          aria-labelledby="tituloActivarReceta"
-          class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
-        >
-          <h3 id="tituloActivarReceta" class="text-xl font-bold text-nogal">
-            Activar versión de receta
-          </h3>
+                <select
+                  id="productoReceta"
+                  name="producto"
+                  [(ngModel)]="formulario.id_producto"
+                  required
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                >
+                  <option [ngValue]="0">Selecciona un producto</option>
 
-          <p class="mt-4 text-gray-700">
-            ¿Deseas activar la versión
+                  @for (producto of productosActivos(); track producto.id_producto) {
+                    <option [ngValue]="producto.id_producto">
+                      {{ producto.nombre }}
+                    </option>
+                  }
+                </select>
+              </div>
 
-            <strong>v{{ receta.version }}</strong>
+              <!-- MINUTOS FABRICACIÓN -->
+              <div>
+                <label for="minutosFabricacion" class="mb-2 block text-sm font-semibold text-nogal">
+                  Minutos de fabricación
+                </label>
 
-            de
+                <input
+                  id="minutosFabricacion"
+                  name="minutosFabricacion"
+                  type="number"
+                  min="0"
+                  max="65535"
+                  step="1"
+                  [(ngModel)]="formulario.minutos_fabricacion"
+                  required
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                />
+              </div>
 
-            <strong>{{ receta.nombre_producto }}</strong>?
-          </p>
+              <!-- MINUTOS GRABADO -->
+              <div>
+                <label for="minutosGrabado" class="mb-2 block text-sm font-semibold text-nogal">
+                  Minutos de grabado
+                </label>
 
-          <p class="mt-3 text-sm text-gray-600">
-            La versión actualmente vigente pasará al historial. No se eliminarán materiales ni se
-            modificarán existencias.
-          </p>
+                <input
+                  id="minutosGrabado"
+                  name="minutosGrabado"
+                  type="number"
+                  min="0"
+                  max="65535"
+                  step="1"
+                  [(ngModel)]="formulario.minutos_grabado"
+                  required
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                />
+              </div>
 
-          <div class="mt-6 flex justify-end gap-3">
-            <button
-              type="button"
-              (click)="cancelarActivacion()"
-              [disabled]="guardando()"
-              class="rounded-lg border border-gray-300 px-4 py-2 font-semibold"
-            >
-              Cancelar
-            </button>
+              <!-- COSTO MANO DE OBRA -->
+              <div>
+                <label for="costoHora" class="mb-2 block text-sm font-semibold text-nogal">
+                  Costo por hora de mano de obra
+                </label>
 
-            <button
-              type="button"
-              (click)="confirmarActivacion()"
-              [disabled]="guardando()"
-              class="rounded-lg bg-salvia px-4 py-2 font-semibold text-white disabled:opacity-50"
-            >
-              {{ guardando() ? 'Activando...' : 'Confirmar activación' }}
-            </button>
-          </div>
+                <input
+                  id="costoHora"
+                  name="costoHora"
+                  type="text"
+                  inputmode="decimal"
+                  [(ngModel)]="formulario.costo_hora_mano_obra"
+                  required
+                  placeholder="75.00"
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                />
+              </div>
+
+              <!-- COSTO INDIRECTO -->
+              <div>
+                <label for="costoIndirecto" class="mb-2 block text-sm font-semibold text-nogal">
+                  Costo indirecto por unidad
+                </label>
+
+                <input
+                  id="costoIndirecto"
+                  name="costoIndirecto"
+                  type="text"
+                  inputmode="decimal"
+                  [(ngModel)]="formulario.costo_indirecto_unitario"
+                  required
+                  placeholder="10.00"
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                />
+              </div>
+
+              <!-- OBSERVACIONES -->
+              <div class="md:col-span-2">
+                <label for="observacionesReceta" class="mb-2 block text-sm font-semibold text-nogal">
+                  Observaciones
+                </label>
+
+                <textarea
+                  id="observacionesReceta"
+                  name="observaciones"
+                  rows="3"
+                  maxlength="300"
+                  [(ngModel)]="formulario.observaciones"
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- ===========================================
+                 MATERIALES DE LA RECETA
+            ============================================ -->
+            <div class="mt-8 border-t border-[#F3E6D6] pt-6">
+              <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <h4 class="text-lg font-bold text-nogal">Materias primas por unidad</h4>
+
+                <button
+                  type="button"
+                  (click)="agregarMaterial()"
+                  [disabled]="formulario.materiales.length >= 100"
+                  class="inline-flex items-center gap-1.5 rounded-xl border border-terracota bg-white px-4 py-2 text-sm font-semibold text-terracota shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-crema focus:outline-none focus:ring-2 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <span aria-hidden="true">+</span>
+                  <span>Agregar material</span>
+                </button>
+              </div>
+
+              @for (ingrediente of formulario.materiales; track ingrediente; let i = $index) {
+                <div
+                  class="mb-4 grid gap-4 rounded-2xl border border-[#E8D6BF] bg-[#FFF9F2] p-4 md:grid-cols-3"
+                >
+                  <!-- SELECCIONAR MATERIAL -->
+                  <div>
+                    <label
+                      [for]="'ingrediente-' + i"
+                      class="mb-2 block text-sm font-semibold text-nogal"
+                    >
+                      Materia prima
+                    </label>
+
+                    <select
+                      [id]="'ingrediente-' + i"
+                      [name]="'ingrediente-' + i"
+                      [(ngModel)]="ingrediente.id_material"
+                      required
+                      class="block w-full rounded-xl border border-[#E8D6BF] bg-white p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:ring-4 focus:ring-[#E8C8AB]/60"
+                    >
+                      <option [ngValue]="0">Selecciona material</option>
+
+                      @for (material of materialesActivos(); track material.id_material) {
+                        <option [ngValue]="material.id_material">
+                          {{ material.nombre }}
+                        </option>
+                      }
+                    </select>
+                  </div>
+
+                  <!-- CANTIDAD -->
+                  <div>
+                    <label
+                      [for]="'cantidadIngrediente-' + i"
+                      class="mb-2 block text-sm font-semibold text-nogal"
+                    >
+                      Cantidad por unidad *
+                    </label>
+
+                    <input
+                      [id]="'cantidadIngrediente-' + i"
+                      [name]="'cantidadIngrediente-' + i"
+                      type="text"
+                      inputmode="decimal"
+                      [(ngModel)]="ingrediente.cantidad"
+                      required
+                      placeholder="1.0000"
+                      class="block w-full rounded-xl border border-[#E8D6BF] bg-white p-3 font-mono text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:ring-4 focus:ring-[#E8C8AB]/60"
+                    />
+                  </div>
+
+                  <!-- QUITAR -->
+                  <div class="flex items-end">
+                    <button
+                      type="button"
+                      (click)="quitarMaterial(i)"
+                      [disabled]="formulario.materiales.length <= 1"
+                      class="w-full rounded-xl border border-red-300 bg-white px-3.5 py-3 text-sm font-semibold text-red-700 transition-all duration-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- NOTA DE INVENTARIO -->
+            <div class="mt-6 rounded-xl border border-[#E8D6BF] bg-[#FFF9F2] p-4">
+              <p class="text-sm font-bold text-nogal">Recetas e inventario</p>
+
+              <p class="mt-1.5 text-sm text-gray-600">
+                Guardar esta receta no modificará las existencias. Los consumos se registrarán cuando
+                la orden de producción utilice los materiales.
+              </p>
+            </div>
+
+            <!-- ACCIONES -->
+            <div class="mt-6 flex flex-wrap justify-end gap-3 border-t border-[#F3E6D6] pt-5">
+              <button
+                type="button"
+                (click)="cerrarFormulario()"
+                [disabled]="guardando()"
+                class="rounded-xl border border-[#E8D6BF] bg-white px-5 py-3 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="submit"
+                [disabled]="guardando() || cargandoCatalogos()"
+                class="rounded-xl bg-terracota px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {{ guardando() ? 'Guardando...' : 'Guardar nueva versión' }}
+              </button>
+            </div>
+          </form>
         </section>
-      </div>
-    }
-  </main>
+      }
+
+      <!-- ================================================
+           8. CONFIRMACIÓN DE ACTIVACIÓN
+      ================================================ -->
+      @if (recetaPendiente(); as receta) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-nogal/60 p-4 backdrop-blur-xs transition-opacity duration-200">
+          <section
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="tituloActivarReceta"
+            class="w-full max-w-md rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-2xl transition-all duration-200"
+          >
+            <h3 id="tituloActivarReceta" class="font-brand text-xl font-bold text-nogal">
+              Activar versión de receta
+            </h3>
+
+            <p class="mt-3 text-sm text-gray-700">
+              ¿Deseas activar la versión
+
+              <strong class="font-mono text-nogal">v{{ receta.version }}</strong>
+
+              de
+
+              <strong class="text-nogal">{{ receta.nombre_producto }}</strong>?
+            </p>
+
+            <p class="mt-3 rounded-xl border border-[#E8D6BF] bg-[#FFF9F2] p-3 text-xs text-gray-600">
+              La versión actualmente vigente pasará al historial. No se eliminarán materiales ni se
+              modificarán existencias.
+            </p>
+
+            <div class="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                (click)="cancelarActivacion()"
+                [disabled]="guardando()"
+                class="rounded-xl border border-[#E8D6BF] bg-white px-4 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                (click)="confirmarActivacion()"
+                [disabled]="guardando()"
+                class="rounded-xl bg-salvia px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#5d6b52] disabled:opacity-50"
+              >
+                {{ guardando() ? 'Activando...' : 'Confirmar activación' }}
+              </button>
+            </div>
+          </section>
+        </div>
+      }
+    </main>
+  </div>
 </div>

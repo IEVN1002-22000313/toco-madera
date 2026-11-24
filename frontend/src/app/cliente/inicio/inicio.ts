@@ -54,6 +54,8 @@ import { CarritoService } from '../../core/services/carrito';
 
 import { imagenProducto } from '../../core/utils/imagenes-productos';
 
+import { initFlowbite } from 'flowbite';
+
 @Component({
   selector: 'app-inicio',
   standalone: true,
@@ -106,6 +108,7 @@ export class Inicio implements OnInit {
   // ==========================================================
 
   ngOnInit(): void {
+    setTimeout(() => initFlowbite(), 0);
     // Consultar los productos al abrir la tienda.
     this.cargarProductos();
   }
@@ -131,6 +134,7 @@ export class Inicio implements OnInit {
 
         // Finalizar estado de carga.
         this.cargandoProductos.set(false);
+        setTimeout(() => initFlowbite(), 0);
       },
 
       // ------------------------------------------------------

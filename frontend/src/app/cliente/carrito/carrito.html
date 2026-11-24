@@ -1,77 +1,282 @@
-<!-- Toco Madera 3.20.6 | Catálogo, configuración y carrito responsive con imágenes locales -->
-<div class="min-h-screen bg-[#F9E9D5] text-[#4B2E1F]">
-  <header class="bg-[#4B2E1F] px-5 py-5 text-white">
-    <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
-      <div>
-        <h1 class="text-xl font-bold">Toco Madera</h1>
-        <p class="text-sm text-[#F9E9D5]">Catálogo y carrito de compras</p>
-      </div>
-      <div class="flex flex-wrap gap-3 text-sm">
-        <a routerLink="/" class="rounded-lg border border-white/40 px-4 py-2">Inicio</a>
-        <a routerLink="/cliente/mis-pedidos" class="rounded-lg border border-white/40 px-4 py-2">Mis pedidos</a>
-        <a routerLink="/cliente/checkout" class="rounded-lg bg-[#A65A2E] px-4 py-2 font-semibold">
-          Checkout ({{ carrito.cantidadTotal() }})
-        </a>
+<!-- =====================================================
+     TOCO MADERA - CATÁLOGO, CONFIGURACIÓN Y CARRITO
+     Archivo: carrito.html
+     Diseño UX/UI: Tailwind CSS 4 + Flowbite 4 (Lógica intacta)
+===================================================== -->
+
+<div class="flex min-h-screen flex-col bg-crema text-nogal selection:bg-salvia selection:text-white">
+  <!-- ================================================
+       1. BARRA SUPERIOR DE NAVEGACIÓN (FLOWBITE)
+  ================================================ -->
+  <header class="sticky top-0 z-40 border-b border-nogal/10 bg-white/85 backdrop-blur-lg transition-all duration-300">
+    <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8" aria-label="Navegación de catálogo y carrito">
+      <a
+        routerLink="/"
+        class="group inline-flex items-center gap-3 font-brand text-xl font-bold tracking-tight text-nogal transition-transform duration-200 hover:scale-[1.01] sm:text-2xl"
+      >
+        <span class="flex h-11 w-11 items-center justify-center rounded-2xl rounded-tr-sm bg-salvia/15 p-1.5 ring-1 ring-salvia/30 transition-all duration-300 group-hover:rounded-2xl group-hover:bg-salvia/25">
+          <img
+            src="/logo-icono.png"
+            alt=""
+            width="48"
+            height="48"
+            class="h-full w-full object-contain transition-transform duration-300 group-hover:rotate-3"
+          />
+        </span>
+        <span class="flex flex-col">
+          <span class="leading-none">Toco Madera</span>
+          <span class="mt-1 inline-flex items-center gap-1 text-[10px] font-bold tracking-widest text-salvia uppercase">
+            <span class="h-1.5 w-1.5 rounded-full bg-salvia"></span>
+            Catálogo y carrito de compras
+          </span>
+        </span>
+      </a>
+
+      <button
+        data-collapse-toggle="navbar-carrito"
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-nogal/15 bg-white text-nogal transition-colors hover:bg-salvia/10 hover:text-salvia focus:ring-2 focus:ring-salvia/40 focus:outline-none sm:hidden"
+        aria-controls="navbar-carrito"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Abrir menú de navegación</span>
+        <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+        </svg>
+      </button>
+
+      <div class="hidden w-full items-center justify-end gap-2 sm:flex sm:w-auto" id="navbar-carrito">
+        <div class="mt-3 flex w-full flex-col gap-2 rounded-2xl border border-nogal/10 bg-white p-3 shadow-sm sm:mt-0 sm:w-auto sm:flex-row sm:items-center sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
+          <a
+            routerLink="/"
+            class="inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-salvia/15 hover:text-nogal"
+          >
+            <svg class="h-4 w-4 text-salvia" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            Inicio
+          </a>
+          <a
+            routerLink="/cliente/mis-pedidos"
+            class="inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-salvia/15 hover:text-nogal"
+          >
+            <svg class="h-4 w-4 text-salvia" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Mis pedidos
+          </a>
+          <a
+            routerLink="/cliente/checkout"
+            class="group inline-flex items-center justify-center gap-2 rounded-full bg-terracota px-4 py-2 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-salvia hover:shadow-md focus:ring-4 focus:ring-salvia/30 focus:outline-none"
+          >
+            <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span>Checkout</span>
+            <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-xs font-extrabold text-terracota">
+              {{ carrito.cantidadTotal() }}
+            </span>
+          </a>
+        </div>
       </div>
     </nav>
   </header>
 
-  <main class="mx-auto max-w-6xl space-y-8 px-5 py-9">
-    <div>
-      <h2 class="text-3xl font-bold">Productos artesanales</h2>
-      <p class="mt-2 text-gray-700">Selecciona tus productos, cantidades y grabados personalizados.</p>
+  <!-- ================================================
+       2. CONTENIDO PRINCIPAL
+  ================================================ -->
+  <main class="mx-auto w-full max-w-6xl flex-1 space-y-10 px-4 py-10 sm:px-6 lg:px-8">
+    <!-- CABECERA ORGÁNICA -->
+    <div class="relative overflow-hidden rounded-[2rem_0.75rem_2rem_0.75rem] border border-nogal/10 bg-white/90 p-6 shadow-2xs sm:p-8">
+      <div class="pointer-events-none absolute -top-10 -right-10 h-36 w-36 rounded-[3rem_1rem_3rem_1rem] bg-salvia/15" aria-hidden="true"></div>
+      <div class="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-salvia/15 px-3 py-1 text-xs font-bold tracking-wider text-nogal uppercase">
+            <span class="h-2 w-2 rounded-full bg-salvia"></span>
+            Personalización y compra
+          </span>
+          <h1 class="mt-2 font-brand text-3xl font-bold text-nogal sm:text-4xl">Productos artesanales</h1>
+          <p class="mt-1.5 text-sm text-nogal/75 sm:text-base">
+            Selecciona tus productos, cantidades y grabados personalizados.
+          </p>
+        </div>
+
+        <a
+          href="#mi-carrito"
+          class="inline-flex w-fit items-center gap-2 rounded-full border border-salvia/40 bg-salvia/10 px-4 py-2 text-xs font-bold text-nogal transition-all duration-200 hover:bg-salvia hover:text-white"
+        >
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          Ver mi carrito ({{ carrito.cantidadTotal() }})
+        </a>
+      </div>
     </div>
 
+    <!-- AVISO DE SESIÓN DE CLIENTE -->
     @if (carrito.idClienteActual() === null) {
-      <div class="rounded-xl border border-[#E8D6BF] bg-white p-4 text-sm" role="status">
-        Para agregar productos y conservar tu carrito personal, primero debes
-        <a routerLink="/login" class="font-bold text-[#A65A2E] underline">iniciar sesión como cliente</a>.
-        Puedes consultar el catálogo sin iniciar sesión.
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl rounded-tl-xs border border-salvia/30 bg-white p-4 text-sm shadow-2xs" role="status">
+        <div class="flex items-center gap-3">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-salvia/15 text-salvia">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </span>
+          <p class="text-nogal/85">
+            Para agregar productos y conservar tu carrito personal, primero debes
+            <a routerLink="/login" class="font-bold text-terracota underline decoration-salvia underline-offset-4 hover:text-salvia">
+              iniciar sesión como cliente
+            </a>.
+            Puedes consultar el catálogo sin iniciar sesión.
+          </p>
+        </div>
       </div>
     }
 
+    <!-- MENSAJES DE ESTADO -->
     @if (mensaje()) {
-      <div role="status" class="rounded-xl border border-green-300 bg-green-50 p-4 text-green-900">{{ mensaje() }}</div>
-    }
-    @if (error()) {
-      <div role="alert" class="rounded-xl border border-red-300 bg-red-50 p-4 text-red-800">{{ error() }}</div>
+      <div role="status" class="flex items-center gap-3 rounded-2xl border border-salvia/40 bg-salvia/15 p-4 text-sm font-semibold text-nogal shadow-2xs transition-all duration-300">
+        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-salvia text-white">
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <span>{{ mensaje() }}</span>
+      </div>
     }
 
-    <section class="rounded-xl bg-white p-5 shadow-sm">
-      <label for="busqueda" class="mb-2 block text-sm font-semibold">Buscar por nombre o SKU</label>
-      <input id="busqueda" type="search" class="w-full rounded-lg border border-gray-300 p-3"
-        placeholder="Buscar un producto..." [ngModel]="busqueda()" (ngModelChange)="busqueda.set($event)" />
+    @if (error()) {
+      <div role="alert" class="flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-800 shadow-2xs transition-all duration-300">
+        <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700">
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+          </svg>
+        </span>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <!-- ================================================
+         3. CATÁLOGO FILTRABLE
+    ================================================ -->
+    <section class="rounded-[2rem_0.85rem_2rem_0.85rem] border border-nogal/10 bg-white p-6 shadow-xs sm:p-8">
+      <div class="flex flex-col justify-between gap-4 border-b border-nogal/10 pb-5 sm:flex-row sm:items-end">
+        <div>
+          <h2 class="font-brand text-2xl font-bold text-nogal">Explora el catálogo</h2>
+          <p class="mt-1 text-xs text-nogal/65 sm:text-sm">Filtra por nombre o código SKU y elige una pieza para personalizar.</p>
+        </div>
+
+        @if (!cargando()) {
+          <span class="inline-flex w-fit items-center gap-1.5 rounded-full bg-salvia/15 px-3.5 py-1 text-xs font-bold text-nogal">
+            <span class="h-2 w-2 rounded-full bg-salvia"></span>
+            {{ productosFiltrados().length }} resultados
+          </span>
+        }
+      </div>
+
+      <!-- BUSCADOR CON ICONO -->
+      <div class="mt-5">
+        <label for="busqueda" class="mb-2 block text-xs font-bold tracking-wider text-nogal uppercase">
+          Buscar por nombre o SKU
+        </label>
+        <div class="relative">
+          <span class="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-salvia" aria-hidden="true">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </span>
+          <input
+            id="busqueda"
+            type="search"
+            class="block w-full rounded-2xl border border-nogal/20 bg-crema/25 py-3 pr-4 pl-11 text-sm text-nogal transition-all duration-200 placeholder:text-nogal/45 focus:border-salvia focus:bg-white focus:ring-4 focus:ring-salvia/20 focus:outline-none"
+            placeholder="Buscar un producto..."
+            [ngModel]="busqueda()"
+            (ngModelChange)="busqueda.set($event)"
+          />
+        </div>
+      </div>
+
       @if (cargando()) {
-        <p class="mt-5">Cargando catálogo...</p>
+        <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-busy="true">
+          @for (sk of [1, 2, 3]; track sk) {
+            <div class="animate-pulse rounded-[1.75rem_0.65rem_1.75rem_0.65rem] border border-nogal/10 bg-crema/30 p-4">
+              <div class="mb-4 h-48 w-full rounded-[1.25rem_0.4rem_1.25rem_0.4rem] bg-crema"></div>
+              <div class="mb-2 h-3 w-20 rounded-full bg-salvia/20"></div>
+              <div class="mb-3 h-5 w-2/3 rounded bg-crema"></div>
+              <div class="h-10 w-full rounded-xl bg-crema"></div>
+            </div>
+          }
+          <p class="col-span-full text-center text-sm font-semibold text-nogal/75">Cargando catálogo...</p>
+        </div>
       } @else if (productosFiltrados().length === 0) {
-        <p class="mt-5 text-gray-600">No se encontraron productos activos.</p>
+        <div class="mt-6 rounded-2xl border border-nogal/10 bg-crema/30 p-8 text-center">
+          <p class="text-sm font-semibold text-nogal/75">No se encontraron productos activos.</p>
+        </div>
       } @else {
-        <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           @for (p of productosFiltrados(); track p.id_producto) {
-            <article class="flex flex-col justify-between overflow-hidden rounded-xl border border-[#E8D6BF]">
-              <!-- Catálogo de compra: solo el producto, sin decoración de ambiente. -->
-              @if (imagenProducto(p.nombre, 'solo'); as foto) {
-                <img [src]="foto" [alt]="'Producto artesanal grabado: ' + p.nombre"
-                  class="h-52 w-full bg-[#FFF9F2] object-contain p-3" loading="lazy" decoding="async" />
-              } @else {
-                <div class="flex h-52 items-center justify-center bg-[#FFF9F2] p-3 text-center text-sm text-gray-500">
-                  Imagen demostrativa no disponible
-                </div>
-              }
-              <div class="flex flex-1 flex-col justify-between p-5">
-                <div>
-                  <p class="text-xs text-gray-500">{{ p.sku }}</p>
-                  <h3 class="mt-1 text-lg font-bold">{{ p.nombre }}</h3>
-                  <p class="mt-2 line-clamp-3 text-sm text-gray-600">{{ p.descripcion || 'Producto artesanal de Toco Madera.' }}</p>
+            <article
+              class="group flex flex-col justify-between overflow-hidden rounded-[1.85rem_0.75rem_1.85rem_0.75rem] border border-nogal/10 bg-white shadow-2xs transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-salvia/50 hover:shadow-xl"
+            >
+              <!-- MARCO IRREGULAR DE PRODUCTO -->
+              <div class="relative p-3 pb-0">
+                <div class="relative h-52 w-full overflow-hidden rounded-[1.35rem_0.45rem_1.35rem_0.45rem] bg-crema/55">
+                  @if (imagenProducto(p.nombre, 'solo'); as foto) {
+                    <img
+                      [src]="foto"
+                      [alt]="'Producto artesanal grabado: ' + p.nombre"
+                      class="h-full w-full object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  } @else {
+                    <div class="flex h-full items-center justify-center p-4 text-center text-xs font-medium text-nogal/60">
+                      Imagen demostrativa no disponible
+                    </div>
+                  }
+
+                  <span class="absolute top-2.5 left-2.5 rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-nogal uppercase shadow-2xs backdrop-blur-xs">
+                    {{ p.sku }}
+                  </span>
+
                   @if (p.permite_grabado) {
-                    <p class="mt-2 text-xs font-semibold text-[#718063]">Admite grabado personalizado</p>
+                    <span class="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-salvia px-2.5 py-0.5 text-[10px] font-bold text-white shadow-2xs">
+                      <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      </svg>
+                      Grabable
+                    </span>
                   }
                 </div>
-                <div class="mt-5 flex flex-wrap items-center justify-between gap-2">
-                  <p class="text-lg font-bold">{{ precio(p.precio_lista) }}</p>
-                  <button type="button" (click)="seleccionar(p)"
-                    class="rounded-lg bg-[#A65A2E] px-4 py-2 font-semibold text-white hover:bg-[#4B2E1F]">
-                    Elegir
+              </div>
+
+              <div class="flex flex-1 flex-col justify-between p-5 pt-4">
+                <div>
+                  <h3 class="font-brand text-lg font-bold text-nogal transition-colors group-hover:text-terracota">
+                    {{ p.nombre }}
+                  </h3>
+                  <p class="mt-2 line-clamp-3 text-xs leading-relaxed text-nogal/75 sm:text-sm">
+                    {{ p.descripcion || 'Producto artesanal de Toco Madera.' }}
+                  </p>
+                  @if (p.permite_grabado) {
+                    <p class="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-salvia/15 px-2.5 py-1 text-xs font-bold text-nogal">
+                      <span class="h-1.5 w-1.5 rounded-full bg-salvia"></span>
+                      Admite grabado personalizado
+                    </p>
+                  }
+                </div>
+
+                <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-nogal/10 pt-4">
+                  <p class="text-xl font-extrabold text-terracota">{{ precio(p.precio_lista) }}</p>
+                  <button
+                    type="button"
+                    (click)="seleccionar(p)"
+                    class="inline-flex items-center gap-1.5 rounded-xl bg-terracota px-4 py-2 text-sm font-bold text-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-salvia hover:shadow-sm focus:ring-4 focus:ring-salvia/30 focus:outline-none"
+                  >
+                    <span>Elegir</span>
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -81,47 +286,114 @@
       }
     </section>
 
+    <!-- ================================================
+         4. PANEL DE CONFIGURACIÓN Y GRABADO
+    ================================================ -->
     @if (elegido(); as producto) {
-      <section id="configurar-producto" class="scroll-mt-6 rounded-xl border border-[#A65A2E] bg-white p-6 shadow-sm">
-        <div class="flex flex-wrap justify-between gap-3">
-          <h3 class="text-xl font-bold">Configurar: {{ producto.nombre }}</h3>
-          <button type="button" (click)="cancelarSeleccion()" class="font-semibold text-gray-600">Cerrar</button>
+      <section
+        id="configurar-producto"
+        class="scroll-mt-24 rounded-[2rem_0.85rem_2rem_0.85rem] border-2 border-salvia/50 bg-white p-6 shadow-md transition-all duration-300 sm:p-8"
+      >
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-nogal/10 pb-4">
+          <div class="flex items-center gap-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-2xl rounded-tl-xs bg-salvia/15 text-salvia">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </span>
+            <h2 class="font-brand text-xl font-bold text-nogal sm:text-2xl">Configurar: {{ producto.nombre }}</h2>
+          </div>
+
+          <button
+            type="button"
+            (click)="cancelarSeleccion()"
+            class="inline-flex items-center gap-1 rounded-xl border border-nogal/15 bg-crema/40 px-3.5 py-1.5 text-xs font-bold text-nogal transition-colors hover:bg-red-50 hover:text-red-700"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Cerrar
+          </button>
         </div>
-        <!-- Vista limpia del artículo que se va a personalizar. -->
+
         @if (imagenProducto(producto.nombre, 'solo'); as foto) {
-          <div class="mt-5 rounded-xl bg-[#FFF9F2] p-3">
-            <img [src]="foto" [alt]="'Vista demostrativa de ' + producto.nombre"
-              class="mx-auto h-64 w-full max-w-lg object-contain" />
-            <p class="mt-2 text-center text-xs text-gray-500">
+          <div class="mt-5 rounded-[1.5rem_0.5rem_1.5rem_0.5rem] border border-salvia/20 bg-crema/45 p-4">
+            <img
+              [src]="foto"
+              [alt]="'Vista demostrativa de ' + producto.nombre"
+              class="mx-auto h-64 w-full max-w-lg object-contain"
+            />
+            <p class="mt-2 text-center text-xs text-nogal/65">
               Imagen de referencia. Tu texto de grabado se registrará al confirmar la compra.
             </p>
           </div>
         }
-        <form (ngSubmit)="agregar()" class="mt-5 grid gap-4 md:grid-cols-2">
+
+        <form (ngSubmit)="agregar()" class="mt-6 grid gap-5 md:grid-cols-2">
           <div>
-            <label for="cantidad" class="mb-2 block text-sm font-semibold">Cantidad (1–100)</label>
-            <input id="cantidad" name="cantidad" type="number" min="1" max="100" step="1" required
-              [(ngModel)]="cantidad" class="w-full rounded-lg border border-gray-300 p-3" />
+            <label for="cantidad" class="mb-2 block text-xs font-bold tracking-wider text-nogal uppercase">
+              Cantidad (1–100)
+            </label>
+            <input
+              id="cantidad"
+              name="cantidad"
+              type="number"
+              min="1"
+              max="100"
+              step="1"
+              required
+              [(ngModel)]="cantidad"
+              class="w-full rounded-xl border border-nogal/20 bg-crema/25 p-3 text-sm font-semibold text-nogal transition-all focus:border-salvia focus:bg-white focus:ring-4 focus:ring-salvia/20 focus:outline-none"
+            />
           </div>
+
           <div>
-            <label for="grabado" class="mb-2 block text-sm font-semibold">Texto de grabado</label>
-            <input id="grabado" name="grabado" type="text" [(ngModel)]="grabado"
-              [disabled]="!producto.permite_grabado" [attr.maxlength]="producto.max_caracteres_grabado"
+            <label for="grabado" class="mb-2 block text-xs font-bold tracking-wider text-nogal uppercase">
+              Texto de grabado
+            </label>
+            <input
+              id="grabado"
+              name="grabado"
+              type="text"
+              [(ngModel)]="grabado"
+              [disabled]="!producto.permite_grabado"
+              [attr.maxlength]="producto.max_caracteres_grabado"
               [placeholder]="producto.permite_grabado ? 'Texto a grabar' : 'No disponible para este producto'"
-              class="w-full rounded-lg border border-gray-300 p-3 disabled:bg-gray-100" />
+              class="w-full rounded-xl border border-nogal/20 bg-crema/25 p-3 text-sm text-nogal transition-all focus:border-salvia focus:bg-white focus:ring-4 focus:ring-salvia/20 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400"
+            />
             @if (producto.permite_grabado) {
-              <p class="mt-1 text-xs text-gray-500">Máximo {{ producto.max_caracteres_grabado }} caracteres.</p>
+              <p class="mt-1.5 text-xs font-medium text-salvia">Máximo {{ producto.max_caracteres_grabado }} caracteres.</p>
             }
           </div>
+
           <div class="md:col-span-2">
-            <label for="notas" class="mb-2 block text-sm font-semibold">Notas del artículo (opcional)</label>
-            <textarea id="notas" name="notas" rows="2" maxlength="200" [(ngModel)]="notas"
-              class="w-full rounded-lg border border-gray-300 p-3"></textarea>
+            <label for="notas" class="mb-2 block text-xs font-bold tracking-wider text-nogal uppercase">
+              Notas del artículo (opcional)
+            </label>
+            <textarea
+              id="notas"
+              name="notas"
+              rows="2"
+              maxlength="200"
+              [(ngModel)]="notas"
+              class="w-full rounded-xl border border-nogal/20 bg-crema/25 p-3 text-sm text-nogal transition-all focus:border-salvia focus:bg-white focus:ring-4 focus:ring-salvia/20 focus:outline-none"
+            ></textarea>
           </div>
-          <div class="md:col-span-2 flex flex-wrap items-center justify-between gap-3">
-            <p class="text-lg font-bold">Subtotal estimado: {{ precio(+producto.precio_lista * cantidad) }}</p>
-            <button type="submit" [disabled]="carrito.idClienteActual() === null"
-              class="rounded-lg bg-[#A65A2E] px-6 py-3 font-bold text-white hover:bg-[#4B2E1F] disabled:cursor-not-allowed disabled:opacity-50">
+
+          <div class="flex flex-wrap items-center justify-between gap-4 border-t border-nogal/10 pt-5 md:col-span-2">
+            <div>
+              <span class="text-xs font-semibold text-nogal/65">Subtotal estimado</span>
+              <p class="text-2xl font-extrabold text-nogal">{{ precio(+producto.precio_lista * cantidad) }}</p>
+            </div>
+
+            <button
+              type="submit"
+              [disabled]="carrito.idClienteActual() === null"
+              class="inline-flex items-center gap-2 rounded-2xl rounded-tr-sm bg-terracota px-6 py-3 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:rounded-2xl hover:bg-salvia hover:shadow-md focus:ring-4 focus:ring-salvia/30 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
               Agregar al carrito
             </button>
           </div>
@@ -129,69 +401,133 @@
       </section>
     }
 
-    <section id="mi-carrito" class="scroll-mt-6 rounded-xl bg-white p-6 shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <h3 class="text-2xl font-bold">Mi carrito ({{ carrito.cantidadTotal() }} unidades)</h3>
+    <!-- ================================================
+         5. SECCIÓN MI CARRITO
+    ================================================ -->
+    <section id="mi-carrito" class="scroll-mt-24 rounded-[2rem_0.85rem_2rem_0.85rem] border border-nogal/10 bg-white p-6 shadow-xs sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-nogal/10 pb-5">
+        <div class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-2xl rounded-bl-xs bg-salvia/15 text-salvia">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+          </span>
+          <h2 class="font-brand text-2xl font-bold text-nogal">Mi carrito ({{ carrito.cantidadTotal() }} unidades)</h2>
+        </div>
+
         @if (!carrito.vacio()) {
-          <button type="button" (click)="carrito.vaciar()" class="text-sm font-semibold text-red-700">Vaciar carrito</button>
+          <button
+            type="button"
+            (click)="carrito.vaciar()"
+            class="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50/70 px-3.5 py-2 text-xs font-bold text-red-700 transition-colors hover:bg-red-100"
+          >
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Vaciar carrito
+          </button>
         }
       </div>
 
       @if (carrito.vacio()) {
-        <p class="mt-5 text-gray-600">
-          @if (carrito.idClienteActual() === null) {
-            Inicia sesión para consultar tu carrito personal.
-          } @else {
-            Tu carrito está vacío. Selecciona un producto del catálogo.
-          }
-        </p>
+        <div class="mt-6 rounded-2xl border border-nogal/10 bg-crema/35 p-8 text-center">
+          <p class="text-sm font-medium text-nogal/75">
+            @if (carrito.idClienteActual() === null) {
+              Inicia sesión para consultar tu carrito personal.
+            } @else {
+              Tu carrito está vacío. Selecciona un producto del catálogo.
+            }
+          </p>
+        </div>
       } @else {
-        <div class="mt-5 space-y-4">
+        <div class="mt-6 space-y-4">
           @for (item of carrito.items(); track item.id_linea) {
-            <div class="grid gap-4 rounded-lg border border-gray-200 p-4 md:grid-cols-4">
-              <!-- En la línea del carrito también se utiliza la fotografía limpia. -->
-              <div class="md:col-span-2 flex flex-col gap-3 sm:flex-row">
+            <div class="grid items-center gap-4 rounded-2xl rounded-tr-sm border border-nogal/10 bg-crema/25 p-4 transition-all duration-200 hover:border-salvia/40 hover:bg-white md:grid-cols-12">
+              <div class="flex flex-col gap-3.5 sm:flex-row sm:items-center md:col-span-6">
                 @if (imagenProducto(item.nombre, 'solo'); as foto) {
-                  <img [src]="foto" [alt]="'Artículo en carrito: ' + item.nombre"
-                    class="h-28 w-full rounded-lg bg-[#FFF9F2] object-contain sm:w-28" loading="lazy" />
+                  <img
+                    [src]="foto"
+                    [alt]="'Artículo en carrito: ' + item.nombre"
+                    class="h-24 w-full shrink-0 rounded-[1.15rem_0.35rem_1.15rem_0.35rem] border border-salvia/20 bg-white object-contain p-1.5 sm:w-24"
+                    loading="lazy"
+                  />
                 }
-                <div>
-                  <p class="font-bold">{{ item.nombre }}</p>
-                  <p class="text-xs text-gray-500">{{ item.sku }}</p>
+                <div class="min-w-0 flex-1 space-y-1">
+                  <p class="font-brand text-base font-bold text-nogal">{{ item.nombre }}</p>
+                  <p class="text-[11px] font-semibold tracking-wider text-nogal/55 uppercase">{{ item.sku }}</p>
                   @if (item.texto_grabado) {
-                    <p class="mt-2 text-sm">Grabado: <strong>{{ item.texto_grabado }}</strong></p>
+                    <p class="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-salvia/30 bg-salvia/15 px-2.5 py-0.5 text-xs text-nogal">
+                      <span class="h-1.5 w-1.5 rounded-full bg-salvia"></span>
+                      Grabado: <strong>{{ item.texto_grabado }}</strong>
+                    </p>
                   }
                   @if (item.notas) {
-                    <p class="mt-1 text-xs text-gray-600">Notas: {{ item.notas }}</p>
+                    <p class="mt-1 text-xs text-nogal/65">Notas: {{ item.notas }}</p>
                   }
-                  <button type="button" (click)="carrito.quitar(item.id_linea)"
-                    class="mt-3 text-sm font-semibold text-red-700">Eliminar artículo</button>
+                  <div>
+                    <button
+                      type="button"
+                      (click)="carrito.quitar(item.id_linea)"
+                      class="mt-2 inline-flex items-center gap-1 text-xs font-bold text-red-700 transition-colors hover:text-red-900 hover:underline"
+                    >
+                      Eliminar artículo
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div>
-                <label [for]="'cantidad-' + item.id_linea" class="mb-2 block text-xs font-semibold">Cantidad</label>
-                <input [id]="'cantidad-' + item.id_linea" type="number" min="1" max="100" step="1"
-                  [ngModel]="item.cantidad" (ngModelChange)="cantidadActualizada(item.id_linea, $event)"
-                  class="w-full rounded-lg border border-gray-300 p-2" />
+
+              <div class="md:col-span-3">
+                <label [for]="'cantidad-' + item.id_linea" class="mb-1.5 block text-xs font-bold text-nogal/75 uppercase">
+                  Cantidad
+                </label>
+                <input
+                  [id]="'cantidad-' + item.id_linea"
+                  type="number"
+                  min="1"
+                  max="100"
+                  step="1"
+                  [ngModel]="item.cantidad"
+                  (ngModelChange)="cantidadActualizada(item.id_linea, $event)"
+                  class="w-full rounded-xl border border-nogal/20 bg-white p-2.5 text-sm font-semibold text-nogal transition-all focus:border-salvia focus:ring-4 focus:ring-salvia/20 focus:outline-none"
+                />
               </div>
-              <div class="text-right md:text-left">
-                <p class="text-sm text-gray-500">{{ precio(item.precio_estimado) }} / unidad</p>
-                <p class="mt-2 text-lg font-bold">{{ precio(+item.precio_estimado * item.cantidad) }}</p>
+
+              <div class="text-left md:col-span-3 md:text-right">
+                <p class="text-xs text-nogal/60">{{ precio(item.precio_estimado) }} / unidad</p>
+                <p class="mt-1 text-lg font-extrabold text-terracota">{{ precio(+item.precio_estimado * item.cantidad) }}</p>
               </div>
             </div>
           }
         </div>
-        <div class="mt-6 flex flex-wrap items-center justify-between gap-4 border-t pt-5">
+
+        <div class="mt-7 flex flex-wrap items-center justify-between gap-4 rounded-2xl rounded-br-sm border border-salvia/25 bg-salvia/10 p-5">
           <div>
-            <p class="text-sm text-gray-600">Total estimado (sin envío ni descuentos)</p>
-            <p class="text-2xl font-bold">{{ precio(carrito.subtotalEstimado()) }}</p>
-            <p class="mt-1 text-xs text-gray-500">Flask recalculará los importes al confirmar.</p>
+            <p class="text-xs font-semibold text-nogal/75">Total estimado (sin envío ni descuentos)</p>
+            <p class="mt-0.5 text-2xl font-extrabold text-nogal sm:text-3xl">{{ precio(carrito.subtotalEstimado()) }}</p>
+            <p class="mt-1 text-xs text-nogal/60">Flask recalculará los importes al confirmar.</p>
           </div>
-          <a routerLink="/cliente/checkout" class="rounded-lg bg-[#718063] px-6 py-3 font-bold text-white hover:bg-[#4B2E1F]">
-            Continuar al pago simulado
+
+          <a
+            routerLink="/cliente/checkout"
+            class="group inline-flex items-center gap-2 rounded-2xl rounded-tr-sm bg-salvia px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:rounded-2xl hover:bg-nogal hover:shadow-md focus:ring-4 focus:ring-nogal/25 focus:outline-none"
+          >
+            <span>Continuar al pago simulado</span>
+            <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
           </a>
         </div>
       }
     </section>
   </main>
+
+  <!-- ================================================
+       6. FOOTER CON ACENTO SALVIA
+  ================================================ -->
+  <footer class="mt-16 border-t-4 border-salvia bg-nogal text-crema">
+    <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-center text-xs text-crema/80 sm:flex-row sm:px-6 lg:px-8">
+      <p class="font-brand italic text-salvia">Toco Madera · «Frases que vienen de raíz y se graban en el corazón»</p>
+      <p class="text-crema/65">León, Guanajuato, México</p>
+    </div>
+  </footer>
 </div>

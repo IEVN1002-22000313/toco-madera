@@ -4,364 +4,686 @@
      ETAPA 3.17.6
 ===================================================== -->
 
-<div class="min-h-screen bg-crema">
-  <!-- ENCABEZADO -->
-  <header class="bg-nogal px-6 py-5 text-white">
-    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
+<div class="min-h-screen bg-crema text-nogal selection:bg-terracota/20 selection:text-nogal">
+  <!-- BOTÓN TOGGLE SIDEBAR EN MÓVIL (FLOWBITE DRAWER) -->
+  <div class="sticky top-0 z-40 flex items-center justify-between border-b border-[#E8D6BF] bg-nogal px-4 py-3 text-white lg:hidden">
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        data-drawer-target="toco-madera-sidebar"
+        data-drawer-toggle="toco-madera-sidebar"
+        aria-controls="toco-madera-sidebar"
+        class="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 p-2 text-[#F9E9D5] transition duration-200 hover:bg-terracota hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <span class="sr-only">Abrir menú de administración</span>
+        <svg class="h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <div>
-        <h1 class="font-brand text-xl font-bold">Toco Madera | Administración</h1>
+        <span class="font-brand text-base font-bold tracking-wide">Toco Madera</span>
+        <span class="ml-1.5 rounded-full bg-terracota/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+          Admin
+        </span>
+      </div>
+    </div>
 
-        <p class="mt-1 text-sm text-[#F9E9D5]">Inventario de materias primas</p>
+    <a
+      routerLink="/"
+      class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#F9E9D5] transition duration-200 hover:bg-white hover:text-nogal"
+    >
+      <span>Tienda</span>
+      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg>
+    </a>
+  </div>
+
+  <!-- ==================================================
+       BARRA LATERAL ADMINISTRATIVA
+  ================================================== -->
+  <aside
+    id="toco-madera-sidebar"
+    aria-label="Navegación de administración"
+    class="fixed top-0 left-0 z-40 flex h-screen w-72 -translate-x-full flex-col justify-between border-r border-[#3A2216] bg-gradient-to-b from-[#4B2E1F] via-nogal to-[#2B1910] text-white shadow-2xl transition-transform duration-300 ease-out lg:translate-x-0"
+  >
+    <!-- PARTE SUPERIOR: MARCA + MÓDULOS -->
+    <div class="flex-1 overflow-y-auto px-4 py-6">
+      <div class="mb-6 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-terracota to-[#8C4825] text-white shadow-md ring-1 ring-[#E8C8AB]/30">
+            <img
+              src="/logo-icono.png"
+              alt="Logo Toco Madera"
+              width="48"
+              height="48"
+              class="h-full w-full object-contain"
+            />
+          </div>
+          <div class="min-w-0">
+            <p class="font-brand truncate text-base font-bold tracking-tight text-white">
+              Toco Madera
+            </p>
+            <p class="text-[11px] font-medium uppercase tracking-[0.14em] text-[#E8C8AB]">
+              Panel Administrador
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div class="flex flex-wrap gap-3">
-        <a
-          routerLink="/admin/dashboard"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Dashboard
-        </a>
+      <div class="space-y-5">
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Principal
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/dashboard"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <a
-          routerLink="/admin/compras"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Compras
-        </a>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Ventas y Taller
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/pedidos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <span>Pedidos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/operaciones"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                <span>Operaciones / Taller</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/clientes"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Clientes</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <a
-          routerLink="/admin/materiales"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Materiales
-        </a>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Catálogo y Producción
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/productos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Productos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/recetas"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>Recetas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/inventario"
+                class="group flex items-center justify-between rounded-xl bg-gradient-to-r from-terracota to-[#8C4825] px-3.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-black/20 transition-all duration-200"
+              >
+                <span class="flex items-center gap-3">
+                  <svg class="h-4 w-4 text-[#F9E9D5] transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                  </svg>
+                  <span>Inventario</span>
+                </span>
+                <span class="h-2 w-2 rounded-full bg-[#F9E9D5]"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <button
-          type="button"
-          (click)="cerrarSesion()"
-          class="rounded-lg bg-terracota px-4 py-2 text-sm font-semibold hover:bg-[#8C4825]"
-        >
-          Cerrar sesión
-        </button>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Abastecimiento
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/materiales"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Materias primas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/proveedores"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                </svg>
+                <span>Proveedores</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/compras"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Compras</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </nav>
-  </header>
+    </div>
 
-  <!-- CONTENIDO -->
-  <main class="mx-auto max-w-7xl px-6 py-10">
-    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <div>
-        <h2 class="font-brand text-3xl font-bold text-nogal">Inventario de materiales</h2>
-
-        <p class="mt-2 text-gray-600">
-          Existencias calculadas a partir de entradas, consumos y otros movimientos registrados.
-        </p>
-      </div>
+    <!-- PARTE INFERIOR DEL SIDEBAR -->
+    <div class="space-y-2 border-t border-white/10 bg-black/15 p-4">
+      <a
+        routerLink="/admin/dashboard"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-[#F9E9D5] transition-all duration-200 hover:bg-white hover:text-nogal focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <span>Dashboard</span>
+      </a>
 
       <button
         type="button"
-        (click)="cargarInventario(); cargarMovimientos()"
-        class="rounded-lg bg-terracota px-5 py-3 font-semibold text-white hover:bg-nogal"
+        (click)="cerrarSesion()"
+        class="flex w-full items-center justify-center gap-2 rounded-xl bg-terracota px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/50"
       >
-        Actualizar datos
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span>Cerrar sesión</span>
       </button>
     </div>
+  </aside>
 
-    <!-- MENSAJES -->
-    @if (errorInventario()) {
-      <div
-        role="alert"
-        class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-      >
-        {{ errorInventario() }}
-      </div>
-    }
-
-    @if (errorUnidades()) {
-      <div
-        role="status"
-        class="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
-      >
-        {{ errorUnidades() }}
-      </div>
-    }
-
-    <!-- ===============================================
-         1. INDICADORES
-    ================================================ -->
-
-    <section class="mb-8 grid gap-4 md:grid-cols-3">
-      <div class="rounded-xl bg-white p-6 shadow-sm">
-        <p class="text-sm text-gray-600">Materias primas registradas</p>
-
-        <p class="mt-3 text-3xl font-bold text-nogal">
-          {{ totalMateriales() }}
-        </p>
-      </div>
-
-      <div class="rounded-xl bg-white p-6 shadow-sm">
-        <p class="text-sm text-gray-600">Por debajo del stock mínimo</p>
-
-        <p class="mt-3 text-3xl font-bold text-terracota">
-          {{ totalAlertas() }}
-        </p>
-      </div>
-
-      <div class="rounded-xl bg-white p-6 shadow-sm">
-        <p class="text-sm text-gray-600">Sin existencias o con saldo negativo</p>
-
-        <p class="mt-3 text-3xl font-bold text-nogal">
-          {{ sinExistencia() }}
-        </p>
-      </div>
-    </section>
-
-    <!-- ===============================================
-         2. BÚSQUEDA Y FILTROS
-    ================================================ -->
-
-    <section class="mb-6 rounded-xl bg-white p-5 shadow-sm">
-      <div class="grid gap-4 md:grid-cols-3">
-        <div class="md:col-span-2">
-          <label for="buscarInventario" class="mb-2 block text-sm font-medium text-nogal">
-            Buscar materia prima
-          </label>
-
-          <input
-            id="buscarInventario"
-            type="search"
-            [ngModel]="busqueda()"
-            (ngModelChange)="busqueda.set($event)"
-            placeholder="Buscar por SKU o nombre"
-            class="w-full rounded-lg border border-gray-300 p-3 text-sm"
-          />
+  <!-- ==================================================
+       ÁREA PRINCIPAL DE CONTENIDO
+  ================================================== -->
+  <div class="transition-all duration-300 lg:pl-72">
+    <!-- ENCABEZADO -->
+    <header class="sticky top-0 z-30 border-b border-[#E8D6BF]/80 bg-crema/90 backdrop-blur-md">
+      <nav class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+            Toco Madera | Administración
+          </p>
+          <h1 class="font-brand text-xl font-bold text-nogal sm:text-2xl">
+            Inventario de materias primas
+          </h1>
         </div>
 
-        <div>
-          <label for="filtroInventario" class="mb-2 block text-sm font-medium text-nogal">
-            Mostrar
-          </label>
-
-          <select
-            id="filtroInventario"
-            [ngModel]="filtroStock()"
-            (ngModelChange)="filtroStock.set($event)"
-            class="w-full rounded-lg border border-gray-300 p-3 text-sm"
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a
+            routerLink="/admin/dashboard"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
           >
-            <option value="TODOS">Todos</option>
-            <option value="BAJO_MINIMO">Bajo mínimo</option>
-            <option value="SIN_EXISTENCIA">Sin existencia</option>
-            <option value="ACTIVOS">Solo activos</option>
-          </select>
+            Dashboard
+          </a>
+
+          <a
+            routerLink="/admin/compras"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Compras
+          </a>
+
+          <a
+            routerLink="/admin/materiales"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Materiales
+          </a>
+
+          <button
+            type="button"
+            (click)="cerrarSesion()"
+            class="rounded-xl bg-terracota px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] sm:text-sm"
+          >
+            Cerrar sesión
+          </button>
         </div>
-      </div>
-    </section>
+      </nav>
+    </header>
 
-    <!-- ===============================================
-         3. EXISTENCIAS DE MATERIALES
-    ================================================ -->
-
-    <section class="rounded-xl bg-white shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 p-5">
-        <h3 class="text-lg font-bold text-nogal">Existencias por material</h3>
-
-        <p class="text-sm text-gray-600">
-          Mostrando {{ inventarioFiltrado().length }} de {{ inventario().length }}
-        </p>
-      </div>
-
-      @if (cargandoInventario()) {
-        <div class="p-10 text-center text-gray-600">Consultando existencias en MySQL...</div>
-      } @else if (inventarioFiltrado().length === 0) {
-        <div class="p-10 text-center text-gray-600">
-          No hay materiales que coincidan con los filtros.
-        </div>
-      } @else {
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-[#F9E9D5] text-nogal">
-              <tr>
-                <th scope="col" class="px-5 py-4">Material</th>
-                <th scope="col" class="px-5 py-4">Unidad</th>
-                <th scope="col" class="px-5 py-4">Existencia</th>
-                <th scope="col" class="px-5 py-4">Mínimo</th>
-                <th scope="col" class="px-5 py-4">Alerta</th>
-                <th scope="col" class="px-5 py-4">Acción</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              @for (material of inventarioFiltrado(); track material.id_material) {
-                <tr class="border-t border-gray-100 hover:bg-[#FFF9F2]">
-                  <td class="px-5 py-4">
-                    <p class="font-semibold text-nogal">
-                      {{ material.nombre }}
-                    </p>
-
-                    <p class="mt-1 text-xs text-gray-500">
-                      {{ material.sku }}
-                    </p>
-
-                    @if (!material.activo) {
-                      <span class="text-xs text-gray-500"> Material inactivo </span>
-                    }
-                  </td>
-
-                  <td class="px-5 py-4 text-gray-700">
-                    {{ nombreUnidad(material.id_unidad) }}
-                  </td>
-
-                  <td class="px-5 py-4 font-bold text-nogal">
-                    {{ cantidadTexto(material.existencia) }}
-                  </td>
-
-                  <td class="px-5 py-4 text-gray-700">
-                    {{ cantidadTexto(material.stock_minimo) }}
-                  </td>
-
-                  <td class="px-5 py-4">
-                    @if (material.bajo_minimo) {
-                      <span
-                        class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"
-                      >
-                        Bajo mínimo
-                      </span>
-                    } @else {
-                      <span
-                        class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
-                      >
-                        Sin alerta
-                      </span>
-                    }
-                  </td>
-
-                  <td class="px-5 py-4">
-                    <button
-                      type="button"
-                      (click)="seleccionarMaterial(material.id_material)"
-                      class="rounded-lg border border-terracota px-3 py-2 text-xs font-semibold text-terracota hover:bg-crema"
-                    >
-                      Ver movimientos
-                    </button>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    </section>
-
-    <!-- ===============================================
-         4. HISTORIAL DE MOVIMIENTOS
-    ================================================ -->
-
-    <section id="historial-movimientos" class="mt-8 scroll-mt-6 rounded-xl bg-white shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 p-5">
+    <!-- CONTENIDO -->
+    <main class="mx-auto max-w-7xl space-y-6 px-6 py-8">
+      <div class="flex flex-col justify-between gap-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm sm:flex-row sm:items-center">
         <div>
-          <h3 class="text-lg font-bold text-nogal">Historial de movimientos</h3>
+          <h2 class="font-brand text-2xl font-bold text-nogal sm:text-3xl">
+            Inventario de materiales
+          </h2>
 
-          <p class="mt-1 text-xs text-gray-500">
-            Se muestran hasta 100 movimientos recientes del filtro seleccionado.
+          <p class="mt-1.5 text-sm text-gray-600">
+            Existencias calculadas a partir de entradas, consumos y otros movimientos registrados.
           </p>
         </div>
 
         <button
           type="button"
-          (click)="mostrarTodosMovimientos()"
-          class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-nogal hover:bg-gray-50"
+          (click)="cargarInventario(); cargarMovimientos()"
+          class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-terracota px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]"
         >
-          Mostrar todos
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span>Actualizar datos</span>
         </button>
       </div>
 
-      @if (materialSeleccionado() !== null) {
-        <div class="border-b border-gray-100 bg-[#FFF9F2] px-5 py-3 text-sm text-nogal">
-          Filtrando por material:
-          <strong>ID {{ materialSeleccionado() }}</strong>
-        </div>
-      }
-
-      @if (errorMovimientos()) {
+      <!-- MENSAJES -->
+      @if (errorInventario()) {
         <div
           role="alert"
-          class="m-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+          class="flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-800 shadow-sm"
         >
-          {{ errorMovimientos() }}
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>{{ errorInventario() }}</span>
         </div>
       }
 
-      @if (cargandoMovimientos()) {
-        <div class="p-10 text-center text-gray-600">Consultando movimientos...</div>
-      } @else if (movimientos().length === 0) {
-        <div class="p-10 text-center text-gray-600">
-          No existen movimientos registrados para el filtro seleccionado.
+      @if (errorUnidades()) {
+        <div
+          role="status"
+          class="flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm font-medium text-amber-900 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ errorUnidades() }}</span>
         </div>
-      } @else {
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-[#F9E9D5] text-nogal">
-              <tr>
-                <th scope="col" class="px-5 py-4">Movimiento</th>
-                <th scope="col" class="px-5 py-4">Fecha</th>
-                <th scope="col" class="px-5 py-4">Material</th>
-                <th scope="col" class="px-5 py-4">Tipo</th>
-                <th scope="col" class="px-5 py-4">Cantidad</th>
-                <th scope="col" class="px-5 py-4">Referencia</th>
-              </tr>
-            </thead>
+      }
 
-            <tbody>
-              @for (movimiento of movimientos(); track movimiento.id_movimiento) {
-                <tr class="border-t border-gray-100">
-                  <td class="px-5 py-4 font-semibold text-nogal">
-                    #{{ movimiento.id_movimiento }}
-                  </td>
+      <!-- ===============================================
+           1. INDICADORES
+      ================================================ -->
+      <section class="grid gap-5 md:grid-cols-3" aria-label="Indicadores de inventario">
+        <article class="group relative overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-nogal/40 hover:shadow-lg">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                Materias primas registradas
+              </p>
+              <p class="mt-3 text-3xl font-bold tracking-tight text-nogal">
+                {{ totalMateriales() }}
+              </p>
+            </div>
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-nogal/10 text-nogal transition-transform duration-300 group-hover:scale-110 group-hover:bg-nogal group-hover:text-white">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+              </svg>
+            </div>
+          </div>
+          <div class="mt-4 h-1 w-12 rounded-full bg-nogal/25 transition-all duration-300 group-hover:w-full group-hover:bg-nogal"></div>
+        </article>
 
-                  <td class="px-5 py-4 text-gray-600">
-                    {{ movimiento.fecha }}
-                  </td>
+        <article class="group relative overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-terracota/40 hover:shadow-lg">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                Por debajo del stock mínimo
+              </p>
+              <p class="mt-3 text-3xl font-bold tracking-tight text-terracota">
+                {{ totalAlertas() }}
+              </p>
+            </div>
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-terracota/10 text-terracota transition-transform duration-300 group-hover:scale-110 group-hover:bg-terracota group-hover:text-white">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+          </div>
+          <div class="mt-4 h-1 w-12 rounded-full bg-terracota/30 transition-all duration-300 group-hover:w-full group-hover:bg-terracota"></div>
+        </article>
 
-                  <td class="px-5 py-4">
-                    <p class="font-semibold text-nogal">
-                      {{ movimiento.nombre_material }}
-                    </p>
+        <article class="group relative overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#A65A2E]/40 hover:shadow-lg">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                Sin existencias o con saldo negativo
+              </p>
+              <p class="mt-3 text-3xl font-bold tracking-tight text-nogal">
+                {{ sinExistencia() }}
+              </p>
+            </div>
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-[#A65A2E]/10 text-[#A65A2E] transition-transform duration-300 group-hover:scale-110 group-hover:bg-[#A65A2E] group-hover:text-white">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+              </svg>
+            </div>
+          </div>
+          <div class="mt-4 h-1 w-12 rounded-full bg-[#A65A2E]/30 transition-all duration-300 group-hover:w-full group-hover:bg-[#A65A2E]"></div>
+        </article>
+      </section>
 
-                    <p class="mt-1 text-xs text-gray-500">
-                      {{ movimiento.sku_material }}
-                    </p>
-                  </td>
+      <!-- ===============================================
+           2. BÚSQUEDA Y FILTROS
+      ================================================ -->
+      <section
+        aria-label="Filtros de inventario"
+        class="rounded-2xl border border-[#E8D6BF] bg-white p-5 shadow-sm"
+      >
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="md:col-span-2">
+            <label for="buscarInventario" class="mb-2 block text-sm font-semibold text-nogal">
+              Buscar materia prima
+            </label>
 
-                  <td class="px-5 py-4 text-gray-700">
-                    {{ movimiento.tipo }}
-                  </td>
+            <div class="relative">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                id="buscarInventario"
+                type="search"
+                [ngModel]="busqueda()"
+                (ngModelChange)="busqueda.set($event)"
+                placeholder="Buscar por SKU o nombre"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 py-3 pr-4 pl-10 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+            </div>
+          </div>
 
-                  <td class="px-5 py-4">
-                    <span
-                      class="font-bold"
-                      [class.text-green-700]="+movimiento.cantidad_firmada > 0"
-                      [class.text-red-700]="+movimiento.cantidad_firmada < 0"
-                    >
-                      {{ +movimiento.cantidad_firmada > 0 ? '+' : ''
-                      }}{{ movimiento.cantidad_firmada }}
-                    </span>
-                  </td>
+          <div>
+            <label for="filtroInventario" class="mb-2 block text-sm font-semibold text-nogal">
+              Mostrar
+            </label>
 
-                  <td class="px-5 py-4 text-xs text-gray-600">
-                    @if (movimiento.id_detalle_compra !== null) {
-                      Compra, detalle: #{{ movimiento.id_detalle_compra }}
-                    } @else if (movimiento.id_orden_produccion !== null) {
-                      Producción: #{{ movimiento.id_orden_produccion }}
-                    } @else {
-                      {{ movimiento.observaciones || '—' }}
-                    }
-                  </td>
+            <select
+              id="filtroInventario"
+              [ngModel]="filtroStock()"
+              (ngModelChange)="filtroStock.set($event)"
+              class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+            >
+              <option value="TODOS">Todos</option>
+              <option value="BAJO_MINIMO">Bajo mínimo</option>
+              <option value="SIN_EXISTENCIA">Sin existencia</option>
+              <option value="ACTIVOS">Solo activos</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===============================================
+           3. EXISTENCIAS DE MATERIALES
+      ================================================ -->
+      <section class="overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] bg-[#FFF9F2]/60 px-6 py-4">
+          <h3 class="text-lg font-bold text-nogal">Existencias por material</h3>
+
+          <span class="rounded-full border border-[#E8D6BF] bg-white px-3 py-1 text-xs font-semibold text-nogal">
+            Mostrando {{ inventarioFiltrado().length }} de {{ inventario().length }}
+          </span>
+        </div>
+
+        @if (cargandoInventario()) {
+          <div class="flex items-center justify-center gap-3 p-10 text-sm font-medium text-gray-600">
+            <svg class="h-5 w-5 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Consultando existencias en MySQL...</span>
+          </div>
+        } @else if (inventarioFiltrado().length === 0) {
+          <div class="p-10 text-center text-sm text-gray-600">
+            No hay materiales que coincidan con los filtros.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="border-b border-[#E8D6BF] bg-[#F9E9D5] text-xs uppercase tracking-wider text-nogal">
+                <tr>
+                  <th scope="col" class="px-5 py-4 font-bold">Material</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Unidad</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Existencia</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Mínimo</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Alerta</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Acción</th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody class="divide-y divide-[#F3E6D6]">
+                @for (material of inventarioFiltrado(); track material.id_material) {
+                  <tr class="transition-colors duration-200 hover:bg-[#FFF9F2]">
+                    <td class="px-5 py-4">
+                      <p class="font-bold text-nogal">
+                        {{ material.nombre }}
+                      </p>
+
+                      <p class="mt-1 inline-block rounded-md bg-crema px-2 py-0.5 font-mono text-xs text-nogal/80">
+                        {{ material.sku }}
+                      </p>
+
+                      @if (!material.activo) {
+                        <span class="ml-1.5 rounded-md bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
+                          Material inactivo
+                        </span>
+                      }
+                    </td>
+
+                    <td class="px-5 py-4 font-medium text-gray-700">
+                      {{ nombreUnidad(material.id_unidad) }}
+                    </td>
+
+                    <td class="px-5 py-4 text-base font-bold text-nogal">
+                      {{ cantidadTexto(material.existencia) }}
+                    </td>
+
+                    <td class="px-5 py-4 text-gray-700">
+                      {{ cantidadTexto(material.stock_minimo) }}
+                    </td>
+
+                    <td class="px-5 py-4">
+                      @if (material.bajo_minimo) {
+                        <span
+                          class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
+                          <span>Bajo mínimo</span>
+                        </span>
+                      } @else {
+                        <span
+                          class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                          <span>Sin alerta</span>
+                        </span>
+                      }
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <button
+                        type="button"
+                        (click)="seleccionarMaterial(material.id_material)"
+                        class="inline-flex items-center gap-1.5 rounded-xl border border-terracota bg-white px-3.5 py-2 text-xs font-semibold text-terracota shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+                      >
+                        <span>Ver movimientos</span>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+
+      <!-- ===============================================
+           4. HISTORIAL DE MOVIMIENTOS
+      ================================================ -->
+      <section
+        id="historial-movimientos"
+        class="scroll-mt-24 overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white shadow-sm"
+      >
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] bg-[#FFF9F2]/60 px-6 py-4">
+          <div>
+            <h3 class="text-lg font-bold text-nogal">Historial de movimientos</h3>
+
+            <p class="mt-1 text-xs text-gray-500">
+              Se muestran hasta 100 movimientos recientes del filtro seleccionado.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            (click)="mostrarTodosMovimientos()"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-4 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-crema focus:outline-none focus:ring-2 focus:ring-[#E8C8AB] sm:text-sm"
+          >
+            Mostrar todos
+          </button>
         </div>
-      }
-    </section>
-  </main>
+
+        @if (materialSeleccionado() !== null) {
+          <div class="flex items-center gap-2 border-b border-[#E8D6BF] bg-[#F9E9D5]/60 px-6 py-3 text-sm text-nogal">
+            <span class="h-2 w-2 rounded-full bg-terracota"></span>
+            <span>
+              Filtrando por material:
+              <strong class="font-bold text-terracota">ID {{ materialSeleccionado() }}</strong>
+            </span>
+          </div>
+        }
+
+        @if (errorMovimientos()) {
+          <div
+            role="alert"
+            class="m-5 flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-800"
+          >
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>{{ errorMovimientos() }}</span>
+          </div>
+        }
+
+        @if (cargandoMovimientos()) {
+          <div class="flex items-center justify-center gap-3 p-10 text-sm font-medium text-gray-600">
+            <svg class="h-5 w-5 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Consultando movimientos...</span>
+          </div>
+        } @else if (movimientos().length === 0) {
+          <div class="p-10 text-center text-sm text-gray-600">
+            No existen movimientos registrados para el filtro seleccionado.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="border-b border-[#E8D6BF] bg-[#F9E9D5] text-xs uppercase tracking-wider text-nogal">
+                <tr>
+                  <th scope="col" class="px-5 py-4 font-bold">Movimiento</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Fecha</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Material</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Tipo</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Cantidad</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Referencia</th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-[#F3E6D6]">
+                @for (movimiento of movimientos(); track movimiento.id_movimiento) {
+                  <tr class="transition-colors duration-200 hover:bg-[#FFF9F2]">
+                    <td class="px-5 py-4 font-bold text-nogal">
+                      #{{ movimiento.id_movimiento }}
+                    </td>
+
+                    <td class="px-5 py-4 text-xs font-medium text-gray-600">
+                      {{ movimiento.fecha }}
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <p class="font-semibold text-nogal">
+                        {{ movimiento.nombre_material }}
+                      </p>
+
+                      <p class="mt-1 inline-block rounded-md bg-crema px-2 py-0.5 font-mono text-xs text-nogal/80">
+                        {{ movimiento.sku_material }}
+                      </p>
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <span class="rounded-lg border border-[#E8D6BF] bg-[#FFF9F2] px-2.5 py-1 text-xs font-semibold text-nogal">
+                        {{ movimiento.tipo }}
+                      </span>
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <span
+                        class="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-bold"
+                        [class.bg-green-50]="+movimiento.cantidad_firmada > 0"
+                        [class.text-green-700]="+movimiento.cantidad_firmada > 0"
+                        [class.bg-red-50]="+movimiento.cantidad_firmada < 0"
+                        [class.text-red-700]="+movimiento.cantidad_firmada < 0"
+                      >
+                        {{ +movimiento.cantidad_firmada > 0 ? '+' : '' }}{{ movimiento.cantidad_firmada }}
+                      </span>
+                    </td>
+
+                    <td class="px-5 py-4 text-xs text-gray-600">
+                      @if (movimiento.id_detalle_compra !== null) {
+                        <span class="font-medium text-nogal">Compra, detalle: #{{ movimiento.id_detalle_compra }}</span>
+                      } @else if (movimiento.id_orden_produccion !== null) {
+                        <span class="font-medium text-terracota">Producción: #{{ movimiento.id_orden_produccion }}</span>
+                      } @else {
+                        <span>{{ movimiento.observaciones || '—' }}</span>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    </main>
+  </div>
 </div>

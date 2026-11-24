@@ -4,457 +4,729 @@
      ETAPA 3.16
 ===================================================== -->
 
-<div class="min-h-screen bg-crema">
-  <!-- ==================================================
-       1. ENCABEZADO
-  ================================================== -->
-  <header class="bg-nogal px-6 py-5 text-white">
-    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
-      <div>
-        <h1 class="font-brand text-xl font-bold">Toco Madera | Administración</h1>
-
-        <p class="mt-1 text-sm text-[#F9E9D5]">Gestión de proveedores</p>
-      </div>
-
-      <div class="flex flex-wrap gap-3">
-        <a
-          routerLink="/admin/dashboard"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
-        >
-          Dashboard
-        </a>
-
-        <a
-          routerLink="/admin/productos"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
-        >
-          Productos
-        </a>
-
-        <button
-          type="button"
-          (click)="cerrarSesion()"
-          class="rounded-lg bg-terracota px-4 py-2 text-sm font-semibold text-white hover:bg-[#8C4825]"
-        >
-          Cerrar sesión
-        </button>
-      </div>
-    </nav>
-  </header>
-
-  <!-- ==================================================
-       2. CONTENIDO PRINCIPAL
-  ================================================== -->
-  <main class="mx-auto max-w-7xl px-6 py-10">
-    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <div>
-        <h2 class="font-brand text-3xl font-bold text-nogal">Gestión de proveedores</h2>
-
-        <p class="mt-2 text-gray-600">
-          Administra los proveedores de materias primas y suministros para la producción artesanal.
-        </p>
-      </div>
-
-      <!-- REGISTRAR NUEVO PROVEEDOR -->
+<div class="min-h-screen bg-crema text-nogal selection:bg-terracota/20 selection:text-nogal">
+  <!-- BOTÓN TOGGLE SIDEBAR EN MÓVIL (FLOWBITE DRAWER) -->
+  <div class="sticky top-0 z-40 flex items-center justify-between border-b border-[#E8D6BF] bg-nogal px-4 py-3 text-white lg:hidden">
+    <div class="flex items-center gap-3">
       <button
         type="button"
-        (click)="nuevoProveedor()"
-        [disabled]="guardando()"
-        class="rounded-lg bg-terracota px-5 py-3 text-sm font-semibold text-white hover:bg-nogal disabled:opacity-50"
+        data-drawer-target="toco-madera-sidebar"
+        data-drawer-toggle="toco-madera-sidebar"
+        aria-controls="toco-madera-sidebar"
+        class="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 p-2 text-[#F9E9D5] transition duration-200 hover:bg-terracota hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
       >
-        + Nuevo proveedor
+        <span class="sr-only">Abrir menú de administración</span>
+        <svg class="h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
       </button>
+      <div>
+        <span class="font-brand text-base font-bold tracking-wide">Toco Madera</span>
+        <span class="ml-1.5 rounded-full bg-terracota/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+          Admin
+        </span>
+      </div>
     </div>
 
-    <!-- ==================================================
-         3. MENSAJES GENERALES
-    ================================================== -->
+    <a
+      routerLink="/admin/dashboard"
+      class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#F9E9D5] transition duration-200 hover:bg-white hover:text-nogal"
+    >
+      <span>Dashboard</span>
+    </a>
+  </div>
 
-    @if (mensaje()) {
-      <div
-        role="status"
-        class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800"
-      >
-        {{ mensaje() }}
+  <!-- ==================================================
+       BARRA LATERAL ADMINISTRATIVA
+  ================================================== -->
+  <aside
+    id="toco-madera-sidebar"
+    aria-label="Navegación de administración"
+    class="fixed top-0 left-0 z-40 flex h-screen w-72 -translate-x-full flex-col justify-between border-r border-[#3A2216] bg-gradient-to-b from-[#4B2E1F] via-nogal to-[#2B1910] text-white shadow-2xl transition-transform duration-300 ease-out lg:translate-x-0"
+  >
+    <!-- PARTE SUPERIOR: MARCA + MÓDULOS -->
+    <div class="flex-1 overflow-y-auto px-4 py-6">
+      <div class="mb-6 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-terracota to-[#8C4825] text-white shadow-md ring-1 ring-[#E8C8AB]/30">
+            <img
+              src="/logo-icono.png"
+              alt="Logo Toco Madera"
+              width="48"
+              height="48"
+              class="h-full w-full object-contain"
+            />
+          </div>
+          <div class="min-w-0">
+            <p class="font-brand truncate text-base font-bold tracking-tight text-white">
+              Toco Madera
+            </p>
+            <p class="text-[11px] font-medium uppercase tracking-[0.14em] text-[#E8C8AB]">
+              Panel Administrador
+            </p>
+          </div>
+        </div>
       </div>
-    }
 
-    @if (error()) {
-      <div
-        role="alert"
-        class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-      >
-        {{ error() }}
-      </div>
-    }
-
-    <!-- ==================================================
-         4. BÚSQUEDA Y FILTROS
-    ================================================== -->
-
-    <section class="mb-6 rounded-xl bg-white p-5 shadow-sm">
-      <div class="grid gap-4 md:grid-cols-3">
-        <div class="md:col-span-2">
-          <label for="buscarProveedor" class="mb-2 block text-sm font-medium text-nogal">
-            Buscar proveedor
-          </label>
-
-          <input
-            id="buscarProveedor"
-            type="search"
-            [ngModel]="busqueda()"
-            (ngModelChange)="busqueda.set($event)"
-            placeholder="Buscar por nombre, contacto o correo"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-          />
+      <div class="space-y-5">
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Principal
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/dashboard"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
         </div>
 
         <div>
-          <label for="estadoProveedor" class="mb-2 block text-sm font-medium text-nogal">
-            Estado
-          </label>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Ventas y Taller
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/pedidos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <span>Pedidos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/operaciones"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                <span>Operaciones / Taller</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/clientes"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Clientes</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-          <select
-            id="estadoProveedor"
-            [ngModel]="filtroEstado()"
-            (ngModelChange)="filtroEstado.set($event)"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-          >
-            <option value="TODOS">Todos</option>
-            <option value="ACTIVOS">Activos</option>
-            <option value="INACTIVOS">Inactivos</option>
-          </select>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Catálogo y Producción
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/productos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Productos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/recetas"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>Recetas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/inventario"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                </svg>
+                <span>Inventario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Abastecimiento
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/materiales"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Materias primas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/proveedores"
+                class="group flex items-center justify-between rounded-xl bg-gradient-to-r from-terracota to-[#8C4825] px-3.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-black/20 transition-all duration-200"
+              >
+                <span class="flex items-center gap-3">
+                  <svg class="h-4 w-4 text-[#F9E9D5] transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                  </svg>
+                  <span>Proveedores</span>
+                </span>
+                <span class="h-2 w-2 rounded-full bg-[#F9E9D5]"></span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/compras"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Compras</span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- ==================================================
-         5. TABLA DE PROVEEDORES
-    ================================================== -->
-
-    <section class="rounded-xl bg-white shadow-sm">
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 p-5">
-        <h3 class="text-lg font-semibold text-nogal">Proveedores registrados</h3>
-
-        <p class="text-sm text-gray-600">
-          Mostrando {{ proveedoresFiltrados().length }} de {{ proveedores().length }}
-        </p>
-      </div>
-
-      @if (cargando()) {
-        <div role="status" class="p-10 text-center text-gray-600">
-          Consultando proveedores en MySQL...
-        </div>
-      } @else if (proveedoresFiltrados().length === 0) {
-        <div class="p-10 text-center text-gray-600">
-          No hay proveedores que coincidan con los filtros.
-        </div>
-      } @else {
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm text-gray-600">
-            <thead class="bg-[#F9E9D5] text-xs uppercase text-nogal">
-              <tr>
-                <th scope="col" class="px-5 py-4">Proveedor</th>
-                <th scope="col" class="px-5 py-4">Contacto</th>
-                <th scope="col" class="px-5 py-4">Teléfono</th>
-                <th scope="col" class="px-5 py-4">Correo</th>
-                <th scope="col" class="px-5 py-4">Estado</th>
-                <th scope="col" class="px-5 py-4">Acciones</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              @for (proveedor of proveedoresFiltrados(); track proveedor.id_proveedor) {
-                <tr class="border-t border-gray-100 hover:bg-[#FFF9F2]">
-                  <td class="px-5 py-4">
-                    <p class="font-semibold text-nogal">
-                      {{ proveedor.nombre }}
-                    </p>
-                    <p class="mt-1 text-xs text-gray-500">ID: {{ proveedor.id_proveedor }}</p>
-                  </td>
-
-                  <td class="px-5 py-4">
-                    {{ proveedor.contacto || 'No registrado' }}
-                  </td>
-
-                  <td class="px-5 py-4">
-                    {{ proveedor.telefono || 'No registrado' }}
-                  </td>
-
-                  <td class="px-5 py-4">
-                    {{ proveedor.correo || 'No registrado' }}
-                  </td>
-
-                  <td class="px-5 py-4">
-                    @if (proveedor.activo) {
-                      <span
-                        class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
-                      >
-                        Activo
-                      </span>
-                    } @else {
-                      <span
-                        class="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700"
-                      >
-                        Inactivo
-                      </span>
-                    }
-                  </td>
-
-                  <td class="px-5 py-4">
-                    <div class="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        (click)="editarProveedor(proveedor)"
-                        [disabled]="guardando()"
-                        class="rounded-lg border border-terracota px-3 py-2 text-xs font-semibold text-terracota hover:bg-crema"
-                      >
-                        Editar
-                      </button>
-
-                      <button
-                        type="button"
-                        (click)="solicitarCambioEstado(proveedor)"
-                        [disabled]="guardando()"
-                        class="rounded-lg px-3 py-2 text-xs font-semibold text-white disabled:opacity-50"
-                        [class.bg-gray-600]="proveedor.activo"
-                        [class.bg-salvia]="!proveedor.activo"
-                      >
-                        {{ proveedor.activo ? 'Desactivar' : 'Activar' }}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    </section>
-
-    <!-- ==================================================
-         6. FORMULARIO DE REGISTRO Y EDICIÓN
-    ================================================== -->
-
-    @if (mostrarFormulario()) {
-      <section
-        id="formulario-proveedor"
-        class="mt-8 scroll-mt-6 rounded-xl border border-[#E8D6BF] bg-white p-6 shadow-sm"
-        aria-labelledby="tituloProveedor"
+    <!-- PARTE INFERIOR DEL SIDEBAR -->
+    <div class="space-y-2 border-t border-white/10 bg-black/15 p-4">
+      <a
+        routerLink="/admin/dashboard"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-[#F9E9D5] transition-all duration-200 hover:bg-white hover:text-nogal focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
       >
-        <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <h3 id="tituloProveedor" class="text-xl font-bold text-nogal">
-            {{ editandoId() === null ? 'Registrar nuevo proveedor' : 'Editar proveedor' }}
-          </h3>
+        <span>Dashboard</span>
+      </a>
+
+      <button
+        type="button"
+        (click)="cerrarSesion()"
+        class="flex w-full items-center justify-center gap-2 rounded-xl bg-terracota px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/50"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span>Cerrar sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================================================
+       ÁREA PRINCIPAL DE CONTENIDO
+  ================================================== -->
+  <div class="transition-all duration-300 lg:pl-72">
+    <!-- ==================================================
+         1. ENCABEZADO
+    ================================================== -->
+    <header class="sticky top-0 z-30 border-b border-[#E8D6BF]/80 bg-crema/90 backdrop-blur-md">
+      <nav class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+            Toco Madera | Administración
+          </p>
+          <h1 class="font-brand text-xl font-bold text-nogal sm:text-2xl">
+            Gestión de proveedores
+          </h1>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a
+            routerLink="/admin/dashboard"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Dashboard
+          </a>
+
+          <a
+            routerLink="/admin/productos"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Productos
+          </a>
 
           <button
             type="button"
-            (click)="cerrarFormulario()"
-            [disabled]="guardando()"
-            class="text-sm font-semibold text-gray-600 hover:text-nogal"
+            (click)="cerrarSesion()"
+            class="rounded-xl bg-terracota px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] sm:text-sm"
           >
-            Cerrar formulario
+            Cerrar sesión
           </button>
         </div>
+      </nav>
+    </header>
 
-        @if (errorFormulario()) {
-          <div
-            role="alert"
-            class="mb-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-          >
-            {{ errorFormulario() }}
+    <!-- ==================================================
+         2. CONTENIDO PRINCIPAL
+    ================================================== -->
+    <main class="mx-auto max-w-7xl space-y-6 px-6 py-8">
+      <div class="flex flex-col justify-between gap-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm sm:flex-row sm:items-center">
+        <div>
+          <h2 class="font-brand text-2xl font-bold text-nogal sm:text-3xl">
+            Gestión de proveedores
+          </h2>
+
+          <p class="mt-1.5 text-sm text-gray-600">
+            Administra los proveedores de materias primas y suministros para la producción artesanal.
+          </p>
+        </div>
+
+        <!-- REGISTRAR NUEVO PROVEEDOR -->
+        <button
+          type="button"
+          (click)="nuevoProveedor()"
+          [disabled]="guardando()"
+          class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-terracota px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span aria-hidden="true" class="text-base leading-none">+</span>
+          <span>Nuevo proveedor</span>
+        </button>
+      </div>
+
+      <!-- ==================================================
+           3. MENSAJES GENERALES
+      ================================================== -->
+      @if (mensaje()) {
+        <div
+          role="status"
+          class="flex items-start gap-3 rounded-2xl border border-salvia/40 bg-green-50 p-4 text-sm font-medium text-green-900 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-salvia" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ mensaje() }}</span>
+        </div>
+      }
+
+      @if (error()) {
+        <div
+          role="alert"
+          class="flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-800 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      <!-- ==================================================
+           4. BÚSQUEDA Y FILTROS
+      ================================================== -->
+      <section class="rounded-2xl border border-[#E8D6BF] bg-white p-5 shadow-sm">
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="md:col-span-2">
+            <label for="buscarProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+              Buscar proveedor
+            </label>
+
+            <div class="relative">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <input
+                id="buscarProveedor"
+                type="search"
+                [ngModel]="busqueda()"
+                (ngModelChange)="busqueda.set($event)"
+                placeholder="Buscar por nombre, contacto o correo"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 py-3 pr-4 pl-10 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="estadoProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+              Estado
+            </label>
+
+            <select
+              id="estadoProveedor"
+              [ngModel]="filtroEstado()"
+              (ngModelChange)="filtroEstado.set($event)"
+              class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+            >
+              <option value="TODOS">Todos</option>
+              <option value="ACTIVOS">Activos</option>
+              <option value="INACTIVOS">Inactivos</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================
+           5. TABLA DE PROVEEDORES
+      ================================================== -->
+      <section class="overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] bg-[#FFF9F2]/60 px-6 py-4">
+          <h3 class="text-lg font-bold text-nogal">Proveedores registrados</h3>
+
+          <span class="rounded-full border border-[#E8D6BF] bg-white px-3 py-1 text-xs font-semibold text-nogal">
+            Mostrando {{ proveedoresFiltrados().length }} de {{ proveedores().length }}
+          </span>
+        </div>
+
+        @if (cargando()) {
+          <div role="status" class="flex items-center justify-center gap-3 p-10 text-sm font-medium text-gray-600">
+            <svg class="h-5 w-5 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Consultando proveedores en MySQL...</span>
+          </div>
+        } @else if (proveedoresFiltrados().length === 0) {
+          <div class="p-10 text-center text-sm text-gray-600">
+            No hay proveedores que coincidan con los filtros.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-gray-600">
+              <thead class="border-b border-[#E8D6BF] bg-[#F9E9D5] text-xs uppercase tracking-wider text-nogal">
+                <tr>
+                  <th scope="col" class="px-5 py-4 font-bold">Proveedor</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Contacto</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Teléfono</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Correo</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Estado</th>
+                  <th scope="col" class="px-5 py-4 font-bold">Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-[#F3E6D6]">
+                @for (proveedor of proveedoresFiltrados(); track proveedor.id_proveedor) {
+                  <tr class="transition-colors duration-200 hover:bg-[#FFF9F2]">
+                    <td class="px-5 py-4">
+                      <p class="font-bold text-nogal">
+                        {{ proveedor.nombre }}
+                      </p>
+                      <p class="mt-1 inline-block rounded-md bg-crema px-2 py-0.5 font-mono text-xs text-nogal/80">
+                        ID: {{ proveedor.id_proveedor }}
+                      </p>
+                    </td>
+
+                    <td class="px-5 py-4 font-medium text-nogal/90">
+                      {{ proveedor.contacto || 'No registrado' }}
+                    </td>
+
+                    <td class="px-5 py-4 font-mono text-xs text-nogal/90 sm:text-sm">
+                      {{ proveedor.telefono || 'No registrado' }}
+                    </td>
+
+                    <td class="px-5 py-4 text-nogal/90">
+                      {{ proveedor.correo || 'No registrado' }}
+                    </td>
+
+                    <td class="px-5 py-4">
+                      @if (proveedor.activo) {
+                        <span
+                          class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                          <span>Activo</span>
+                        </span>
+                      } @else {
+                        <span
+                          class="inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-gray-500"></span>
+                          <span>Inactivo</span>
+                        </span>
+                      }
+                    </td>
+
+                    <td class="px-5 py-4">
+                      <div class="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          (click)="editarProveedor(proveedor)"
+                          [disabled]="guardando()"
+                          class="rounded-xl border border-terracota bg-white px-3.5 py-2 text-xs font-semibold text-terracota shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-crema focus:outline-none focus:ring-2 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          Editar
+                        </button>
+
+                        <button
+                          type="button"
+                          (click)="solicitarCambioEstado(proveedor)"
+                          [disabled]="guardando()"
+                          class="rounded-xl px-3.5 py-2 text-xs font-semibold text-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          [class.bg-gray-600]="proveedor.activo"
+                          [class.hover:bg-gray-700]="proveedor.activo"
+                          [class.focus:ring-gray-300]="proveedor.activo"
+                          [class.bg-salvia]="!proveedor.activo"
+                          [class.hover:bg-[#5d6b52]]="!proveedor.activo"
+                          [class.focus:ring-salvia/40]="!proveedor.activo"
+                        >
+                          {{ proveedor.activo ? 'Desactivar' : 'Activar' }}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           </div>
         }
+      </section>
 
-        <form
-          #formProveedor="ngForm"
-          (ngSubmit)="guardarProveedor()"
-          class="grid gap-5 md:grid-cols-2"
+      <!-- ==================================================
+           6. FORMULARIO DE REGISTRO Y EDICIÓN
+      ================================================== -->
+      @if (mostrarFormulario()) {
+        <section
+          id="formulario-proveedor"
+          class="scroll-mt-24 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-md transition-all duration-300"
+          aria-labelledby="tituloProveedor"
         >
-          <!-- NOMBRE -->
-          <div>
-            <label for="nombreProveedor" class="mb-2 block text-sm font-medium text-nogal">
-              Nombre comercial *
-            </label>
+          <div class="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] pb-4">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+                Red de abastecimiento
+              </p>
+              <h3 id="tituloProveedor" class="mt-0.5 text-xl font-bold text-nogal">
+                {{ editandoId() === null ? 'Registrar nuevo proveedor' : 'Editar proveedor' }}
+              </h3>
+            </div>
 
-            <input
-              id="nombreProveedor"
-              name="nombre"
-              type="text"
-              [(ngModel)]="formulario.nombre"
-              required
-              minlength="2"
-              autocomplete="organization"
-              placeholder="Nombre del proveedor"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-            />
-          </div>
-
-          <!-- CONTACTO -->
-          <div>
-            <label for="contactoProveedor" class="mb-2 block text-sm font-medium text-nogal">
-              Persona de contacto
-            </label>
-
-            <input
-              id="contactoProveedor"
-              name="contacto"
-              type="text"
-              [(ngModel)]="formulario.contacto"
-              placeholder="Nombre del contacto"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-            />
-          </div>
-
-          <!-- TELÉFONO -->
-          <div>
-            <label for="telefonoProveedor" class="mb-2 block text-sm font-medium text-nogal">
-              Teléfono
-            </label>
-
-            <input
-              id="telefonoProveedor"
-              name="telefono"
-              type="tel"
-              [(ngModel)]="formulario.telefono"
-              autocomplete="tel"
-              placeholder="4771234567"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-            />
-          </div>
-
-          <!-- CORREO -->
-          <div>
-            <label for="correoProveedor" class="mb-2 block text-sm font-medium text-nogal">
-              Correo electrónico
-            </label>
-
-            <input
-              id="correoProveedor"
-              name="correo"
-              type="email"
-              [(ngModel)]="formulario.correo"
-              email
-              autocomplete="email"
-              placeholder="contacto@ejemplo.com"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-            />
-          </div>
-
-          <!-- DIRECCIÓN -->
-          <div class="md:col-span-2">
-            <label for="direccionProveedor" class="mb-2 block text-sm font-medium text-nogal">
-              Dirección
-            </label>
-
-            <input
-              id="direccionProveedor"
-              name="direccion"
-              type="text"
-              [(ngModel)]="formulario.direccion"
-              autocomplete="street-address"
-              placeholder="Dirección del proveedor"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-            />
-          </div>
-
-          <!-- SITIO WEB -->
-          <div class="md:col-span-2">
-            <label for="sitioProveedor" class="mb-2 block text-sm font-medium text-nogal">
-              Sitio web
-            </label>
-
-            <input
-              id="sitioProveedor"
-              name="sitio_web"
-              type="url"
-              [(ngModel)]="formulario.sitio_web"
-              placeholder="https://ejemplo.com"
-              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm focus:border-terracota"
-            />
-
-            <p class="mt-2 text-xs text-gray-500">Incluye https:// al registrar una página web.</p>
-          </div>
-
-          <!-- ACCIONES DEL FORMULARIO -->
-          <div class="flex flex-wrap justify-end gap-3 border-t border-gray-100 pt-5 md:col-span-2">
             <button
               type="button"
               (click)="cerrarFormulario()"
               [disabled]="guardando()"
-              class="rounded-lg border border-gray-300 px-5 py-3 font-semibold text-gray-700 hover:bg-gray-100"
+              class="rounded-xl border border-[#E8D6BF] bg-crema/60 px-3.5 py-2 text-xs font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50 sm:text-sm"
             >
-              Cancelar
-            </button>
-
-            <button
-              type="submit"
-              [disabled]="formProveedor.invalid || guardando()"
-              class="rounded-lg bg-terracota px-6 py-3 font-semibold text-white hover:bg-nogal disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {{
-                guardando()
-                  ? 'Guardando...'
-                  : editandoId() === null
-                    ? 'Registrar proveedor'
-                    : 'Guardar cambios'
-              }}
+              Cerrar formulario
             </button>
           </div>
-        </form>
-      </section>
-    }
 
-    <!-- ==================================================
-         7. CONFIRMAR ACTIVACIÓN / DESACTIVACIÓN
-    ================================================== -->
-
-    @if (proveedorPendiente(); as proveedor) {
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <section
-          role="alertdialog"
-          aria-modal="true"
-          aria-labelledby="tituloConfirmacionProveedor"
-          aria-describedby="textoConfirmacionProveedor"
-          class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
-        >
-          <h3 id="tituloConfirmacionProveedor" class="text-xl font-bold text-nogal">
-            Confirmar cambio de estado
-          </h3>
-
-          <p id="textoConfirmacionProveedor" class="mt-4 text-sm text-gray-700">
-            ¿Deseas
-            {{ proveedor.activo ? 'desactivar' : 'activar' }}
-            al proveedor
-
-            <strong>{{ proveedor.nombre }}</strong>?
-          </p>
-
-          <p class="mt-2 text-xs text-gray-500">
-            Sus compras y cotizaciones anteriores permanecerán registradas en MySQL.
-          </p>
-
-          <div class="mt-6 flex justify-end gap-3">
-            <button
-              type="button"
-              (click)="cancelarCambioEstado()"
-              [disabled]="guardando()"
-              class="rounded-lg border border-gray-300 px-4 py-2 font-semibold text-gray-700"
+          @if (errorFormulario()) {
+            <div
+              role="alert"
+              class="mb-5 flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-800"
             >
-              Cancelar
-            </button>
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>{{ errorFormulario() }}</span>
+            </div>
+          }
 
-            <button
-              type="button"
-              (click)="confirmarCambioEstado()"
-              [disabled]="guardando()"
-              class="rounded-lg bg-terracota px-4 py-2 font-semibold text-white hover:bg-nogal disabled:opacity-50"
-            >
-              {{ guardando() ? 'Procesando...' : 'Confirmar' }}
-            </button>
-          </div>
+          <form
+            #formProveedor="ngForm"
+            (ngSubmit)="guardarProveedor()"
+            class="grid gap-5 md:grid-cols-2"
+          >
+            <!-- NOMBRE -->
+            <div>
+              <label for="nombreProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+                Nombre comercial *
+              </label>
+
+              <input
+                id="nombreProveedor"
+                name="nombre"
+                type="text"
+                [(ngModel)]="formulario.nombre"
+                required
+                minlength="2"
+                autocomplete="organization"
+                placeholder="Nombre del proveedor"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+            </div>
+
+            <!-- CONTACTO -->
+            <div>
+              <label for="contactoProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+                Persona de contacto
+              </label>
+
+              <input
+                id="contactoProveedor"
+                name="contacto"
+                type="text"
+                [(ngModel)]="formulario.contacto"
+                placeholder="Nombre del contacto"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+            </div>
+
+            <!-- TELÉFONO -->
+            <div>
+              <label for="telefonoProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+                Teléfono
+              </label>
+
+              <input
+                id="telefonoProveedor"
+                name="telefono"
+                type="tel"
+                [(ngModel)]="formulario.telefono"
+                autocomplete="tel"
+                placeholder="4771234567"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+            </div>
+
+            <!-- CORREO -->
+            <div>
+              <label for="correoProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+                Correo electrónico
+              </label>
+
+              <input
+                id="correoProveedor"
+                name="correo"
+                type="email"
+                [(ngModel)]="formulario.correo"
+                email
+                autocomplete="email"
+                placeholder="contacto@ejemplo.com"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+            </div>
+
+            <!-- DIRECCIÓN -->
+            <div class="md:col-span-2">
+              <label for="direccionProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+                Dirección
+              </label>
+
+              <input
+                id="direccionProveedor"
+                name="direccion"
+                type="text"
+                [(ngModel)]="formulario.direccion"
+                autocomplete="street-address"
+                placeholder="Dirección del proveedor"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+            </div>
+
+            <!-- SITIO WEB -->
+            <div class="md:col-span-2">
+              <label for="sitioProveedor" class="mb-2 block text-sm font-semibold text-nogal">
+                Sitio web
+              </label>
+
+              <input
+                id="sitioProveedor"
+                name="sitio_web"
+                type="url"
+                [(ngModel)]="formulario.sitio_web"
+                placeholder="https://ejemplo.com"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+              />
+
+              <p class="mt-2 text-xs text-gray-500">Incluye https:// al registrar una página web.</p>
+            </div>
+
+            <!-- ACCIONES DEL FORMULARIO -->
+            <div class="flex flex-wrap justify-end gap-3 border-t border-[#F3E6D6] pt-4 md:col-span-2">
+              <button
+                type="button"
+                (click)="cerrarFormulario()"
+                [disabled]="guardando()"
+                class="rounded-xl border border-[#E8D6BF] bg-white px-5 py-3 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="submit"
+                [disabled]="formProveedor.invalid || guardando()"
+                class="rounded-xl bg-terracota px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {{
+                  guardando()
+                    ? 'Guardando...'
+                    : editandoId() === null
+                      ? 'Registrar proveedor'
+                      : 'Guardar cambios'
+                }}
+              </button>
+            </div>
+          </form>
         </section>
-      </div>
-    }
-  </main>
+      }
+
+      <!-- ==================================================
+           7. CONFIRMAR ACTIVACIÓN / DESACTIVACIÓN
+      ================================================== -->
+      @if (proveedorPendiente(); as proveedor) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-nogal/60 p-4 backdrop-blur-xs transition-opacity duration-200">
+          <section
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="tituloConfirmacionProveedor"
+            aria-describedby="textoConfirmacionProveedor"
+            class="w-full max-w-md rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-2xl transition-all duration-200"
+          >
+            <h3 id="tituloConfirmacionProveedor" class="font-brand text-xl font-bold text-nogal">
+              Confirmar cambio de estado
+            </h3>
+
+            <p id="textoConfirmacionProveedor" class="mt-3 text-sm text-gray-700">
+              ¿Deseas
+              {{ proveedor.activo ? 'desactivar' : 'activar' }}
+              al proveedor
+
+              <strong class="text-nogal">{{ proveedor.nombre }}</strong>?
+            </p>
+
+            <p class="mt-2 rounded-xl border border-[#E8D6BF] bg-[#FFF9F2] p-3 text-xs text-gray-600">
+              Sus compras y cotizaciones anteriores permanecerán registradas en MySQL.
+            </p>
+
+            <div class="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                (click)="cancelarCambioEstado()"
+                [disabled]="guardando()"
+                class="rounded-xl border border-[#E8D6BF] bg-white px-4 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                (click)="confirmarCambioEstado()"
+                [disabled]="guardando()"
+                class="rounded-xl bg-terracota px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-nogal disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {{ guardando() ? 'Procesando...' : 'Confirmar' }}
+              </button>
+            </div>
+          </section>
+        </div>
+      }
+    </main>
+  </div>
 </div>

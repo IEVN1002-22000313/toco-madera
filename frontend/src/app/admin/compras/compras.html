@@ -4,617 +4,900 @@
      ETAPA 3.17
 ===================================================== -->
 
-<div class="min-h-screen bg-crema">
-  <!-- ================================================
-       1. ENCABEZADO
-  ================================================ -->
-
-  <header class="bg-nogal px-6 py-5 text-white">
-    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
-      <div>
-        <h1 class="font-brand text-xl font-bold">Toco Madera | Administración</h1>
-
-        <p class="mt-1 text-sm text-[#F9E9D5]">Compras y recepción de materias primas</p>
-      </div>
-
-      <div class="flex flex-wrap gap-3">
-        <a
-          routerLink="/admin/dashboard"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Dashboard
-        </a>
-
-        <a
-          routerLink="/admin/materiales"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Materiales
-        </a>
-
-        <a
-          routerLink="/admin/proveedores"
-          class="rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold hover:bg-white/10"
-        >
-          Proveedores
-        </a>
-
-        <button
-          type="button"
-          (click)="cerrarSesion()"
-          class="rounded-lg bg-terracota px-4 py-2 text-sm font-semibold hover:bg-[#8C4825]"
-        >
-          Cerrar sesión
-        </button>
-      </div>
-    </nav>
-  </header>
-
-  <!-- ================================================
-       2. CONTENIDO
-  ================================================ -->
-
-  <main class="mx-auto max-w-7xl px-6 py-10">
-    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
-      <div>
-        <h2 class="font-brand text-3xl font-bold text-nogal">Gestión de compras</h2>
-
-        <p class="mt-2 text-gray-600">
-          Registra compras a proveedores y confirma la recepción de materias primas.
-        </p>
-      </div>
-
+<div class="min-h-screen bg-crema text-nogal selection:bg-terracota/20 selection:text-nogal">
+  <!-- BOTÓN TOGGLE SIDEBAR EN MÓVIL (FLOWBITE DRAWER) -->
+  <div class="sticky top-0 z-40 flex items-center justify-between border-b border-[#E8D6BF] bg-nogal px-4 py-3 text-white lg:hidden">
+    <div class="flex items-center gap-3">
       <button
         type="button"
-        (click)="nuevaCompra()"
-        [disabled]="guardando() || cargandoCatalogos()"
-        class="rounded-lg bg-terracota px-5 py-3 font-semibold text-white hover:bg-nogal disabled:opacity-50"
+        data-drawer-target="toco-madera-sidebar"
+        data-drawer-toggle="toco-madera-sidebar"
+        aria-controls="toco-madera-sidebar"
+        class="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 p-2 text-[#F9E9D5] transition duration-200 hover:bg-terracota hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
       >
-        + Nueva compra
+        <span class="sr-only">Abrir menú de administración</span>
+        <svg class="h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
       </button>
+      <div>
+        <span class="font-brand text-base font-bold tracking-wide">Toco Madera</span>
+        <span class="ml-1.5 rounded-full bg-terracota/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+          Admin
+        </span>
+      </div>
     </div>
 
-    <!-- ================================================
-         3. MENSAJES
-    ================================================ -->
+    <a
+      routerLink="/"
+      class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#F9E9D5] transition duration-200 hover:bg-white hover:text-nogal"
+    >
+      <span>Tienda</span>
+      <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg>
+    </a>
+  </div>
 
-    @if (mensaje()) {
-      <div
-        role="status"
-        class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4 text-green-800"
-      >
-        {{ mensaje() }}
+  <!-- ==================================================
+       BARRA LATERAL ADMINISTRATIVA
+  ================================================== -->
+  <aside
+    id="toco-madera-sidebar"
+    aria-label="Navegación de administración"
+    class="fixed top-0 left-0 z-40 flex h-screen w-72 -translate-x-full flex-col justify-between border-r border-[#3A2216] bg-gradient-to-b from-[#4B2E1F] via-nogal to-[#2B1910] text-white shadow-2xl transition-transform duration-300 ease-out lg:translate-x-0"
+  >
+    <!-- PARTE SUPERIOR: MARCA + MÓDULOS -->
+    <div class="flex-1 overflow-y-auto px-4 py-6">
+      <div class="mb-6 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-terracota to-[#8C4825] text-white shadow-md ring-1 ring-[#E8C8AB]/30">
+            <img
+              src="/logo-icono.png"
+              alt="Logo Toco Madera"
+              width="48"
+              height="48"
+              class="h-full w-full object-contain"
+            />
+          </div>
+          <div class="min-w-0">
+            <p class="font-brand truncate text-base font-bold tracking-tight text-white">
+              Toco Madera
+            </p>
+            <p class="text-[11px] font-medium uppercase tracking-[0.14em] text-[#E8C8AB]">
+              Panel Administrador
+            </p>
+          </div>
+        </div>
       </div>
-    }
 
-    @if (error()) {
-      <div role="alert" class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
-        {{ error() }}
-      </div>
-    }
-
-    @if (errorCatalogos()) {
-      <div role="alert" class="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4">
-        <p class="text-sm text-amber-900">
-          {{ errorCatalogos() }}
-        </p>
-
-        <button
-          type="button"
-          (click)="cargarCatalogos()"
-          class="mt-3 rounded-lg bg-terracota px-4 py-2 text-sm font-semibold text-white"
-        >
-          Reintentar catálogos
-        </button>
-      </div>
-    }
-
-    <!-- ================================================
-         4. FILTROS
-    ================================================ -->
-
-    <section class="mb-6 rounded-xl bg-white p-5 shadow-sm">
-      <div class="grid gap-4 md:grid-cols-3">
-        <div class="md:col-span-2">
-          <label for="buscarCompra" class="mb-2 block font-medium text-nogal">
-            Buscar compra
-          </label>
-
-          <input
-            id="buscarCompra"
-            type="search"
-            [ngModel]="busqueda()"
-            (ngModelChange)="busqueda.set($event)"
-            placeholder="Número, proveedor o referencia"
-            class="w-full rounded-lg border border-gray-300 p-3"
-          />
+      <div class="space-y-5">
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Principal
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/dashboard"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
         </div>
 
         <div>
-          <label for="estadoCompra" class="mb-2 block font-medium text-nogal"> Estado </label>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Ventas y Taller
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/pedidos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <span>Pedidos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/operaciones"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                <span>Operaciones / Taller</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/clientes"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Clientes</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-          <select
-            id="estadoCompra"
-            [ngModel]="filtroEstado()"
-            (ngModelChange)="filtroEstado.set($event)"
-            class="w-full rounded-lg border border-gray-300 p-3"
-          >
-            <option value="TODOS">Todas</option>
-            <option value="BORRADOR">Borradores</option>
-            <option value="RECIBIDA">Recibidas</option>
-            <option value="CANCELADA">Canceladas</option>
-          </select>
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Catálogo y Producción
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/productos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Productos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/recetas"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>Recetas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/inventario"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                </svg>
+                <span>Inventario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Abastecimiento
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/materiales"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Materias primas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/proveedores"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                </svg>
+                <span>Proveedores</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/compras"
+                class="group flex items-center justify-between rounded-xl bg-gradient-to-r from-terracota to-[#8C4825] px-3.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-black/20 transition-all duration-200"
+              >
+                <span class="flex items-center gap-3">
+                  <svg class="h-4 w-4 text-[#F9E9D5] transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span>Compras</span>
+                </span>
+                <span class="h-2 w-2 rounded-full bg-[#F9E9D5]"></span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- ================================================
-         5. LISTADO DE COMPRAS
-    ================================================ -->
-
-    <section class="rounded-xl bg-white shadow-sm">
-      <div class="flex flex-wrap justify-between gap-3 border-b border-gray-200 p-5">
-        <h3 class="text-lg font-bold text-nogal">Compras registradas</h3>
-
-        <p class="text-sm text-gray-600">
-          Mostrando {{ comprasFiltradas().length }} de {{ compras().length }}
-        </p>
-      </div>
-
-      @if (cargando()) {
-        <div class="p-10 text-center text-gray-600">Consultando compras...</div>
-      } @else if (comprasFiltradas().length === 0) {
-        <div class="p-10 text-center text-gray-600">
-          No hay compras que coincidan con los filtros.
-        </div>
-      } @else {
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-[#F9E9D5] text-nogal">
-              <tr>
-                <th class="px-5 py-4">Compra</th>
-                <th class="px-5 py-4">Proveedor</th>
-                <th class="px-5 py-4">Detalles</th>
-                <th class="px-5 py-4">Total</th>
-                <th class="px-5 py-4">Estado</th>
-                <th class="px-5 py-4">Acciones</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              @for (compra of comprasFiltradas(); track compra.id_compra) {
-                <tr class="border-t border-gray-100 align-top hover:bg-[#FFF9F2]">
-                  <!-- DATOS DE COMPRA -->
-                  <td class="px-5 py-4">
-                    <p class="font-bold text-nogal">#{{ compra.id_compra }}</p>
-
-                    <p class="mt-1 text-xs text-gray-500">
-                      {{ compra.fecha }}
-                    </p>
-
-                    @if (compra.referencia_documento) {
-                      <p class="mt-1 text-xs text-gray-500">
-                        Ref: {{ compra.referencia_documento }}
-                      </p>
-                    }
-                  </td>
-
-                  <!-- PROVEEDOR -->
-                  <td class="px-5 py-4 text-gray-700">
-                    {{ nombreProveedor(compra.id_proveedor) }}
-                  </td>
-
-                  <!-- MATERIALES COMPRADOS -->
-                  <td class="px-5 py-4">
-                    <details class="max-w-xs">
-                      <summary class="cursor-pointer font-semibold text-terracota">
-                        Ver {{ compra.detalles.length }}
-                        material(es)
-                      </summary>
-
-                      <div class="mt-3 space-y-3">
-                        @for (detalle of compra.detalles; track detalle.id_detalle_compra) {
-                          <div class="rounded-lg bg-gray-50 p-3 text-xs text-gray-700">
-                            <p class="font-semibold text-nogal">
-                              {{ nombreMaterial(detalle.id_material) }}
-                            </p>
-
-                            <p>Cantidad: {{ detalle.cantidad }}</p>
-
-                            <p>Costo: ${{ detalle.costo_unitario }}</p>
-
-                            <p>Subtotal: ${{ detalle.subtotal }}</p>
-                          </div>
-                        }
-                      </div>
-                    </details>
-                  </td>
-
-                  <!-- TOTAL -->
-                  <td class="px-5 py-4 font-bold text-nogal">${{ compra.total }}</td>
-
-                  <!-- ESTADO -->
-                  <td class="px-5 py-4">
-                    @if (compra.estado === 'RECIBIDA') {
-                      <span
-                        class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
-                      >
-                        Recibida
-                      </span>
-                    } @else if (compra.estado === 'CANCELADA') {
-                      <span
-                        class="rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700"
-                      >
-                        Cancelada
-                      </span>
-                    } @else {
-                      <span
-                        class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"
-                      >
-                        Borrador
-                      </span>
-                    }
-                  </td>
-
-                  <!-- ACCIONES -->
-                  <td class="px-5 py-4">
-                    @if (compra.estado === 'BORRADOR') {
-                      <div class="flex flex-col gap-2">
-                        <button
-                          type="button"
-                          (click)="solicitarAccion(compra, 'RECIBIR')"
-                          [disabled]="guardando()"
-                          class="rounded-lg bg-salvia px-3 py-2 font-semibold text-white disabled:opacity-50"
-                        >
-                          Recibir
-                        </button>
-
-                        <button
-                          type="button"
-                          (click)="solicitarAccion(compra, 'CANCELAR')"
-                          [disabled]="guardando()"
-                          class="rounded-lg border border-red-300 px-3 py-2 font-semibold text-red-700 disabled:opacity-50"
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    } @else {
-                      <span class="text-xs text-gray-500"> Sin acciones pendientes </span>
-                    }
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-    </section>
-
-    <!-- ================================================
-         6. FORMULARIO DE COMPRA
-    ================================================ -->
-
-    @if (mostrarFormulario()) {
-      <section
-        id="formulario-compra"
-        class="mt-8 scroll-mt-6 rounded-xl border border-[#E8D6BF] bg-white p-6 shadow-sm"
+    <!-- PARTE INFERIOR DEL SIDEBAR: ACCESO A TIENDA Y CIERRE DE SESIÓN -->
+    <div class="space-y-2 border-t border-white/10 bg-black/15 p-4">
+      <a
+        routerLink="/admin/dashboard"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-[#F9E9D5] transition-all duration-200 hover:bg-white hover:text-nogal focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
       >
-        <div class="mb-6 flex justify-between gap-3">
-          <h3 class="text-xl font-bold text-nogal">Registrar compra de materiales</h3>
+        <span>Dashboard</span>
+      </a>
+
+      <button
+        type="button"
+        (click)="cerrarSesion()"
+        class="flex w-full items-center justify-center gap-2 rounded-xl bg-terracota px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/50"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        <span>Cerrar sesión</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==================================================
+       ÁREA PRINCIPAL DE CONTENIDO
+  ================================================== -->
+  <div class="transition-all duration-300 lg:pl-72">
+    <!-- TOPBAR SUPERIOR -->
+    <header class="sticky top-0 z-30 border-b border-[#E8D6BF]/80 bg-crema/90 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+            Toco Madera | Administración
+          </p>
+          <h1 class="font-brand text-xl font-bold text-nogal sm:text-2xl">
+            Compras y recepción de materias primas
+          </h1>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a
+            routerLink="/admin/dashboard"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Dashboard
+          </a>
+
+          <a
+            routerLink="/admin/materiales"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Materiales
+          </a>
+
+          <a
+            routerLink="/admin/proveedores"
+            class="rounded-xl border border-[#E8D6BF] bg-white px-3.5 py-2 text-xs font-semibold text-nogal shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota/40 hover:bg-[#FFF9F2] sm:text-sm"
+          >
+            Proveedores
+          </a>
 
           <button
             type="button"
-            (click)="cerrarFormulario()"
-            [disabled]="guardando()"
-            class="font-semibold text-gray-600"
+            (click)="cerrarSesion()"
+            class="rounded-xl bg-terracota px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] sm:text-sm"
           >
-            Cerrar
+            Cerrar sesión
           </button>
         </div>
+      </div>
+    </header>
 
-        <form (ngSubmit)="guardarCompra()">
-          <!-- DATOS GENERALES -->
-          <div class="grid gap-5 md:grid-cols-2">
-            <div>
-              <label for="proveedorCompra" class="mb-2 block font-medium text-nogal">
-                Proveedor *
-              </label>
+    <!-- ================================================
+         2. CONTENIDO
+    ================================================ -->
+    <main class="mx-auto max-w-7xl space-y-6 px-6 py-8">
+      <div class="flex flex-col justify-between gap-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm sm:flex-row sm:items-center">
+        <div>
+          <h2 class="font-brand text-2xl font-bold text-nogal sm:text-3xl">
+            Gestión de compras
+          </h2>
+          <p class="mt-1.5 text-sm text-gray-600">
+            Registra compras a proveedores y confirma la recepción de materias primas.
+          </p>
+        </div>
 
-              <select
-                id="proveedorCompra"
-                name="proveedor"
-                [(ngModel)]="formulario.id_proveedor"
-                required
-                class="w-full rounded-lg border border-gray-300 p-3"
-              >
-                <option [ngValue]="0">Selecciona un proveedor</option>
+        <button
+          type="button"
+          (click)="nuevaCompra()"
+          [disabled]="guardando() || cargandoCatalogos()"
+          class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-terracota px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <span aria-hidden="true" class="text-base leading-none">+</span>
+          <span>Nueva compra</span>
+        </button>
+      </div>
 
-                @for (proveedor of proveedoresActivos(); track proveedor.id_proveedor) {
-                  <option [ngValue]="proveedor.id_proveedor">
-                    {{ proveedor.nombre }}
-                  </option>
-                }
-              </select>
-            </div>
+      <!-- ================================================
+           3. MENSAJES
+      ================================================ -->
+      @if (mensaje()) {
+        <div
+          role="status"
+          class="flex items-start gap-3 rounded-2xl border border-salvia/40 bg-green-50 p-4 text-sm font-medium text-green-900 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-salvia" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ mensaje() }}</span>
+        </div>
+      }
 
-            <div>
-              <label for="referenciaCompra" class="mb-2 block font-medium text-nogal">
-                Referencia de documento
-              </label>
+      @if (error()) {
+        <div
+          role="alert"
+          class="flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-800 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>{{ error() }}</span>
+        </div>
+      }
 
+      @if (errorCatalogos()) {
+        <div
+          role="alert"
+          class="rounded-2xl border border-amber-300 bg-amber-50 p-5 shadow-sm"
+        >
+          <p class="text-sm font-medium text-amber-950">
+            {{ errorCatalogos() }}
+          </p>
+
+          <button
+            type="button"
+            (click)="cargarCatalogos()"
+            class="mt-3 inline-flex items-center gap-2 rounded-xl bg-terracota px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4825] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]"
+          >
+            Reintentar catálogos
+          </button>
+        </div>
+      }
+
+      <!-- ================================================
+           4. FILTROS
+      ================================================ -->
+      <section
+        aria-label="Filtros de búsqueda de compras"
+        class="rounded-2xl border border-[#E8D6BF] bg-white p-5 shadow-sm"
+      >
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="md:col-span-2">
+            <label for="buscarCompra" class="mb-2 block text-sm font-semibold text-nogal">
+              Buscar compra
+            </label>
+
+            <div class="relative">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
               <input
-                id="referenciaCompra"
-                name="referencia"
-                type="text"
-                maxlength="90"
-                [(ngModel)]="formulario.referencia_documento"
-                placeholder="Ej. COT-001"
-                class="w-full rounded-lg border border-gray-300 p-3"
+                id="buscarCompra"
+                type="search"
+                [ngModel]="busqueda()"
+                (ngModelChange)="busqueda.set($event)"
+                placeholder="Número, proveedor o referencia"
+                class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 py-3 pr-4 pl-10 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
               />
-            </div>
-
-            <div class="md:col-span-2">
-              <label for="observacionesCompra" class="mb-2 block font-medium text-nogal">
-                Observaciones
-              </label>
-
-              <textarea
-                id="observacionesCompra"
-                name="observaciones"
-                rows="2"
-                maxlength="300"
-                [(ngModel)]="formulario.observaciones"
-                class="w-full rounded-lg border border-gray-300 p-3"
-              ></textarea>
             </div>
           </div>
 
-          <!-- DETALLES DE LA COMPRA -->
-          <div class="mt-8">
-            <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <label for="estadoCompra" class="mb-2 block text-sm font-semibold text-nogal">
+              Estado
+            </label>
+
+            <select
+              id="estadoCompra"
+              [ngModel]="filtroEstado()"
+              (ngModelChange)="filtroEstado.set($event)"
+              class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+            >
+              <option value="TODOS">Todas</option>
+              <option value="BORRADOR">Borradores</option>
+              <option value="RECIBIDA">Recibidas</option>
+              <option value="CANCELADA">Canceladas</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================
+           5. LISTADO DE COMPRAS
+      ================================================ -->
+      <section class="overflow-hidden rounded-2xl border border-[#E8D6BF] bg-white shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] bg-[#FFF9F2]/60 px-6 py-4">
+          <h3 class="text-lg font-bold text-nogal">Compras registradas</h3>
+
+          <span class="rounded-full border border-[#E8D6BF] bg-white px-3 py-1 text-xs font-semibold text-nogal">
+            Mostrando {{ comprasFiltradas().length }} de {{ compras().length }}
+          </span>
+        </div>
+
+        @if (cargando()) {
+          <div class="flex items-center justify-center gap-3 p-10 text-sm font-medium text-gray-600">
+            <svg class="h-5 w-5 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Consultando compras...</span>
+          </div>
+        } @else if (comprasFiltradas().length === 0) {
+          <div class="p-10 text-center text-sm text-gray-600">
+            No hay compras que coincidan con los filtros.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="border-b border-[#E8D6BF] bg-[#F9E9D5] text-xs uppercase tracking-wider text-nogal">
+                <tr>
+                  <th class="px-5 py-4 font-bold">Compra</th>
+                  <th class="px-5 py-4 font-bold">Proveedor</th>
+                  <th class="px-5 py-4 font-bold">Detalles</th>
+                  <th class="px-5 py-4 font-bold">Total</th>
+                  <th class="px-5 py-4 font-bold">Estado</th>
+                  <th class="px-5 py-4 font-bold">Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody class="divide-y divide-[#F3E6D6]">
+                @for (compra of comprasFiltradas(); track compra.id_compra) {
+                  <tr class="align-top transition-colors duration-200 hover:bg-[#FFF9F2]">
+                    <!-- DATOS DE COMPRA -->
+                    <td class="px-5 py-4">
+                      <p class="font-bold text-nogal">#{{ compra.id_compra }}</p>
+
+                      <p class="mt-1 text-xs text-gray-500">
+                        {{ compra.fecha }}
+                      </p>
+
+                      @if (compra.referencia_documento) {
+                        <p class="mt-1 inline-block rounded-md bg-crema px-2 py-0.5 text-xs font-medium text-nogal/80">
+                          Ref: {{ compra.referencia_documento }}
+                        </p>
+                      }
+                    </td>
+
+                    <!-- PROVEEDOR -->
+                    <td class="px-5 py-4 font-medium text-nogal">
+                      {{ nombreProveedor(compra.id_proveedor) }}
+                    </td>
+
+                    <!-- MATERIALES COMPRADOS -->
+                    <td class="px-5 py-4">
+                      <details class="group max-w-xs rounded-xl border border-[#E8D6BF]/80 bg-[#FFF9F2]/50 p-2.5 transition-all">
+                        <summary class="cursor-pointer select-none font-semibold text-terracota transition-colors hover:text-nogal">
+                          Ver {{ compra.detalles.length }}
+                          material(es)
+                        </summary>
+
+                        <div class="mt-3 space-y-2.5">
+                          @for (detalle of compra.detalles; track detalle.id_detalle_compra) {
+                            <div class="rounded-lg border border-[#E8D6BF]/60 bg-white p-3 text-xs text-gray-700 shadow-2xs">
+                              <p class="font-bold text-nogal">
+                                {{ nombreMaterial(detalle.id_material) }}
+                              </p>
+
+                              <p class="mt-1">Cantidad: <span class="font-medium text-nogal">{{ detalle.cantidad }}</span></p>
+
+                              <p>Costo: <span class="font-medium text-nogal">${{ detalle.costo_unitario }}</span></p>
+
+                              <p class="mt-0.5 font-semibold text-terracota">Subtotal: ${{ detalle.subtotal }}</p>
+                            </div>
+                          }
+                        </div>
+                      </details>
+                    </td>
+
+                    <!-- TOTAL -->
+                    <td class="px-5 py-4 text-base font-bold text-nogal">
+                      ${{ compra.total }}
+                    </td>
+
+                    <!-- ESTADO -->
+                    <td class="px-5 py-4">
+                      @if (compra.estado === 'RECIBIDA') {
+                        <span
+                          class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                          <span>Recibida</span>
+                        </span>
+                      } @else if (compra.estado === 'CANCELADA') {
+                        <span
+                          class="inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-700"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-gray-500"></span>
+                          <span>Cancelada</span>
+                        </span>
+                      } @else {
+                        <span
+                          class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"
+                        >
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-600"></span>
+                          <span>Borrador</span>
+                        </span>
+                      }
+                    </td>
+
+                    <!-- ACCIONES -->
+                    <td class="px-5 py-4">
+                      @if (compra.estado === 'BORRADOR') {
+                        <div class="flex flex-col gap-2">
+                          <button
+                            type="button"
+                            (click)="solicitarAccion(compra, 'RECIBIR')"
+                            [disabled]="guardando()"
+                            class="rounded-xl bg-salvia px-3.5 py-2 text-xs font-semibold text-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5d6b52] focus:outline-none focus:ring-2 focus:ring-salvia/40 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            Recibir
+                          </button>
+
+                          <button
+                            type="button"
+                            (click)="solicitarAccion(compra, 'CANCELAR')"
+                            [disabled]="guardando()"
+                            class="rounded-xl border border-red-300 bg-red-50/50 px-3.5 py-2 text-xs font-semibold text-red-700 transition-all duration-200 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-200 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      } @else {
+                        <span class="text-xs text-gray-500">Sin acciones pendientes</span>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+
+      <!-- ================================================
+           6. FORMULARIO DE COMPRA
+      ================================================ -->
+      @if (mostrarFormulario()) {
+        <section
+          id="formulario-compra"
+          class="scroll-mt-24 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-md transition-all duration-300"
+        >
+          <div class="mb-6 flex items-center justify-between gap-3 border-b border-[#F3E6D6] pb-4">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+                Registro de abastecimiento
+              </p>
+              <h3 class="mt-0.5 text-xl font-bold text-nogal">
+                Registrar compra de materiales
+              </h3>
+            </div>
+
+            <button
+              type="button"
+              (click)="cerrarFormulario()"
+              [disabled]="guardando()"
+              class="rounded-xl border border-[#E8D6BF] bg-crema/60 px-3.5 py-2 text-xs font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50 sm:text-sm"
+            >
+              Cerrar
+            </button>
+          </div>
+
+          <form (ngSubmit)="guardarCompra()">
+            <!-- DATOS GENERALES -->
+            <div class="grid gap-5 md:grid-cols-2">
               <div>
-                <h4 class="text-lg font-bold text-nogal">Materias primas</h4>
-                <p class="mt-1 text-sm text-gray-500">
-                  {{ formulario.detalles.length }} material(es) en esta compra. Puedes agregar más
-                  al final de la lista.
+                <label for="proveedorCompra" class="mb-2 block text-sm font-semibold text-nogal">
+                  Proveedor *
+                </label>
+
+                <select
+                  id="proveedorCompra"
+                  name="proveedor"
+                  [(ngModel)]="formulario.id_proveedor"
+                  required
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                >
+                  <option [ngValue]="0">Selecciona un proveedor</option>
+
+                  @for (proveedor of proveedoresActivos(); track proveedor.id_proveedor) {
+                    <option [ngValue]="proveedor.id_proveedor">
+                      {{ proveedor.nombre }}
+                    </option>
+                  }
+                </select>
+              </div>
+
+              <div>
+                <label for="referenciaCompra" class="mb-2 block text-sm font-semibold text-nogal">
+                  Referencia de documento
+                </label>
+
+                <input
+                  id="referenciaCompra"
+                  name="referencia"
+                  type="text"
+                  maxlength="90"
+                  [(ngModel)]="formulario.referencia_documento"
+                  placeholder="Ej. COT-001"
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                />
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="observacionesCompra" class="mb-2 block text-sm font-semibold text-nogal">
+                  Observaciones
+                </label>
+
+                <textarea
+                  id="observacionesCompra"
+                  name="observaciones"
+                  rows="2"
+                  maxlength="300"
+                  [(ngModel)]="formulario.observaciones"
+                  class="block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- DETALLES DE LA COMPRA -->
+            <div class="mt-8">
+              <div class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[#F3E6D6] pb-3">
+                <div>
+                  <h4 class="text-lg font-bold text-nogal">Materias primas</h4>
+                  <p class="mt-1 text-sm text-gray-500">
+                    {{ formulario.detalles.length }} material(es) en esta compra. Puedes agregar más
+                    al final de la lista.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  (click)="agregarDetalle()"
+                  class="inline-flex items-center gap-1.5 rounded-xl border border-terracota bg-white px-4 py-2 text-sm font-semibold text-terracota transition-all duration-200 hover:-translate-y-0.5 hover:bg-crema focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/60"
+                >
+                  <span>+ Agregar material</span>
+                </button>
+              </div>
+
+              @for (detalle of formulario.detalles; track detalle; let i = $index) {
+                <div
+                  class="mb-4 grid gap-4 rounded-2xl border border-[#E8D6BF] bg-[#FFF9F2] p-4 transition-all duration-200 hover:border-terracota/40 md:grid-cols-4"
+                >
+                  <div>
+                    <label [for]="'material-' + i" class="mb-2 block text-sm font-semibold text-nogal">
+                      Material
+                    </label>
+
+                    <select
+                      [id]="'material-' + i"
+                      [name]="'material-' + i"
+                      [(ngModel)]="detalle.id_material"
+                      (ngModelChange)="cambiarMaterial(detalle, $event)"
+                      required
+                      class="block w-full rounded-xl border border-[#E8D6BF] bg-white p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:ring-4 focus:ring-[#E8C8AB]/60"
+                    >
+                      <option [ngValue]="0">Selecciona material</option>
+
+                      @for (material of materialesActivos(); track material.id_material) {
+                        <option [ngValue]="material.id_material">
+                          {{ material.nombre }}
+                        </option>
+                      }
+                    </select>
+                  </div>
+
+                  <div>
+                    <label [for]="'cantidad-' + i" class="mb-2 block text-sm font-semibold text-nogal">
+                      Cantidad
+                    </label>
+
+                    <input
+                      [id]="'cantidad-' + i"
+                      [name]="'cantidad-' + i"
+                      type="text"
+                      inputmode="decimal"
+                      [(ngModel)]="detalle.cantidad"
+                      required
+                      placeholder="1.0000"
+                      class="block w-full rounded-xl border border-[#E8D6BF] bg-white p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:ring-4 focus:ring-[#E8C8AB]/60"
+                    />
+                  </div>
+
+                  <div class="rounded-xl bg-white/75 p-3 shadow-2xs">
+                    <label [for]="'costo-' + i" class="mb-2 block text-sm font-semibold text-nogal">
+                      Costo unitario
+                    </label>
+
+                    <input
+                      [id]="'costo-' + i"
+                      [name]="'costo-' + i"
+                      type="text"
+                      inputmode="decimal"
+                      [(ngModel)]="detalle.costo_unitario"
+                      required
+                      placeholder="Costo real por unidad"
+                      class="block w-full rounded-xl border border-[#E8D6BF] bg-white p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:ring-4 focus:ring-[#E8C8AB]/60"
+                    />
+
+                    <p class="mt-2 text-xs text-gray-500">
+                      @if (tieneHistorialCosto(detalle.id_material)) {
+                        Sugerido: último costo de compra recibida. Puedes modificarlo.
+                      } @else {
+                        Sin costo histórico: introduce el costo cotizado por tu proveedor.
+                      }
+                    </p>
+
+                    <p class="mt-2 text-xs font-semibold text-terracota">
+                      Subtotal: ${{ subtotalDetalle(detalle).toFixed(2) }}
+                    </p>
+                    <p class="mt-1 text-xs text-gray-600">
+                      Precio base en catálogo:
+                      @if (costoBaseMaterial(detalle.id_material)) {
+                        <span class="font-semibold text-nogal">${{ costoBaseMaterial(detalle.id_material) }}</span>
+                      } @else {
+                        <span>Sin precio base</span>
+                      }
+                    </p>
+                    <button
+                      type="button"
+                      (click)="guardarCostoBase(detalle)"
+                      [disabled]="guardando() || guardandoCostoBase() || !detalle.id_material"
+                      class="mt-2.5 rounded-lg border border-terracota bg-white px-2.5 py-1.5 text-xs font-semibold text-terracota transition-all duration-200 hover:bg-crema focus:outline-none focus:ring-2 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {{
+                        guardandoCostoBase() ? 'Guardando precio...' : 'Guardar este precio como base'
+                      }}
+                    </button>
+                  </div>
+
+                  <div class="flex items-end">
+                    <button
+                      type="button"
+                      (click)="quitarDetalle(i)"
+                      [disabled]="formulario.detalles.length <= 1"
+                      class="w-full rounded-xl border border-red-300 bg-white px-3 py-3 text-sm font-semibold text-red-700 transition-all duration-200 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-200 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <!-- ==================================================
+                   ACCIÓN AL FINAL DE LA LISTA - MEJORA UX
+                   El usuario ya no necesita regresar al encabezado
+                   para incorporar otro material.
+                   Se reutiliza agregarDetalle() y no modifica costos.
+              =================================================== -->
+              <div
+                class="mt-2 flex flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-[#D6BBA1] bg-[#FFF9F2] px-4 py-5 text-center transition-colors duration-200 hover:border-terracota/60"
+              >
+                <p class="text-sm text-gray-600">
+                  ¿Necesitas registrar otra materia prima en esta compra?
+                </p>
+                <button
+                  type="button"
+                  (click)="agregarDetalle()"
+                  [disabled]="guardando() || guardandoCostoBase()"
+                  class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-nogal px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+                  aria-label="Agregar otro material al final de la compra"
+                >
+                  <span aria-hidden="true" class="text-lg leading-none">+</span>
+                  Agregar otro material
+                </button>
+                <p class="text-xs text-gray-500">
+                  Agregados: {{ formulario.detalles.length }} · Los costos de los demás materiales se
+                  conservan.
+                </p>
+              </div>
+            </div>
+
+            <!-- TOTAL Y ACCIONES -->
+            <div
+              class="sticky bottom-0 z-20 -mx-6 mt-6 flex flex-wrap items-center justify-between gap-4 rounded-b-2xl border-t border-[#E8D6BF] bg-white/95 px-6 py-4 shadow-[0_-5px_20px_rgba(75,46,31,0.08)] backdrop-blur-sm supports-[backdrop-filter]:bg-white/90"
+            >
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Total estimado de compra
+                </p>
+
+                <p class="mt-0.5 text-2xl font-bold text-nogal">
+                  ${{ totalFormulario().toFixed(2) }}
+                  <span class="text-sm font-semibold text-terracota">MXN</span>
                 </p>
               </div>
 
-              <button
-                type="button"
-                (click)="agregarDetalle()"
-                class="rounded-lg border border-terracota px-4 py-2 text-sm font-semibold text-terracota hover:bg-crema"
-              >
-                + Agregar material
-              </button>
-            </div>
+              <div class="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  (click)="cerrarFormulario()"
+                  [disabled]="guardando()"
+                  class="rounded-xl border border-[#E8D6BF] bg-white px-5 py-3 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50"
+                >
+                  Cancelar
+                </button>
 
-            @for (detalle of formulario.detalles; track detalle; let i = $index) {
-              <div
-                class="mb-4 grid gap-4 rounded-lg border border-gray-200 bg-[#FFF9F2] p-4 md:grid-cols-4"
-              >
-                <div>
-                  <label [for]="'material-' + i" class="mb-2 block text-sm font-medium text-nogal">
-                    Material
-                  </label>
-
-                  <select
-                    [id]="'material-' + i"
-                    [name]="'material-' + i"
-                    [(ngModel)]="detalle.id_material"
-                    (ngModelChange)="cambiarMaterial(detalle, $event)"
-                    required
-                    class="w-full rounded-lg border border-gray-300 p-3"
-                  >
-                    <option [ngValue]="0">Selecciona material</option>
-
-                    @for (material of materialesActivos(); track material.id_material) {
-                      <option [ngValue]="material.id_material">
-                        {{ material.nombre }}
-                      </option>
-                    }
-                  </select>
-                </div>
-
-                <div>
-                  <label [for]="'cantidad-' + i" class="mb-2 block text-sm font-medium text-nogal">
-                    Cantidad
-                  </label>
-
-                  <input
-                    [id]="'cantidad-' + i"
-                    [name]="'cantidad-' + i"
-                    type="text"
-                    inputmode="decimal"
-                    [(ngModel)]="detalle.cantidad"
-                    required
-                    placeholder="1.0000"
-                    class="w-full rounded-lg border border-gray-300 p-3"
-                  />
-                </div>
-
-                <div>
-                  <label [for]="'costo-' + i" class="mb-2 block text-sm font-medium text-nogal">
-                    Costo unitario
-                  </label>
-
-                  <input
-                    [id]="'costo-' + i"
-                    [name]="'costo-' + i"
-                    type="text"
-                    inputmode="decimal"
-                    [(ngModel)]="detalle.costo_unitario"
-                    required
-                    placeholder="Costo real por unidad"
-                    class="w-full rounded-lg border border-gray-300 p-3"
-                  />
-
-                  <p class="mt-1 text-xs text-gray-500">
-                    @if (tieneHistorialCosto(detalle.id_material)) {
-                      Sugerido: último costo de compra recibida. Puedes modificarlo.
-                    } @else {
-                      Sin costo histórico: introduce el costo cotizado por tu proveedor.
-                    }
-                  </p>
-
-                  <p class="mt-2 text-xs text-gray-500">
-                    Subtotal: ${{ subtotalDetalle(detalle).toFixed(2) }}
-                  </p>
-                  <p class="mt-1 text-xs text-gray-600">
-                    Precio base en catálogo:
-                    @if (costoBaseMaterial(detalle.id_material)) {
-                      ${{ costoBaseMaterial(detalle.id_material) }}
-                    } @else {
-                      Sin precio base
-                    }
-                  </p>
-                  <button
-                    type="button"
-                    (click)="guardarCostoBase(detalle)"
-                    [disabled]="guardando() || guardandoCostoBase() || !detalle.id_material"
-                    class="mt-2 rounded-md border border-terracota px-2 py-1 text-xs font-semibold text-terracota hover:bg-crema disabled:opacity-50"
-                  >
-                    {{
-                      guardandoCostoBase() ? 'Guardando precio...' : 'Guardar este precio como base'
-                    }}
-                  </button>
-                </div>
-
-                <div class="flex items-end">
-                  <button
-                    type="button"
-                    (click)="quitarDetalle(i)"
-                    [disabled]="formulario.detalles.length <= 1"
-                    class="w-full rounded-lg border border-red-300 px-3 py-3 font-semibold text-red-700 disabled:opacity-40"
-                  >
-                    Quitar
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  [disabled]="guardando()"
+                  class="rounded-xl bg-terracota px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {{ guardando() ? 'Guardando...' : 'Guardar borrador' }}
+                </button>
               </div>
+            </div>
+          </form>
+        </section>
+      }
+
+      <!-- ================================================
+           7. CONFIRMACIÓN DE ACCIÓN
+      ================================================ -->
+      @if (compraPendiente(); as pendiente) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-nogal/60 p-4 backdrop-blur-xs transition-opacity duration-200">
+          <section
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="tituloAccionCompra"
+            class="w-full max-w-md rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-2xl transition-all duration-200"
+          >
+            <h3 id="tituloAccionCompra" class="font-brand text-xl font-bold text-nogal">
+              Confirmar operación
+            </h3>
+
+            <p class="mt-3 text-sm text-gray-700">
+              ¿Deseas
+
+              {{ pendiente.accion === 'RECIBIR' ? 'confirmar la recepción de' : 'cancelar' }}
+
+              la compra
+
+              <strong class="text-nogal">#{{ pendiente.compra.id_compra }}</strong
+              >?
+            </p>
+
+            @if (pendiente.accion === 'RECIBIR') {
+              <p class="mt-3 rounded-xl border border-salvia/30 bg-salvia/10 p-3 text-xs font-medium text-nogal">
+                Se registrarán las entradas de todos los materiales y la compra pasará a estado
+                RECIBIDA.
+              </p>
+            } @else {
+              <p class="mt-3 rounded-xl border border-[#E8D6BF] bg-[#FFF9F2] p-3 text-xs font-medium text-gray-700">
+                La compra se cancelará sin modificar existencias.
+              </p>
             }
 
-            <!-- ==================================================
-                 ACCIÓN AL FINAL DE LA LISTA - MEJORA UX
-                 El usuario ya no necesita regresar al encabezado
-                 para incorporar otro material.
-                 Se reutiliza agregarDetalle() y no modifica costos.
-            =================================================== -->
-            <div
-              class="mt-2 flex flex-col items-center gap-2 rounded-xl border-2 border-dashed border-[#D6BBA1] bg-[#FFF9F2] px-4 py-5 text-center"
-            >
-              <p class="text-sm text-gray-600">
-                ¿Necesitas registrar otra materia prima en esta compra?
-              </p>
+            <div class="mt-6 flex justify-end gap-3">
               <button
                 type="button"
-                (click)="agregarDetalle()"
-                [disabled]="guardando() || guardandoCostoBase()"
-                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-nogal px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-terracota focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
-                aria-label="Agregar otro material al final de la compra"
-              >
-                <span aria-hidden="true" class="text-lg leading-none">+</span>
-                Agregar otro material
-              </button>
-              <p class="text-xs text-gray-500">
-                Agregados: {{ formulario.detalles.length }} · Los costos de los demás materiales se
-                conservan.
-              </p>
-            </div>
-          </div>
-
-          <!-- TOTAL Y ACCIONES -->
-          <div
-            class="sticky bottom-0 z-20 -mx-6 mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#E8D6BF] bg-white/95 px-6 py-4 shadow-[0_-5px_20px_rgba(75,46,31,0.08)] backdrop-blur-sm supports-[backdrop-filter]:bg-white/90"
-          >
-            <div>
-              <p class="text-sm text-gray-600">Total estimado de compra</p>
-
-              <p class="text-2xl font-bold text-nogal">
-                ${{ totalFormulario().toFixed(2) }}
-                MXN
-              </p>
-            </div>
-
-            <div class="flex flex-wrap gap-3">
-              <button
-                type="button"
-                (click)="cerrarFormulario()"
+                (click)="cancelarAccion()"
                 [disabled]="guardando()"
-                class="rounded-lg border border-gray-300 px-5 py-3 font-semibold"
+                class="rounded-xl border border-[#E8D6BF] bg-white px-4 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-crema disabled:opacity-50"
               >
-                Cancelar
+                Volver
               </button>
 
               <button
-                type="submit"
+                type="button"
+                (click)="confirmarAccion()"
                 [disabled]="guardando()"
-                class="rounded-lg bg-terracota px-6 py-3 font-semibold text-white hover:bg-nogal disabled:opacity-50"
+                class="rounded-xl bg-terracota px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#8C4825] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {{ guardando() ? 'Guardando...' : 'Guardar borrador' }}
+                {{ guardando() ? 'Procesando...' : 'Confirmar' }}
               </button>
             </div>
-          </div>
-        </form>
-      </section>
-    }
-
-    <!-- ================================================
-         7. CONFIRMACIÓN DE ACCIÓN
-    ================================================ -->
-
-    @if (compraPendiente(); as pendiente) {
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <section
-          role="alertdialog"
-          aria-modal="true"
-          aria-labelledby="tituloAccionCompra"
-          class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
-        >
-          <h3 id="tituloAccionCompra" class="text-xl font-bold text-nogal">Confirmar operación</h3>
-
-          <p class="mt-4 text-gray-700">
-            ¿Deseas
-
-            {{ pendiente.accion === 'RECIBIR' ? 'confirmar la recepción de' : 'cancelar' }}
-
-            la compra
-
-            <strong>#{{ pendiente.compra.id_compra }}</strong
-            >?
-          </p>
-
-          @if (pendiente.accion === 'RECIBIR') {
-            <p class="mt-3 text-sm text-gray-600">
-              Se registrarán las entradas de todos los materiales y la compra pasará a estado
-              RECIBIDA.
-            </p>
-          } @else {
-            <p class="mt-3 text-sm text-gray-600">
-              La compra se cancelará sin modificar existencias.
-            </p>
-          }
-
-          <div class="mt-6 flex justify-end gap-3">
-            <button
-              type="button"
-              (click)="cancelarAccion()"
-              [disabled]="guardando()"
-              class="rounded-lg border border-gray-300 px-4 py-2 font-semibold"
-            >
-              Volver
-            </button>
-
-            <button
-              type="button"
-              (click)="confirmarAccion()"
-              [disabled]="guardando()"
-              class="rounded-lg bg-terracota px-4 py-2 font-semibold text-white disabled:opacity-50"
-            >
-              {{ guardando() ? 'Procesando...' : 'Confirmar' }}
-            </button>
-          </div>
-        </section>
-      </div>
-    }
-  </main>
+          </section>
+        </div>
+      }
+    </main>
+  </div>
 </div>

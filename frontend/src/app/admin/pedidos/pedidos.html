@@ -1,224 +1,520 @@
-<div class="min-h-screen bg-gradient-to-b from-[#FBF2E6] via-[#F9E9D5] to-[#F3DFC5] px-4 py-8 text-[#4B2E1F]">
-  <main class="mx-auto max-w-7xl space-y-6">
-    <!-- Encabezado y acciones principales -->
-    <header class="flex flex-col justify-between gap-4 rounded-2xl border border-[#E6D2B8] bg-white/90 p-5 shadow-sm backdrop-blur-sm md:flex-row md:items-center">
-      <div class="space-y-1">
-        <span class="inline-flex items-center rounded-full bg-[#F9E9D5] px-3 py-0.5 text-xs font-semibold tracking-wide text-[#8C4A23] uppercase">
-          Panel de administración
+<div class="min-h-screen bg-crema text-nogal selection:bg-terracota/20 selection:text-nogal">
+  <!-- BOTÓN TOGGLE SIDEBAR EN MÓVIL (FLOWBITE DRAWER) -->
+  <div class="sticky top-0 z-40 flex items-center justify-between border-b border-[#E8D6BF] bg-nogal px-4 py-3 text-white lg:hidden">
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        data-drawer-target="toco-madera-sidebar"
+        data-drawer-toggle="toco-madera-sidebar"
+        aria-controls="toco-madera-sidebar"
+        class="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 p-2 text-[#F9E9D5] transition duration-200 hover:bg-terracota hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <span class="sr-only">Abrir menú de administración</span>
+        <svg class="h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <div>
+        <span class="font-brand text-base font-bold tracking-wide">Toco Madera</span>
+        <span class="ml-1.5 rounded-full bg-terracota/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+          Admin
         </span>
-        <h1 class="text-2xl font-bold tracking-tight text-[#3E2416] sm:text-3xl">Revisión de pedidos</h1>
-        <p class="text-sm text-stone-600">Autorización del taller, seguimiento financiero y artículos personalizados.</p>
       </div>
-
-      <div class="flex flex-wrap items-center gap-2.5">
-        <a
-          routerLink="/admin/operaciones"
-          class="inline-flex items-center justify-center rounded-xl border border-[#718063] bg-[#718063] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#5E6C51]"
-        >
-          Taller y entregas
-        </a>
-        <a
-          routerLink="/admin/dashboard"
-          class="inline-flex items-center justify-center rounded-xl border border-[#A65A2E] bg-[#FFFDF9] px-4 py-2 text-sm font-semibold text-[#8C4A23] transition hover:bg-[#F9E9D5]"
-        >
-          Dashboard
-        </a>
-        <button
-          type="button"
-          (click)="cargar()"
-          class="inline-flex items-center justify-center rounded-xl bg-[#A65A2E] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#8C4A23] active:scale-[0.99]"
-        >
-          Actualizar
-        </button>
-      </div>
-    </header>
-
-    <!-- Mensajes de estado -->
-    @if (error()) {
-      <p role="alert" class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm font-medium text-red-800 shadow-xs">
-        {{ error() }}
-      </p>
-    }
-    @if (mensaje()) {
-      <p role="status" class="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-900 shadow-xs">
-        {{ mensaje() }}
-      </p>
-    }
-
-    <!-- Barra de filtros -->
-    <div class="flex flex-wrap items-center gap-2 rounded-2xl border border-[#E6D2B8] bg-white/80 px-4 py-3 shadow-2xs">
-      <span class="mr-1 text-sm font-semibold text-[#4B2E1F]">Filtrar autorización:</span>
-      @for (f of ['TODOS','POR_REVISAR','APROBADO','RECHAZADO']; track f) {
-        <button
-          type="button"
-          (click)="cambiarFiltro(f)"
-          [class]="filtro() === f
-            ? 'rounded-full border border-[#A65A2E] bg-[#A65A2E] px-3.5 py-1 text-xs font-semibold text-white shadow-2xs transition'
-            : 'rounded-full border border-[#D8BE9E] bg-white px-3.5 py-1 text-xs font-semibold text-[#5C3A26] transition hover:border-[#A65A2E] hover:bg-[#FDF6EC]'"
-        >
-          {{ f }}
-        </button>
-      }
     </div>
 
-    <!-- Contenido principal: Listado + Detalle -->
-    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-      <!-- Listado de pedidos -->
-      <section class="space-y-3.5" aria-label="Listado de pedidos">
-        @if (cargando()) {
-          <p class="rounded-2xl border border-[#E8D6BF] bg-white p-5 text-sm text-stone-600 shadow-sm">
-            Consultando pedidos...
+    <a
+      routerLink="/admin/dashboard"
+      class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#F9E9D5] transition duration-200 hover:bg-white hover:text-nogal"
+    >
+      <span>Dashboard</span>
+    </a>
+  </div>
+
+  <!-- ==================================================
+       BARRA LATERAL ADMINISTRATIVA
+  ================================================== -->
+  <aside
+    id="toco-madera-sidebar"
+    aria-label="Navegación de administración"
+    class="fixed top-0 left-0 z-40 flex h-screen w-72 -translate-x-full flex-col justify-between border-r border-[#3A2216] bg-gradient-to-b from-[#4B2E1F] via-nogal to-[#2B1910] text-white shadow-2xl transition-transform duration-300 ease-out lg:translate-x-0"
+  >
+    <!-- PARTE SUPERIOR: MARCA + MÓDULOS -->
+    <div class="flex-1 overflow-y-auto px-4 py-6">
+      <div class="mb-6 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-terracota to-[#8C4825] text-white shadow-md ring-1 ring-[#E8C8AB]/30">
+            <img
+              src="/logo-icono.png"
+              alt="Logo Toco Madera"
+              width="48"
+              height="48"
+              class="h-full w-full object-contain"
+            />
+          </div>
+          <div class="min-w-0">
+            <p class="font-brand truncate text-base font-bold tracking-tight text-white">
+              Toco Madera
+            </p>
+            <p class="text-[11px] font-medium uppercase tracking-[0.14em] text-[#E8C8AB]">
+              Panel Administrador
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-5">
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Principal
           </p>
-        }
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/dashboard"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        @for (p of verPedidos(); track p.id_pedido) {
-          <article class="rounded-2xl border border-[#E8D6BF] bg-white p-5 shadow-sm transition hover:border-[#CFAF88] hover:shadow-md">
-            <div class="flex flex-wrap items-start justify-between gap-3">
-              <div class="space-y-0.5">
-                <p class="text-xs font-medium text-stone-500">Pedido #{{ p.id_pedido }}</p>
-                <h2 class="text-base font-bold break-all text-[#3E2416]">{{ p.folio }}</h2>
-                <p class="text-sm text-stone-700">{{ p.cliente_nombre }} · <span class="text-stone-500">{{ p.fecha }}</span></p>
-              </div>
-              <div class="text-right">
-                <span class="inline-block rounded-full border border-[#E3C8A6] bg-[#F9E9D5] px-2.5 py-1 text-xs font-semibold text-[#7A3F1D]">
-                  {{ p.autorizacion }}
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Ventas y Taller
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/pedidos"
+                class="group flex items-center justify-between rounded-xl bg-gradient-to-r from-terracota to-[#8C4825] px-3.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-black/20 transition-all duration-200"
+              >
+                <span class="flex items-center gap-3">
+                  <svg class="h-4 w-4 text-[#F9E9D5] transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                  <span>Pedidos</span>
                 </span>
-                <p class="mt-1.5 text-xs font-medium text-stone-500">{{ p.estado }}</p>
-              </div>
-            </div>
-
-            <div class="mt-4 grid grid-cols-3 gap-2.5 rounded-xl border border-[#F2E6D7] bg-[#FDF9F4] p-3 text-sm">
-              <div>
-                <p class="text-xs text-stone-500">Total</p>
-                <p class="font-bold text-[#3E2416]">{{ dinero(p.total) }}</p>
-              </div>
-              <div>
-                <p class="text-xs text-stone-500">Pagado</p>
-                <p class="font-bold text-emerald-800">{{ dinero(p.pagado) }}</p>
-              </div>
-              <div>
-                <p class="text-xs text-stone-500">Saldo</p>
-                <p class="font-bold text-[#8C4A23]">{{ dinero(p.saldo) }}</p>
-              </div>
-            </div>
-
-            <div class="mt-4 flex justify-end">
-              <button
-                type="button"
-                (click)="seleccionar(p.id_pedido)"
-                class="rounded-xl bg-[#4B2E1F] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#362015] active:scale-[0.99]"
+                <span class="h-2 w-2 rounded-full bg-[#F9E9D5]"></span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/operaciones"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
               >
-                Ver detalle
-              </button>
-            </div>
-          </article>
-        } @empty {
-          @if (!cargando()) {
-            <p class="rounded-2xl border border-[#E8D6BF] bg-white p-5 text-sm text-stone-600 shadow-sm">
-              No hay pedidos en este filtro.
-            </p>
-          }
-        }
-      </section>
-
-      <!-- Detalle del pedido seleccionado -->
-      <section class="h-fit space-y-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm" aria-label="Detalle del pedido">
-        @if (detalle(); as d) {
-          <div class="border-b border-[#EFE3D3] pb-4">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-              <h2 class="text-xl font-bold text-[#3E2416]">Pedido #{{ d.pedido.id_pedido }}</h2>
-              <span class="rounded-full bg-[#F9E9D5] px-3 py-1 text-xs font-bold text-[#7A3F1D]">
-                {{ d.pedido.autorizacion }}
-              </span>
-            </div>
-            <p class="mt-1 break-all text-xs font-medium text-stone-500">{{ d.pedido.folio }}</p>
-          </div>
-
-          <div class="space-y-1.5 rounded-xl bg-[#FDF9F4] p-3.5 text-sm text-stone-700">
-            <p><strong class="text-[#3E2416]">Cliente:</strong> {{ d.pedido.cliente_nombre }} · {{ d.pedido.cliente_correo }} · {{ d.pedido.cliente_telefono || 'Sin teléfono' }}</p>
-            <p><strong class="text-[#3E2416]">Estado:</strong> {{ d.pedido.estado }} · <strong class="text-[#3E2416]">Pago:</strong> {{ d.pedido.modalidad_pago }}</p>
-            <p><strong class="text-[#3E2416]">Entrega:</strong> {{ d.pedido.tipo_entrega }} · {{ d.entrega?.programada || d.pedido.fecha_entrega_prometida || 'Por confirmar' }}</p>
-            <p><strong class="text-[#3E2416]">Recolección:</strong> {{ d.entrega?.punto_recoleccion || 'Lugar por confirmar' }}</p>
-          </div>
-
-          <div class="space-y-2.5 border-t border-[#EFE3D3] pt-4">
-            <h3 class="text-sm font-bold tracking-wide text-[#3E2416] uppercase">Artículos y grabados</h3>
-            @for (item of d.detalles; track item.id_detalle_pedido) {
-              <div class="rounded-xl border border-[#F1E4D4] bg-[#FFF9F2] p-3.5 text-sm">
-                <p class="font-semibold text-[#3E2416]">{{ item.producto }} × {{ item.cantidad }} · <span class="font-medium text-[#7A3F1D]">{{ dinero(item.precio_unitario_acordado) }} por unidad</span></p>
-                <p class="mt-1 text-stone-700">Tipo de surtido: <span class="font-medium">{{ item.tipo_surtido }}</span></p>
-                @if (item.texto_grabado) {
-                  <p class="mt-1 rounded-lg bg-white px-2.5 py-1 text-xs text-[#4B2E1F]"><strong>Grabado:</strong> {{ item.texto_grabado }}</p>
-                }
-                @if (item.notas) {
-                  <p class="mt-1 text-xs text-stone-600"><strong>Notas:</strong> {{ item.notas }}</p>
-                }
-              </div>
-            }
-          </div>
-
-          <div class="space-y-2 border-t border-[#EFE3D3] pt-4">
-            <h3 class="text-sm font-bold tracking-wide text-[#3E2416] uppercase">Pagos SIMULADOS</h3>
-            @for (pago of d.pagos; track pago.id_pago) {
-              <div class="flex items-center justify-between rounded-xl border border-[#F2E6D7] bg-[#FDF9F4] px-3.5 py-2 text-sm">
-                <span class="font-semibold text-[#3E2416]">{{ dinero(pago.monto) }}</span>
-                <span class="text-stone-600">{{ pago.metodo }} · {{ pago.estado }}</span>
-              </div>
-            }
-          </div>
-
-          @if (d.pedido.motivo) {
-            <p class="rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-sm text-amber-950">
-              <strong>Motivo:</strong> {{ d.pedido.motivo }}
-            </p>
-          }
-
-          @if (puedeDecidir(d.pedido)) {
-            <div class="space-y-3.5 border-t border-[#EFE3D3] pt-4">
-              <p class="text-xs leading-relaxed text-stone-600">
-                Antes de autorizar, verifica grabado, insumos y fecha estimada. Los pagos ya registrados son simulados.
-              </p>
-
-              <button
-                type="button"
-                [disabled]="guardando()"
-                (click)="decidir('APROBADO')"
-                class="w-full rounded-xl bg-[#718063] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#5E6C51] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                <span>Operaciones / Taller</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/clientes"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
               >
-                Autorizar pedido
-              </button>
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Clientes</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-              <div class="space-y-1.5 pt-1">
-                <label for="motivoRechazo" class="block text-sm font-semibold text-[#3E2416]">Motivo de rechazo</label>
-                <textarea
-                  id="motivoRechazo"
-                  rows="2"
-                  maxlength="300"
-                  class="w-full rounded-xl border border-[#DFCBB2] bg-[#FFFCF8] p-2.5 text-sm text-[#3E2416] placeholder:text-stone-400 focus:border-[#A65A2E] focus:ring-2 focus:ring-[#A65A2E]/20 focus:outline-none"
-                  [value]="motivo()"
-                  (input)="cambiarMotivo($any($event.target).value)"
-                  placeholder="Motivo (mínimo 5 caracteres)"
-                ></textarea>
-              </div>
-
-              <button
-                type="button"
-                [disabled]="guardando()"
-                (click)="decidir('RECHAZADO')"
-                class="w-full rounded-xl border border-red-700 bg-red-50/60 px-4 py-2 text-sm font-bold text-red-800 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Catálogo y Producción
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/productos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
               >
-                Rechazar pedido
-              </button>
-            </div>
-          } @else {
-            <p class="rounded-xl border border-[#E6D2B8] bg-[#F9E9D5] p-3.5 text-sm text-[#4B2E1F]">
-              La decisión no está disponible: el pedido ya fue revisado o avanzó de etapa.
-            </p>
-          }
-        } @else {
-          <p class="text-sm text-stone-600">Selecciona un pedido de la lista para ver sus detalles.</p>
-        }
-      </section>
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Productos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/recetas"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>Recetas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/inventario"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                </svg>
+                <span>Inventario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Abastecimiento
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/materiales"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Materias primas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/proveedores"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                </svg>
+                <span>Proveedores</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/compras"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Compras</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </main>
+
+    <!-- PARTE INFERIOR DEL SIDEBAR -->
+    <div class="border-t border-white/10 bg-black/15 p-4">
+      <a
+        routerLink="/admin/dashboard"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-semibold text-[#F9E9D5] transition-all duration-200 hover:bg-white hover:text-nogal focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span>Volver al dashboard</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ==================================================
+       ÁREA PRINCIPAL DE CONTENIDO
+  ================================================== -->
+  <div class="transition-all duration-300 lg:pl-72">
+    <main class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+      <!-- Encabezado y acciones principales -->
+      <header class="flex flex-col justify-between gap-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm lg:flex-row lg:items-center">
+        <div class="space-y-1">
+          <span class="inline-flex items-center rounded-full bg-[#F9E9D5] px-3 py-0.5 text-xs font-semibold tracking-wide text-[#8C4A23] uppercase">
+            Panel de administración
+          </span>
+          <h1 class="font-brand text-2xl font-bold tracking-tight text-nogal sm:text-3xl">
+            Revisión de pedidos
+          </h1>
+          <p class="text-sm text-gray-600">
+            Autorización del taller, seguimiento financiero y artículos personalizados.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+          <a
+            routerLink="/admin/operaciones"
+            class="inline-flex items-center justify-center rounded-xl border border-salvia bg-salvia px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5E6C51] focus:outline-none focus:ring-4 focus:ring-salvia/40"
+          >
+            Taller y entregas
+          </a>
+          <a
+            routerLink="/admin/dashboard"
+            class="inline-flex items-center justify-center rounded-xl border border-[#A65A2E] bg-[#FFFDF9] px-4 py-2.5 text-sm font-semibold text-[#8C4A23] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#F9E9D5] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/60"
+          >
+            Dashboard
+          </a>
+          <button
+            type="button"
+            (click)="cargar()"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-terracota px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#8C4A25] hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] active:scale-[0.99]"
+          >
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Actualizar</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Mensajes de estado -->
+      @if (error()) {
+        <div
+          role="alert"
+          class="flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 px-4 py-3.5 text-sm font-medium text-red-800 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>{{ error() }}</span>
+        </div>
+      }
+      @if (mensaje()) {
+        <div
+          role="status"
+          class="flex items-start gap-3 rounded-2xl border border-salvia/40 bg-emerald-50 px-4 py-3.5 text-sm font-medium text-emerald-950 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-salvia" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ mensaje() }}</span>
+        </div>
+      }
+
+      <!-- Barra de filtros -->
+      <div class="flex flex-wrap items-center gap-2 rounded-2xl border border-[#E8D6BF] bg-white px-4 py-3.5 shadow-sm">
+        <span class="mr-1 text-sm font-semibold text-nogal">Filtrar autorización:</span>
+        @for (f of ['TODOS','POR_REVISAR','APROBADO','RECHAZADO']; track f) {
+          <button
+            type="button"
+            (click)="cambiarFiltro(f)"
+            [class]="filtro() === f
+              ? 'rounded-full border border-terracota bg-terracota px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs transition-all duration-200'
+              : 'rounded-full border border-[#E8D6BF] bg-[#FFF9F2] px-3.5 py-1.5 text-xs font-semibold text-nogal transition-all duration-200 hover:-translate-y-0.5 hover:border-terracota hover:bg-[#F9E9D5]'"
+          >
+            {{ f }}
+          </button>
+        }
+      </div>
+
+      <!-- Contenido principal: Listado + Detalle -->
+      <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+        <!-- Listado de pedidos -->
+        <section class="space-y-4" aria-label="Listado de pedidos">
+          @if (cargando()) {
+            <div class="flex items-center gap-3 rounded-2xl border border-[#E8D6BF] bg-white p-5 text-sm text-gray-600 shadow-sm">
+              <svg class="h-4 w-4 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Consultando pedidos...</span>
+            </div>
+          }
+
+          @for (p of verPedidos(); track p.id_pedido) {
+            <article class="group rounded-2xl border border-[#E8D6BF] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-terracota/50 hover:shadow-lg">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div class="space-y-0.5">
+                  <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    Pedido #{{ p.id_pedido }}
+                  </p>
+                  <h2 class="break-all font-mono text-base font-bold text-nogal transition-colors group-hover:text-terracota">
+                    {{ p.folio }}
+                  </h2>
+                  <p class="text-sm font-medium text-gray-700">
+                    {{ p.cliente_nombre }} · <span class="text-xs text-gray-500">{{ p.fecha }}</span>
+                  </p>
+                </div>
+                <div class="text-right">
+                  <span class="inline-block rounded-full border border-[#E3C8A6] bg-[#F9E9D5] px-3 py-1 text-xs font-semibold text-[#7A3F1D]">
+                    {{ p.autorizacion }}
+                  </span>
+                  <p class="mt-1.5 text-xs font-semibold text-gray-500">{{ p.estado }}</p>
+                </div>
+              </div>
+
+              <div class="mt-4 grid grid-cols-3 gap-2.5 rounded-xl border border-[#F2E6D7] bg-[#FDF9F4] p-3 text-sm">
+                <div class="rounded-lg bg-white/80 p-2 shadow-2xs">
+                  <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Total</p>
+                  <p class="mt-0.5 font-bold text-nogal">{{ dinero(p.total) }}</p>
+                </div>
+                <div class="rounded-lg bg-white/80 p-2 shadow-2xs">
+                  <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Pagado</p>
+                  <p class="mt-0.5 font-bold text-emerald-800">{{ dinero(p.pagado) }}</p>
+                </div>
+                <div class="rounded-lg bg-white/80 p-2 shadow-2xs">
+                  <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Saldo</p>
+                  <p class="mt-0.5 font-bold text-[#8C4A23]">{{ dinero(p.saldo) }}</p>
+                </div>
+              </div>
+
+              <div class="mt-4 flex justify-end">
+                <button
+                  type="button"
+                  (click)="seleccionar(p.id_pedido)"
+                  class="rounded-xl bg-nogal px-4 py-2 text-sm font-semibold text-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]"
+                >
+                  Ver detalle
+                </button>
+              </div>
+            </article>
+          } @empty {
+            @if (!cargando()) {
+              <p class="rounded-2xl border border-[#E8D6BF] bg-white p-6 text-center text-sm text-gray-600 shadow-sm">
+                No hay pedidos en este filtro.
+              </p>
+            }
+          }
+        </section>
+
+        <!-- Detalle del pedido seleccionado -->
+        <section
+          class="h-fit space-y-5 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300"
+          aria-label="Detalle del pedido"
+        >
+          @if (detalle(); as d) {
+            <div class="border-b border-[#EFE3D3] pb-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+                    Ficha de autorización
+                  </span>
+                  <h2 class="font-brand mt-0.5 text-xl font-bold text-nogal sm:text-2xl">
+                    Pedido #{{ d.pedido.id_pedido }}
+                  </h2>
+                </div>
+                <span class="rounded-full border border-[#E3C8A6] bg-[#F9E9D5] px-3.5 py-1 text-xs font-bold text-[#7A3F1D]">
+                  {{ d.pedido.autorizacion }}
+                </span>
+              </div>
+              <p class="mt-1 break-all font-mono text-xs font-medium text-gray-500">
+                {{ d.pedido.folio }}
+              </p>
+            </div>
+
+            <div class="space-y-2 rounded-xl border border-[#F2E6D7] bg-[#FDF9F4] p-4 text-sm text-gray-700">
+              <p>
+                <strong class="text-nogal">Cliente:</strong> {{ d.pedido.cliente_nombre }} · {{ d.pedido.cliente_correo }} · {{ d.pedido.cliente_telefono || 'Sin teléfono' }}
+              </p>
+              <p>
+                <strong class="text-nogal">Estado:</strong> {{ d.pedido.estado }} · <strong class="text-nogal">Pago:</strong> {{ d.pedido.modalidad_pago }}
+              </p>
+              <p>
+                <strong class="text-nogal">Entrega:</strong> {{ d.pedido.tipo_entrega }} · {{ d.entrega?.programada || d.pedido.fecha_entrega_prometida || 'Por confirmar' }}
+              </p>
+              <p>
+                <strong class="text-nogal">Recolección:</strong> {{ d.entrega?.punto_recoleccion || 'Lugar por confirmar' }}
+              </p>
+            </div>
+
+            <div class="space-y-3 border-t border-[#EFE3D3] pt-4">
+              <h3 class="text-xs font-bold tracking-wider text-nogal uppercase">
+                Artículos y grabados
+              </h3>
+              @for (item of d.detalles; track item.id_detalle_pedido) {
+                <div class="rounded-xl border border-[#F1E4D4] bg-[#FFF9F2] p-4 text-sm transition-colors hover:border-[#E3C6A9]">
+                  <p class="font-bold text-nogal">
+                    {{ item.producto }} × {{ item.cantidad }} ·
+                    <span class="font-semibold text-[#7A3F1D]">{{ dinero(item.precio_unitario_acordado) }} por unidad</span>
+                  </p>
+                  <p class="mt-1 text-gray-700">
+                    Tipo de surtido: <span class="font-semibold text-nogal">{{ item.tipo_surtido }}</span>
+                  </p>
+                  @if (item.texto_grabado) {
+                    <p class="mt-2 rounded-lg border border-[#E8D6BF]/70 bg-white px-3 py-1.5 text-xs text-nogal">
+                      <strong>Grabado:</strong> {{ item.texto_grabado }}
+                    </p>
+                  }
+                  @if (item.notas) {
+                    <p class="mt-1.5 text-xs text-gray-600">
+                      <strong>Notas:</strong> {{ item.notas }}
+                    </p>
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="space-y-2 border-t border-[#EFE3D3] pt-4">
+              <h3 class="text-xs font-bold tracking-wider text-nogal uppercase">
+                Pagos SIMULADOS
+              </h3>
+              @for (pago of d.pagos; track pago.id_pago) {
+                <div class="flex items-center justify-between rounded-xl border border-[#F2E6D7] bg-[#FDF9F4] px-4 py-2.5 text-sm">
+                  <span class="font-bold text-nogal">{{ dinero(pago.monto) }}</span>
+                  <span class="text-xs font-medium text-gray-600">{{ pago.metodo }} · {{ pago.estado }}</span>
+                </div>
+              }
+            </div>
+
+            @if (d.pedido.motivo) {
+              <div class="rounded-xl border border-amber-300 bg-amber-50 p-3.5 text-sm text-amber-950">
+                <strong>Motivo:</strong> {{ d.pedido.motivo }}
+              </div>
+            }
+
+            @if (puedeDecidir(d.pedido)) {
+              <div class="space-y-4 border-t border-[#EFE3D3] pt-4">
+                <p class="text-xs leading-relaxed text-gray-600">
+                  Antes de autorizar, verifica grabado, insumos y fecha estimada. Los pagos ya registrados son simulados.
+                </p>
+
+                <button
+                  type="button"
+                  [disabled]="guardando()"
+                  (click)="decidir('APROBADO')"
+                  class="w-full rounded-xl bg-salvia px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5E6C51] focus:outline-none focus:ring-4 focus:ring-salvia/40 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                >
+                  Autorizar pedido
+                </button>
+
+                <div class="space-y-1.5 pt-1">
+                  <label for="motivoRechazo" class="block text-sm font-semibold text-nogal">
+                    Motivo de rechazo
+                  </label>
+                  <textarea
+                    id="motivoRechazo"
+                    rows="2"
+                    maxlength="300"
+                    class="w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder:text-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60 focus:outline-none"
+                    [value]="motivo()"
+                    (input)="cambiarMotivo($any($event.target).value)"
+                    placeholder="Motivo (mínimo 5 caracteres)"
+                  ></textarea>
+                </div>
+
+                <button
+                  type="button"
+                  [disabled]="guardando()"
+                  (click)="decidir('RECHAZADO')"
+                  class="w-full rounded-xl border border-red-700 bg-red-50/70 px-4 py-2 text-sm font-bold text-red-800 transition-all duration-200 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                >
+                  Rechazar pedido
+                </button>
+              </div>
+            } @else {
+              <p class="rounded-xl border border-[#E8D6BF] bg-[#F9E9D5] p-3.5 text-sm font-medium text-nogal">
+                La decisión no está disponible: el pedido ya fue revisado o avanzó de etapa.
+              </p>
+            }
+          } @else {
+            <div class="rounded-xl border border-[#F2E6D7] bg-[#FDF9F4] p-6 text-center text-sm text-gray-600">
+              Selecciona un pedido de la lista para ver sus detalles.
+            </div>
+          }
+        </section>
+      </div>
+    </main>
+  </div>
 </div>

@@ -1,198 +1,747 @@
 <!-- Toco Madera — Etapa 3.20.4. Operaciones reales protegidas por JWT ADMIN. -->
-<div class="min-h-screen bg-[#F9E9D5] px-4 py-8 text-[#4B2E1F]">
-  <main class="mx-auto max-w-7xl space-y-6">
-    <header class="flex flex-wrap items-center justify-between gap-3">
+<div class="min-h-screen bg-crema text-nogal selection:bg-terracota/20 selection:text-nogal">
+  <!-- BOTÓN TOGGLE SIDEBAR EN MÓVIL (FLOWBITE DRAWER) -->
+  <div class="sticky top-0 z-40 flex items-center justify-between border-b border-[#E8D6BF] bg-nogal px-4 py-3 text-white lg:hidden">
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        data-drawer-target="toco-madera-sidebar"
+        data-drawer-toggle="toco-madera-sidebar"
+        aria-controls="toco-madera-sidebar"
+        class="inline-flex items-center justify-center rounded-lg border border-white/15 bg-white/10 p-2 text-[#F9E9D5] transition duration-200 hover:bg-terracota hover:text-white focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <span class="sr-only">Abrir menú de administración</span>
+        <svg class="h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
       <div>
-        <h1 class="text-3xl font-bold">Taller y entregas</h1>
-        <p class="mt-1 text-sm text-[#6B5140]">Flujo administrativo completo: autorización → fabricación → recolección → entrega.</p>
+        <span class="font-brand text-base font-bold tracking-wide">Toco Madera</span>
+        <span class="ml-1.5 rounded-full bg-terracota/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+          Admin
+        </span>
       </div>
-      <nav class="flex flex-wrap gap-2">
-        <a routerLink="/admin/pedidos" class="rounded-lg border border-[#A65A2E] px-4 py-2 text-sm font-semibold">Autorizaciones</a>
-        <a routerLink="/admin/dashboard" class="rounded-lg border border-[#A65A2E] px-4 py-2 text-sm font-semibold">Dashboard</a>
-        <button type="button" [disabled]="ocupado() || cargando()" (click)="cargar()"
-          class="rounded-lg bg-[#A65A2E] px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">Actualizar</button>
-      </nav>
-    </header>
+    </div>
 
-    <p class="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-      Entorno académico: los pagos son <strong>simulados</strong>, no hay cobros bancarios. Las acciones de fabricación y entrega
-      <strong>sí escriben movimientos reales en tu MySQL local</strong> y no deben repetirse.
-    </p>
-    @if (error()) { <p role="alert" class="rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-800">{{ error() }}</p> }
-    @if (mensaje()) { <p role="status" class="rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-900">{{ mensaje() }}</p> }
-    @if (ocupado()) { <p role="status" class="text-sm font-semibold text-[#A65A2E]">Procesando solicitud...</p> }
+    <a
+      routerLink="/admin/dashboard"
+      class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#F9E9D5] transition duration-200 hover:bg-white hover:text-nogal"
+    >
+      <span>Dashboard</span>
+    </a>
+  </div>
 
-    <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.3fr)]">
-      <aside class="space-y-3" aria-label="Pedidos">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <h2 class="text-xl font-bold">Pedidos</h2>
-          <div class="flex gap-2 text-xs">
-            <button type="button" (click)="cambiarFiltro('ACTIVOS')" [class]="filtro() === 'ACTIVOS' ? 'rounded-full border border-[#A65A2E] bg-[#A65A2E] px-3 py-1 text-white' : 'rounded-full border border-[#A65A2E] px-3 py-1'">Activos</button>
-            <button type="button" (click)="cambiarFiltro('TODOS')" [class]="filtro() === 'TODOS' ? 'rounded-full border border-[#A65A2E] bg-[#A65A2E] px-3 py-1 text-white' : 'rounded-full border border-[#A65A2E] px-3 py-1'">Todos</button>
+  <!-- ==================================================
+       BARRA LATERAL ADMINISTRATIVA
+  ================================================== -->
+  <aside
+    id="toco-madera-sidebar"
+    aria-label="Navegación de administración"
+    class="fixed top-0 left-0 z-40 flex h-screen w-72 -translate-x-full flex-col justify-between border-r border-[#3A2216] bg-gradient-to-b from-[#4B2E1F] via-nogal to-[#2B1910] text-white shadow-2xl transition-transform duration-300 ease-out lg:translate-x-0"
+  >
+    <!-- PARTE SUPERIOR: MARCA + MÓDULOS -->
+    <div class="flex-1 overflow-y-auto px-4 py-6">
+      <div class="mb-6 rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-terracota to-[#8C4825] text-white shadow-md ring-1 ring-[#E8C8AB]/30">
+            <img
+              src="/logo-icono.png"
+              alt="Logo Toco Madera"
+              width="48"
+              height="48"
+              class="h-full w-full object-contain"
+            />
+          </div>
+          <div class="min-w-0">
+            <p class="font-brand truncate text-base font-bold tracking-tight text-white">
+              Toco Madera
+            </p>
+            <p class="text-[11px] font-medium uppercase tracking-[0.14em] text-[#E8C8AB]">
+              Panel Administrador
+            </p>
           </div>
         </div>
-        @if (cargando()) { <p class="rounded-xl bg-white p-4">Cargando pedidos...</p> }
-        @for (p of pedidosFiltrados(); track p.id_pedido) {
-          <button type="button" (click)="seleccionar(p.id_pedido)" [disabled]="ocupado()"
-            [class]="idSeleccionado() === p.id_pedido ? 'block w-full rounded-xl border-2 border-[#A65A2E] bg-white p-4 text-left shadow-sm hover:shadow-md disabled:opacity-60' : 'block w-full rounded-xl border border-[#E8D6BF] bg-white p-4 text-left shadow-sm hover:shadow-md disabled:opacity-60'">
-            <span class="flex flex-wrap items-center justify-between gap-2">
-              <span class="font-bold">Pedido #{{ p.id_pedido }}</span>
-              <span class="rounded bg-[#F9E9D5] px-2 py-1 text-xs">{{ p.estado }}</span>
-            </span>
-            <span class="mt-1 block break-all text-xs text-gray-500">{{ p.folio }}</span>
-            <span class="mt-1 block text-sm">{{ p.cliente_nombre }}</span>
-            <span class="mt-2 flex flex-wrap items-center justify-between gap-2 text-sm">
-              <span>Entrega: {{ p.estado_entrega || 'SIN PROGRAMAR' }}</span>
-              <strong>Saldo: {{ dinero(p.saldo_simulado) }}</strong>
-            </span>
-          </button>
-        } @empty { @if (!cargando()) { <p class="rounded-xl bg-white p-4">No hay pedidos en el filtro.</p> } }
-      </aside>
+      </div>
 
-      <section class="space-y-5" aria-label="Operación del pedido">
-        @if (pedido(); as p) {
-          <div class="rounded-xl border border-[#E8D6BF] bg-white p-5 shadow-sm">
-            <h2 class="text-2xl font-bold">Pedido #{{ p.id_pedido }}</h2>
-            <p class="mt-1 break-all text-xs text-gray-500">{{ p.folio }}</p>
-            <div class="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-              <p><strong>Cliente:</strong> {{ p.cliente_nombre }}</p>
-              <p><strong>Estado:</strong> {{ p.estado }}</p>
-              <p><strong>Autorización:</strong> {{ autorizacion() }}</p>
-              <p><strong>Saldo simulado:</strong> {{ dinero(p.saldo_simulado) }}</p>
-              <p><strong>Entrega:</strong> {{ p.estado_entrega || 'PENDIENTE' }}</p>
-              <p><strong>Modalidad:</strong> {{ p.tipo_entrega }}</p>
+      <div class="space-y-5">
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Principal
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/dashboard"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Ventas y Taller
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/pedidos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <span>Pedidos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/operaciones"
+                class="group flex items-center justify-between rounded-xl bg-gradient-to-r from-terracota to-[#8C4825] px-3.5 py-2.5 text-sm font-semibold text-white shadow-md shadow-black/20 transition-all duration-200"
+              >
+                <span class="flex items-center gap-3">
+                  <svg class="h-4 w-4 text-[#F9E9D5] transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                  <span>Operaciones / Taller</span>
+                </span>
+                <span class="h-2 w-2 rounded-full bg-[#F9E9D5]"></span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/clientes"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Clientes</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Catálogo y Producción
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/productos"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                <span>Productos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/recetas"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>Recetas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/inventario"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                </svg>
+                <span>Inventario</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#E8C8AB]/75">
+            Abastecimiento
+          </p>
+          <ul class="space-y-1">
+            <li>
+              <a
+                routerLink="/admin/materiales"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Materias primas</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/proveedores"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                </svg>
+                <span>Proveedores</span>
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/admin/compras"
+                class="group flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-[#F9E9D5]/90 transition-all duration-200 hover:translate-x-1 hover:bg-white/10 hover:text-white"
+              >
+                <svg class="h-4 w-4 text-[#E8C8AB] transition-colors group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>Compras</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARTE INFERIOR DEL SIDEBAR -->
+    <div class="border-t border-white/10 bg-black/15 p-4">
+      <a
+        routerLink="/admin/dashboard"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-semibold text-[#F9E9D5] transition-all duration-200 hover:bg-white hover:text-nogal focus:outline-none focus:ring-2 focus:ring-[#E8C8AB]"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span>Volver al dashboard</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ==================================================
+       ÁREA PRINCIPAL DE CONTENIDO
+  ================================================== -->
+  <div class="transition-all duration-300 lg:pl-72">
+    <main class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
+      <header class="flex flex-col justify-between gap-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm lg:flex-row lg:items-center">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+            Flujo operativo de taller
+          </p>
+          <h1 class="font-brand mt-1 text-2xl font-bold text-nogal sm:text-3xl">
+            Taller y entregas
+          </h1>
+          <p class="mt-1 text-sm text-[#6B5140]">
+            Flujo administrativo completo: autorización → fabricación → recolección → entrega.
+          </p>
+        </div>
+
+        <nav class="flex flex-wrap items-center gap-2.5" aria-label="Accesos rápidos de operaciones">
+          <a
+            routerLink="/admin/pedidos"
+            class="rounded-xl border border-[#A65A2E] bg-white px-4 py-2.5 text-sm font-semibold text-[#A65A2E] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#FFF9F2] focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/60"
+          >
+            Autorizaciones
+          </a>
+          <a
+            routerLink="/admin/dashboard"
+            class="rounded-xl border border-[#E8D6BF] bg-crema/60 px-4 py-2.5 text-sm font-semibold text-nogal transition-all duration-200 hover:-translate-y-0.5 hover:bg-crema focus:outline-none focus:ring-4 focus:ring-[#E8C8AB]/60"
+          >
+            Dashboard
+          </a>
+          <button
+            type="button"
+            [disabled]="ocupado() || cargando()"
+            (click)="cargar()"
+            class="inline-flex items-center gap-2 rounded-xl bg-[#A65A2E] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota hover:shadow-md focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span>Actualizar</span>
+          </button>
+        </nav>
+      </header>
+
+      <div class="rounded-2xl border border-amber-300 bg-amber-50/90 p-4 text-sm text-amber-950 shadow-2xs">
+        Entorno académico: los pagos son <strong>simulados</strong>, no hay cobros bancarios. Las acciones de fabricación y entrega
+        <strong>sí escriben movimientos reales en tu MySQL local</strong> y no deben repetirse.
+      </div>
+
+      @if (error()) {
+        <div
+          role="alert"
+          class="flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-sm font-medium text-red-800 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <span>{{ error() }}</span>
+        </div>
+      }
+
+      @if (mensaje()) {
+        <div
+          role="status"
+          class="flex items-start gap-3 rounded-2xl border border-salvia/40 bg-green-50 p-4 text-sm font-medium text-green-900 shadow-sm"
+        >
+          <svg class="mt-0.5 h-5 w-5 shrink-0 text-salvia" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>{{ mensaje() }}</span>
+        </div>
+      }
+
+      @if (ocupado()) {
+        <div
+          role="status"
+          class="flex items-center gap-2.5 rounded-2xl border border-[#E8D6BF] bg-white px-4 py-3 text-sm font-semibold text-[#A65A2E] shadow-2xs"
+        >
+          <svg class="h-4 w-4 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Procesando solicitud...</span>
+        </div>
+      }
+
+      <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.35fr)]">
+        <!-- COLUMNA IZQUIERDA: LISTA DE PEDIDOS -->
+        <aside class="space-y-3" aria-label="Pedidos">
+          <div class="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-[#E8D6BF] bg-white px-4 py-3 shadow-2xs">
+            <h2 class="text-lg font-bold text-nogal">Pedidos</h2>
+            <div class="flex gap-1.5 text-xs font-semibold">
+              <button
+                type="button"
+                (click)="cambiarFiltro('ACTIVOS')"
+                [class]="filtro() === 'ACTIVOS' ? 'rounded-full border border-[#A65A2E] bg-[#A65A2E] px-3 py-1 text-white shadow-2xs transition-all duration-200' : 'rounded-full border border-[#E8D6BF] bg-[#FFF9F2] px-3 py-1 text-nogal transition-all duration-200 hover:border-[#A65A2E]'"
+              >
+                Activos
+              </button>
+              <button
+                type="button"
+                (click)="cambiarFiltro('TODOS')"
+                [class]="filtro() === 'TODOS' ? 'rounded-full border border-[#A65A2E] bg-[#A65A2E] px-3 py-1 text-white shadow-2xs transition-all duration-200' : 'rounded-full border border-[#E8D6BF] bg-[#FFF9F2] px-3 py-1 text-nogal transition-all duration-200 hover:border-[#A65A2E]'"
+              >
+                Todos
+              </button>
             </div>
-            @if (autorizacion()==='POR_REVISAR' && p.estado!=='ENTREGADO') {
-              <p class="mt-3 rounded-lg bg-amber-50 p-3 text-sm">Primero autoriza el pedido en <a routerLink="/admin/pedidos" class="font-bold underline">Revisión de pedidos</a>.</p>
-            }
-            @if (p.estado==='ENTREGADO') {
-              <p class="mt-3 rounded-lg bg-green-50 p-3 font-semibold text-green-900">Pedido histórico entregado. No se permiten operaciones adicionales.</p>
-              <p class="mt-2 text-sm">Fecha registrada: {{ p.entregada || 'Consultar seguimiento' }}</p>
-            }
           </div>
 
-          @if (p.estado!=='ENTREGADO' && p.estado!=='CANCELADO') {
-            <!-- ETAPA 1: FABRICACIÓN -->
-            <div class="rounded-xl border border-[#E8D6BF] bg-white p-5 shadow-sm space-y-4">
-              <div><h3 class="text-xl font-bold">1. Producción y materiales</h3>
-                <p class="text-sm text-gray-600">Planificar el detalle, iniciar orden, verificar insumos, consumirlos y registrar lote terminado.</p></div>
-
-              @if (autorizacion()!=='APROBADO') {
-                <p class="rounded-lg bg-amber-50 p-3 text-sm">Se requiere autorización ADMIN para iniciar una fabricación nueva.</p>
-              }
-              @for (d of pendientesPedido(); track d.id_detalle_pedido) {
-                <article class="rounded-lg border border-[#E3C6A9] bg-[#FFF9F2] p-4 space-y-2">
-                  <p class="font-bold">{{ d.producto }} · detalle #{{ d.id_detalle_pedido }}</p>
-                  <p class="text-sm">Unidades sin planificar: <strong>{{ d.cantidad_pendiente }}</strong></p>
-                  @if (d.texto_grabado) { <p class="text-sm">Grabado: {{ d.texto_grabado }}</p> }
-                  <p class="text-xs">Recetas vigentes: {{ d.recetas_vigentes }}</p>
-                  <div class="flex flex-wrap items-end gap-2">
-                    <label class="text-sm font-medium">Cantidad a planificar
-                      <input type="number" min="1" [max]="d.cantidad_pendiente" step="1" class="mt-1 block w-28 rounded border p-2"
-                        [value]="cantidadPlanificar(d)" (input)="cambiarCantidad(d.id_detalle_pedido,$any($event.target).value)" />
-                    </label>
-                    <button type="button" [disabled]="ocupado() || d.recetas_vigentes===0 || autorizacion()!=='APROBADO'"
-                      (click)="planificar(d)" class="rounded-lg bg-[#A65A2E] px-4 py-2 text-sm font-bold text-white disabled:opacity-40">Planificar orden</button>
-                  </div>
-                </article>
-              } @empty { <p class="text-sm text-gray-600">No quedan detalles de fabricación sin planificar para este pedido.</p> }
-
-              <h4 class="border-t pt-3 font-bold">Órdenes asociadas a este pedido</h4>
-              @for (o of ordenesPedido(); track o.id_orden) {
-                <article class="space-y-3 rounded-lg border border-[#E3C6A9] p-4">
-                  <div class="flex flex-wrap items-center justify-between gap-2">
-                    <div><p class="font-bold">Orden #{{ o.id_orden }} · {{ o.producto }}</p>
-                      <p class="text-sm">{{ o.cantidad }} unidad(es) · {{ o.estado }}</p></div>
-                    @if (o.estado==='FINALIZADA') { <span class="rounded bg-green-100 px-3 py-1 text-xs font-bold text-green-900">Lote terminado registrado</span> }
-                  </div>
-                  @if (o.estado==='PLANIFICADA') {
-                    <button type="button" [disabled]="ocupado() || autorizacion()!=='APROBADO'" (click)="iniciar(o)"
-                      class="rounded-lg bg-[#A65A2E] px-3 py-2 text-sm font-bold text-white disabled:opacity-40">Iniciar orden</button>
-                  }
-                  @if (o.estado==='EN_PROCESO') {
-                    <div class="flex flex-wrap gap-2">
-                      <button type="button" [disabled]="ocupado()" (click)="verificarMateriales(o)" class="rounded-lg border border-[#A65A2E] px-3 py-2 text-sm font-semibold">Verificar materiales</button>
-                      <button type="button" [disabled]="ocupado()" (click)="verificarFinalizacion(o)" class="rounded-lg border border-[#A65A2E] px-3 py-2 text-sm font-semibold">Verificar finalización</button>
-                    </div>
-                    @if (materiales()[o.id_orden]; as verificacion) {
-                      <div class="rounded-lg bg-[#FFF9F2] p-3 text-sm space-y-2">
-                        <p class="font-semibold">Materiales de la receta</p>
-                        @for (m of verificacion.materiales; track m.nombre) {
-                          <p>{{ m.nombre }} · Requerido {{ m.cantidad_requerida }} · Disponible {{ m.stock_disponible }} · {{ m.suficiente ? 'SUFICIENTE' : 'INSUFICIENTE' }}</p>
-                        }
-                        @if (verificacion.ya_consumida) { <p>Los materiales ya fueron consumidos para esta orden.</p> }
-                        @if (verificacion.puede_consumir) {
-                          <button type="button" [disabled]="ocupado()" (click)="consumir(o)" class="rounded bg-red-800 px-3 py-2 font-bold text-white disabled:opacity-40">Confirmar consumo de materiales</button>
-                        }
-                      </div>
-                    }
-                    @if (finalizaciones()[o.id_orden]; as v) {
-                      <div class="rounded-lg bg-[#FFF9F2] p-3 text-sm space-y-2">
-                        <p>Consumos completos: {{ v.consumos_completos ? 'Sí' : 'No' }} · Lotes existentes: {{ v.lotes_existentes }}</p>
-                        @if (v.observacion) { <p>{{ v.observacion }}</p> }
-                        @if (v.puede_finalizar) {
-                          <button type="button" [disabled]="ocupado()" (click)="finalizar(o)" class="rounded bg-[#718063] px-3 py-2 font-bold text-white disabled:opacity-40">Finalizar y crear lote</button>
-                        }
-                      </div>
-                    }
-                  }
-                </article>
-              } @empty { <p class="text-sm text-gray-600">Todavía no hay órdenes de fabricación para este pedido.</p> }
-            </div>
-
-            <!-- ETAPA 2: PROGRAMACIÓN -->
-            <div class="rounded-xl border border-[#E8D6BF] bg-white p-5 shadow-sm space-y-3">
-              <h3 class="text-xl font-bold">2. Programar recolección</h3>
-              <p class="text-sm text-gray-600">Define una fecha futura y el punto de recolección acordado con el cliente.</p>
-              <label class="block text-sm font-semibold">Fecha y hora local
-                <input type="datetime-local" class="mt-1 block w-full rounded-lg border p-2" [value]="fechaLocal()"
-                  (input)="cambiarFecha($any($event.target).value)" [disabled]="!puedeProgramar()" />
-              </label>
-              <label class="block text-sm font-semibold">Punto de recolección
-                <input type="text" maxlength="200" class="mt-1 block w-full rounded-lg border p-2"
-                  placeholder="Lugar acordado para la recolección" [value]="punto()" (input)="cambiarPunto($any($event.target).value)"
-                  [disabled]="!puedeProgramar()" />
-              </label>
-              <button type="button" [disabled]="ocupado() || !puedeProgramar()" (click)="programar()"
-                class="rounded-lg bg-[#A65A2E] px-4 py-2 font-bold text-white disabled:opacity-40">Guardar programación</button>
-              @if (p.programada) { <p class="text-sm text-green-800">Actualmente programado para {{ p.programada }} en {{ p.punto_recoleccion }}.</p> }
-            </div>
-
-            <!-- ETAPA 3: LISTO -->
-            <div class="rounded-xl border border-[#E8D6BF] bg-white p-5 shadow-sm space-y-3">
-              <h3 class="text-xl font-bold">3. Marcar producto listo</h3>
-              <p class="text-sm text-gray-600">Flask comprueba que todos los detalles tengan inventario terminado suficiente. Si falta un lote, responde con el motivo y no cambia el estado.</p>
-              <button type="button" [disabled]="ocupado() || !puedeListo()" (click)="listo()"
-                class="rounded-lg bg-[#718063] px-4 py-2 font-bold text-white disabled:opacity-40">Marcar LISTO</button>
-              @if (p.estado==='LISTO') { <p class="font-semibold text-green-800">Pedido LISTO para recoger.</p> }
-            </div>
-
-            <!-- ETAPA 4: SALDO -->
-            <div class="rounded-xl border border-[#E8D6BF] bg-white p-5 shadow-sm space-y-3">
-              <h3 class="text-xl font-bold">4. Liquidación simulada</h3>
-              <p class="text-sm">Saldo registrado: <strong>{{ dinero(p.saldo_simulado) }}</strong></p>
-              <p class="text-xs text-gray-600">No introduce datos bancarios y no cobra dinero real. Se añade un registro de pago simulado en MySQL.</p>
-              <button type="button" [disabled]="ocupado() || !puedeLiquidar()" (click)="liquidar()"
-                class="rounded-lg bg-[#A65A2E] px-4 py-2 font-bold text-white disabled:opacity-40">Registrar liquidación simulada</button>
-            </div>
-
-            <!-- ETAPA 5: ENTREGA -->
-            <div class="rounded-xl border border-[#E8D6BF] bg-white p-5 shadow-sm space-y-3">
-              <h3 class="text-xl font-bold">5. Confirmar entrega</h3>
-              <p class="text-sm text-gray-600">Solo disponible con pedido LISTO, entrega PROGRAMADA y saldo cero. La confirmación registra una salida real de inventario.</p>
-              <label class="block text-sm font-semibold">Nombre del receptor
-                <input type="text" maxlength="120" class="mt-1 block w-full rounded-lg border p-2" placeholder="Nombre de quien recibe"
-                  [value]="receptor()" (input)="cambiarReceptor($any($event.target).value)" />
-              </label>
-              <button type="button" [disabled]="ocupado() || !puedeEntregar()" (click)="entregar()"
-                class="rounded-lg bg-[#4B2E1F] px-4 py-2 font-bold text-white disabled:opacity-40">Confirmar entrega y descontar inventario</button>
-              @if (!puedeEntregar()) { <p class="text-xs text-gray-600">Faltan requisitos, nombre del receptor o alguna condición todavía no está cumplida.</p> }
+          @if (cargando()) {
+            <div class="flex items-center gap-3 rounded-2xl border border-[#E8D6BF] bg-white p-4 text-sm text-gray-600 shadow-sm">
+              <svg class="h-4 w-4 animate-spin text-terracota" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Cargando pedidos...</span>
             </div>
           }
-        } @else {
-          <p class="rounded-xl bg-white p-6">Selecciona un pedido de la lista para gestionar sus operaciones.</p>
-        }
-      </section>
-    </div>
-  </main>
+
+          @for (p of pedidosFiltrados(); track p.id_pedido) {
+            <button
+              type="button"
+              (click)="seleccionar(p.id_pedido)"
+              [disabled]="ocupado()"
+              [class]="idSeleccionado() === p.id_pedido ? 'block w-full rounded-2xl border-2 border-[#A65A2E] bg-white p-4 text-left shadow-md transition-all duration-200 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60' : 'block w-full rounded-2xl border border-[#E8D6BF] bg-white p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#A65A2E]/50 hover:bg-[#FFF9F2]/60 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60'"
+            >
+              <span class="flex flex-wrap items-center justify-between gap-2">
+                <span class="font-bold text-nogal">Pedido #{{ p.id_pedido }}</span>
+                <span class="rounded-full bg-[#F9E9D5] px-2.5 py-0.5 text-xs font-semibold text-nogal">
+                  {{ p.estado }}
+                </span>
+              </span>
+              <span class="mt-1 block break-all font-mono text-xs text-gray-500">
+                {{ p.folio }}
+              </span>
+              <span class="mt-1.5 block text-sm font-medium text-nogal/90">
+                {{ p.cliente_nombre }}
+              </span>
+              <span class="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-[#F3E6D6] pt-2 text-xs">
+                <span class="text-gray-600">Entrega: <strong class="font-semibold text-nogal">{{ p.estado_entrega || 'SIN PROGRAMAR' }}</strong></span>
+                <strong class="text-sm text-terracota">Saldo: {{ dinero(p.saldo_simulado) }}</strong>
+              </span>
+            </button>
+          } @empty {
+            @if (!cargando()) {
+              <p class="rounded-2xl border border-[#E8D6BF] bg-white p-5 text-sm text-gray-600 shadow-sm">
+                No hay pedidos en el filtro.
+              </p>
+            }
+          }
+        </aside>
+
+        <!-- COLUMNA DERECHA: OPERACIÓN DEL PEDIDO -->
+        <section class="space-y-5" aria-label="Operación del pedido">
+          @if (pedido(); as p) {
+            <!-- RESUMEN DEL PEDIDO SELECCIONADO -->
+            <div class="rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300">
+              <div class="flex flex-wrap items-start justify-between gap-2 border-b border-[#F3E6D6] pb-4">
+                <div>
+                  <span class="text-xs font-semibold uppercase tracking-[0.14em] text-terracota">
+                    Detalle operativo
+                  </span>
+                  <h2 class="font-brand mt-0.5 text-2xl font-bold text-nogal">
+                    Pedido #{{ p.id_pedido }}
+                  </h2>
+                  <p class="mt-1 break-all font-mono text-xs text-gray-500">
+                    {{ p.folio }}
+                  </p>
+                </div>
+                <span class="rounded-full bg-[#F9E9D5] px-3.5 py-1 text-xs font-bold text-nogal">
+                  {{ p.estado }}
+                </span>
+              </div>
+
+              <div class="mt-4 grid gap-3 rounded-xl border border-[#F3E6D6] bg-[#FFF9F2] p-4 text-sm sm:grid-cols-2">
+                <p><strong class="text-nogal">Cliente:</strong> {{ p.cliente_nombre }}</p>
+                <p><strong class="text-nogal">Estado:</strong> {{ p.estado }}</p>
+                <p><strong class="text-nogal">Autorización:</strong> {{ autorizacion() }}</p>
+                <p><strong class="text-nogal">Saldo simulado:</strong> <span class="font-bold text-terracota">{{ dinero(p.saldo_simulado) }}</span></p>
+                <p><strong class="text-nogal">Entrega:</strong> {{ p.estado_entrega || 'PENDIENTE' }}</p>
+                <p><strong class="text-nogal">Modalidad:</strong> {{ p.tipo_entrega }}</p>
+              </div>
+
+              @if (autorizacion() === 'POR_REVISAR' && p.estado !== 'ENTREGADO') {
+                <p class="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-3.5 text-sm text-amber-950">
+                  Primero autoriza el pedido en
+                  <a routerLink="/admin/pedidos" class="font-bold underline hover:text-terracota">Revisión de pedidos</a>.
+                </p>
+              }
+
+              @if (p.estado === 'ENTREGADO') {
+                <div class="mt-4 rounded-xl border border-salvia/40 bg-green-50 p-4 text-green-950">
+                  <p class="font-bold">Pedido histórico entregado. No se permiten operaciones adicionales.</p>
+                  <p class="mt-1.5 text-sm">Fecha registrada: {{ p.entregada || 'Consultar seguimiento' }}</p>
+                </div>
+              }
+            </div>
+
+            @if (p.estado !== 'ENTREGADO' && p.estado !== 'CANCELADO') {
+              <!-- ETAPA 1: FABRICACIÓN -->
+              <div class="space-y-4 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300">
+                <div class="border-b border-[#F3E6D6] pb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-terracota">Paso 1</span>
+                  <h3 class="text-xl font-bold text-nogal">1. Producción y materiales</h3>
+                  <p class="mt-1 text-sm text-gray-600">
+                    Planificar el detalle, iniciar orden, verificar insumos, consumirlos y registrar lote terminado.
+                  </p>
+                </div>
+
+                @if (autorizacion() !== 'APROBADO') {
+                  <p class="rounded-xl border border-amber-300 bg-amber-50 p-3.5 text-sm text-amber-950">
+                    Se requiere autorización ADMIN para iniciar una fabricación nueva.
+                  </p>
+                }
+
+                @for (d of pendientesPedido(); track d.id_detalle_pedido) {
+                  <article class="space-y-2.5 rounded-2xl border border-[#E3C6A9] bg-[#FFF9F2] p-4 transition-all duration-200 hover:border-[#A65A2E]/60">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                      <p class="font-bold text-nogal">
+                        {{ d.producto }} · <span class="text-xs font-semibold text-terracota">detalle #{{ d.id_detalle_pedido }}</span>
+                      </p>
+                      <span class="rounded-md bg-white px-2.5 py-1 text-xs font-semibold text-nogal shadow-2xs">
+                        Recetas vigentes: {{ d.recetas_vigentes }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-700">
+                      Unidades sin planificar: <strong class="text-nogal">{{ d.cantidad_pendiente }}</strong>
+                    </p>
+                    @if (d.texto_grabado) {
+                      <p class="rounded-lg bg-white/80 px-3 py-1.5 text-sm text-nogal">
+                        <strong>Grabado:</strong> {{ d.texto_grabado }}
+                      </p>
+                    }
+                    <div class="flex flex-wrap items-end gap-3 pt-1">
+                      <label class="text-sm font-semibold text-nogal">
+                        Cantidad a planificar
+                        <input
+                          type="number"
+                          min="1"
+                          [max]="d.cantidad_pendiente"
+                          step="1"
+                          class="mt-1 block w-28 rounded-xl border border-[#E8D6BF] bg-white p-2.5 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:ring-4 focus:ring-[#E8C8AB]/60"
+                          [value]="cantidadPlanificar(d)"
+                          (input)="cambiarCantidad(d.id_detalle_pedido, $any($event.target).value)"
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        [disabled]="ocupado() || d.recetas_vigentes === 0 || autorizacion() !== 'APROBADO'"
+                        (click)="planificar(d)"
+                        class="rounded-xl bg-[#A65A2E] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Planificar orden
+                      </button>
+                    </div>
+                  </article>
+                } @empty {
+                  <p class="rounded-xl bg-[#FFF9F2]/60 p-3 text-sm text-gray-600">
+                    No quedan detalles de fabricación sin planificar para este pedido.
+                  </p>
+                }
+
+                <h4 class="border-t border-[#F3E6D6] pt-4 text-base font-bold text-nogal">
+                  Órdenes asociadas a este pedido
+                </h4>
+
+                @for (o of ordenesPedido(); track o.id_orden) {
+                  <article class="space-y-3 rounded-2xl border border-[#E3C6A9] bg-white p-4 shadow-2xs transition-all duration-200 hover:border-[#A65A2E]/50">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <p class="font-bold text-nogal">
+                          Orden #{{ o.id_orden }} · <span class="text-terracota">{{ o.producto }}</span>
+                        </p>
+                        <p class="text-sm text-gray-600">
+                          {{ o.cantidad }} unidad(es) · <strong class="font-semibold text-nogal">{{ o.estado }}</strong>
+                        </p>
+                      </div>
+                      @if (o.estado === 'FINALIZADA') {
+                        <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-900">
+                          Lote terminado registrado
+                        </span>
+                      }
+                    </div>
+
+                    @if (o.estado === 'PLANIFICADA') {
+                      <button
+                        type="button"
+                        [disabled]="ocupado() || autorizacion() !== 'APROBADO'"
+                        (click)="iniciar(o)"
+                        class="rounded-xl bg-[#A65A2E] px-4 py-2 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Iniciar orden
+                      </button>
+                    }
+
+                    @if (o.estado === 'EN_PROCESO') {
+                      <div class="flex flex-wrap gap-2.5">
+                        <button
+                          type="button"
+                          [disabled]="ocupado()"
+                          (click)="verificarMateriales(o)"
+                          class="rounded-xl border border-[#A65A2E] bg-[#FFF9F2] px-3.5 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#F9E9D5] focus:outline-none focus:ring-2 focus:ring-[#E8C8AB] disabled:opacity-40"
+                        >
+                          Verificar materiales
+                        </button>
+                        <button
+                          type="button"
+                          [disabled]="ocupado()"
+                          (click)="verificarFinalizacion(o)"
+                          class="rounded-xl border border-[#A65A2E] bg-[#FFF9F2] px-3.5 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#F9E9D5] focus:outline-none focus:ring-2 focus:ring-[#E8C8AB] disabled:opacity-40"
+                        >
+                          Verificar finalización
+                        </button>
+                      </div>
+
+                      @if (materiales()[o.id_orden]; as verificacion) {
+                        <div class="space-y-2 rounded-xl border border-[#E8D6BF] bg-[#FFF9F2] p-3.5 text-sm">
+                          <p class="font-bold text-nogal">Materiales de la receta</p>
+                          @for (m of verificacion.materiales; track m.nombre) {
+                            <p class="text-xs sm:text-sm">
+                              <strong class="text-nogal">{{ m.nombre }}</strong> · Requerido {{ m.cantidad_requerida }} · Disponible {{ m.stock_disponible }} ·
+                              <span [class]="m.suficiente ? 'font-bold text-green-800' : 'font-bold text-red-700'">
+                                {{ m.suficiente ? 'SUFICIENTE' : 'INSUFICIENTE' }}
+                              </span>
+                            </p>
+                          }
+                          @if (verificacion.ya_consumida) {
+                            <p class="text-xs font-semibold text-salvia">Los materiales ya fueron consumidos para esta orden.</p>
+                          }
+                          @if (verificacion.puede_consumir) {
+                            <button
+                              type="button"
+                              [disabled]="ocupado()"
+                              (click)="consumir(o)"
+                              class="rounded-xl bg-red-800 px-3.5 py-2 text-xs font-bold text-white shadow-2xs transition-all duration-200 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-300 disabled:opacity-40 sm:text-sm"
+                            >
+                              Confirmar consumo de materiales
+                            </button>
+                          }
+                        </div>
+                      }
+
+                      @if (finalizaciones()[o.id_orden]; as v) {
+                        <div class="space-y-2 rounded-xl border border-[#E8D6BF] bg-[#FFF9F2] p-3.5 text-sm">
+                          <p>
+                            Consumos completos: <strong>{{ v.consumos_completos ? 'Sí' : 'No' }}</strong> · Lotes existentes: <strong>{{ v.lotes_existentes }}</strong>
+                          </p>
+                          @if (v.observacion) {
+                            <p class="text-xs text-gray-600">{{ v.observacion }}</p>
+                          }
+                          @if (v.puede_finalizar) {
+                            <button
+                              type="button"
+                              [disabled]="ocupado()"
+                              (click)="finalizar(o)"
+                              class="rounded-xl bg-[#718063] px-3.5 py-2 text-xs font-bold text-white shadow-2xs transition-all duration-200 hover:bg-[#5d6b52] focus:outline-none focus:ring-2 focus:ring-salvia/40 disabled:opacity-40 sm:text-sm"
+                            >
+                              Finalizar y crear lote
+                            </button>
+                          }
+                        </div>
+                      }
+                    }
+                  </article>
+                } @empty {
+                  <p class="rounded-xl bg-[#FFF9F2]/60 p-3 text-sm text-gray-600">
+                    Todavía no hay órdenes de fabricación para este pedido.
+                  </p>
+                }
+              </div>
+
+              <!-- ETAPA 2: PROGRAMACIÓN -->
+              <div class="space-y-3.5 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300">
+                <div class="border-b border-[#F3E6D6] pb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-terracota">Paso 2</span>
+                  <h3 class="text-xl font-bold text-nogal">2. Programar recolección</h3>
+                  <p class="mt-1 text-sm text-gray-600">
+                    Define una fecha futura y el punto de recolección acordado con el cliente.
+                  </p>
+                </div>
+
+                <label class="block text-sm font-semibold text-nogal">
+                  Fecha y hora local
+                  <input
+                    type="datetime-local"
+                    class="mt-1.5 block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60 disabled:opacity-50"
+                    [value]="fechaLocal()"
+                    (input)="cambiarFecha($any($event.target).value)"
+                    [disabled]="!puedeProgramar()"
+                  />
+                </label>
+
+                <label class="block text-sm font-semibold text-nogal">
+                  Punto de recolección
+                  <input
+                    type="text"
+                    maxlength="200"
+                    class="mt-1.5 block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60 disabled:opacity-50"
+                    placeholder="Lugar acordado para la recolección"
+                    [value]="punto()"
+                    (input)="cambiarPunto($any($event.target).value)"
+                    [disabled]="!puedeProgramar()"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  [disabled]="ocupado() || !puedeProgramar()"
+                  (click)="programar()"
+                  class="rounded-xl bg-[#A65A2E] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Guardar programación
+                </button>
+
+                @if (p.programada) {
+                  <p class="rounded-xl border border-salvia/30 bg-green-50/70 p-3 text-sm font-medium text-green-900">
+                    Actualmente programado para <strong>{{ p.programada }}</strong> en <strong>{{ p.punto_recoleccion }}</strong>.
+                  </p>
+                }
+              </div>
+
+              <!-- ETAPA 3: LISTO -->
+              <div class="space-y-3.5 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300">
+                <div class="border-b border-[#F3E6D6] pb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-salvia">Paso 3</span>
+                  <h3 class="text-xl font-bold text-nogal">3. Marcar producto listo</h3>
+                  <p class="mt-1 text-sm text-gray-600">
+                    Flask comprueba que todos los detalles tengan inventario terminado suficiente. Si falta un lote, responde con el motivo y no cambia el estado.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  [disabled]="ocupado() || !puedeListo()"
+                  (click)="listo()"
+                  class="rounded-xl bg-[#718063] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5d6b52] focus:outline-none focus:ring-4 focus:ring-salvia/40 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Marcar LISTO
+                </button>
+
+                @if (p.estado === 'LISTO') {
+                  <p class="rounded-xl border border-salvia/30 bg-green-50/70 p-3 text-sm font-bold text-green-900">
+                    Pedido LISTO para recoger.
+                  </p>
+                }
+              </div>
+
+              <!-- ETAPA 4: SALDO -->
+              <div class="space-y-3.5 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300">
+                <div class="border-b border-[#F3E6D6] pb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-terracota">Paso 4</span>
+                  <h3 class="text-xl font-bold text-nogal">4. Liquidación simulada</h3>
+                </div>
+
+                <p class="text-sm text-nogal">
+                  Saldo registrado: <strong class="text-base text-terracota">{{ dinero(p.saldo_simulado) }}</strong>
+                </p>
+                <p class="text-xs text-gray-600">
+                  No introduce datos bancarios y no cobra dinero real. Se añade un registro de pago simulado en MySQL.
+                </p>
+
+                <button
+                  type="button"
+                  [disabled]="ocupado() || !puedeLiquidar()"
+                  (click)="liquidar()"
+                  class="rounded-xl bg-[#A65A2E] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-terracota focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Registrar liquidación simulada
+                </button>
+              </div>
+
+              <!-- ETAPA 5: ENTREGA -->
+              <div class="space-y-3.5 rounded-2xl border border-[#E8D6BF] bg-white p-6 shadow-sm transition-all duration-300">
+                <div class="border-b border-[#F3E6D6] pb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-nogal">Paso 5</span>
+                  <h3 class="text-xl font-bold text-nogal">5. Confirmar entrega</h3>
+                  <p class="mt-1 text-sm text-gray-600">
+                    Solo disponible con pedido LISTO, entrega PROGRAMADA y saldo cero. La confirmación registra una salida real de inventario.
+                  </p>
+                </div>
+
+                <label class="block text-sm font-semibold text-nogal">
+                  Nombre del receptor
+                  <input
+                    type="text"
+                    maxlength="120"
+                    class="mt-1.5 block w-full rounded-xl border border-[#E8D6BF] bg-[#FFF9F2]/60 p-3 text-sm text-nogal placeholder-gray-400 transition-all duration-200 focus:border-terracota focus:bg-white focus:ring-4 focus:ring-[#E8C8AB]/60"
+                    placeholder="Nombre de quien recibe"
+                    [value]="receptor()"
+                    (input)="cambiarReceptor($any($event.target).value)"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  [disabled]="ocupado() || !puedeEntregar()"
+                  (click)="entregar()"
+                  class="rounded-xl bg-[#4B2E1F] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-nogal focus:outline-none focus:ring-4 focus:ring-[#E8C8AB] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Confirmar entrega y descontar inventario
+                </button>
+
+                @if (!puedeEntregar()) {
+                  <p class="text-xs text-gray-600">
+                    Faltan requisitos, nombre del receptor o alguna condición todavía no está cumplida.
+                  </p>
+                }
+              </div>
+            }
+          } @else {
+            <div class="rounded-2xl border border-[#E8D6BF] bg-white p-8 text-center text-sm text-gray-600 shadow-sm">
+              Selecciona un pedido de la lista para gestionar sus operaciones.
+            </div>
+          }
+        </section>
+      </div>
+    </main>
+  </div>
 </div>

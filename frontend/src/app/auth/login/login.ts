@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../../core/services/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login', standalone: true,
@@ -34,6 +35,7 @@ export class Login {
       next: respuesta => {
         this.cargando.set(false);
         this.password = '';
+        this.alertaTerracota('¡Bienvenido!', 'Sesión iniciada correctamente.', 'success');
         if (respuesta.usuario.rol === 'ADMIN') {
           this.router.navigateByUrl('/admin/dashboard');
           return;
@@ -52,4 +54,20 @@ export class Login {
       }
     });
   }
+
+  private alertaTerracota(titulo: string, texto: string, icono: 'success' | 'warning' | 'info' | 'error' = 'success'): void {
+  Swal.fire({
+    title: titulo,
+    text: texto,
+    icon: icono,
+    timer: 1800,
+    showConfirmButton: false,
+    background: '#b85d3b', // Tono terracota
+    color: '#ffffff',
+    customClass: {
+      popup: 'rounded-[1.75rem_0.75rem_1.75rem_0.75rem] shadow-2xl border border-white/20',
+    },
+  });
+}
+  
 }

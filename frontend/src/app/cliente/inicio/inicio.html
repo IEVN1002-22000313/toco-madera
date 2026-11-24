@@ -1,74 +1,49 @@
 <!-- =====================================================
      TOCO MADERA - PÁGINA PRINCIPAL DEL CLIENTE
-
-     Archivo:
-     frontend/src/app/cliente/inicio/inicio.html
-
-     ETAPA 3.18 - NAVEGACIÓN Y AUTENTICACIÓN
-
-     CONTENIDO:
-     1. Menú dinámico según sesión y rol.
-     2. Presentación de la empresa.
-     3. Navegación al catálogo.
-     4. Catálogo conectado a MySQL.
-     5. Acceso al carrito.
-     6. Acceso a historial de pedidos.
-     7. Inicio y cierre de sesión.
-
-     Se conservan los estados del catálogo:
-     - Cargando
-     - Error
-     - Vacío
-     - Productos disponibles
+     Archivo: frontend/src/app/cliente/inicio/inicio.html
+     Diseño UX/UI: Tailwind CSS 4 + Flowbite 4 (Lógica intacta)
 ===================================================== -->
 
-<div class="min-h-screen bg-crema">
+<div class="flex min-h-screen flex-col bg-crema text-nogal selection:bg-salvia selection:text-white">
   <!-- ================================================
-       1. ENCABEZADO Y NAVEGACIÓN
+1. BARRA DE NAVEGACIÓN MODERNA (FLOWBITE)
   ================================================ -->
-
-  <header class="bg-white shadow-sm">
-    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 p-5">
-      <!-- NOMBRE COMERCIAL -->
-      <a routerLink="/" class="inline-flex items-center gap-3 font-brand text-2xl font-bold text-nogal">
-        <img src="/logo-icono.png" alt="" width="48" height="48"
-          class="h-12 w-12 shrink-0 object-contain" />
-        <span>Toco Madera</span>
+  <header class="sticky top-0 z-40 border-b border-nogal/10 bg-white/85 backdrop-blur-lg transition-all duration-300">
+    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8" aria-label="Navegación principal">
+      <!-- LOGO Y NOMBRE COMERCIAL -->
+      <a
+        routerLink="/"
+        class="group inline-flex items-center gap-3 font-brand text-xl font-bold tracking-tight text-nogal transition-transform duration-200 hover:scale-[1.01] sm:text-2xl"
+      >
+        <span class="flex h-11 w-11 items-center justify-center rounded-2xl rounded-tr-sm bg-salvia/15 p-1.5 ring-1 ring-salvia/30 transition-all duration-300 group-hover:rounded-2xl group-hover:bg-salvia/25">
+          <img
+            src="/logo-icono.png"
+            alt=""
+            width="48"
+            height="48"
+            class="h-full w-full object-contain transition-transform duration-300 group-hover:rotate-3"
+          />
+        </span>
+        <span class="flex flex-col">
+          <span class="leading-none">Toco Madera</span>
+          <span class="mt-1 inline-flex items-center gap-1 text-[10px] font-bold tracking-widest text-salvia uppercase">
+            <span class="h-1.5 w-1.5 rounded-full bg-salvia"></span>
+            Grabado artesanal
+          </span>
+        </span>
       </a>
 
-      <!-- ============================================
-           MENÚ DINÁMICO
-      ============================================ -->
-
-      <div class="flex flex-wrap items-center gap-3">
-        <!-- ----------------------------------------
-             PRODUCTOS
-        ----------------------------------------- -->
-
-        <button
-          type="button"
-          (click)="irAlCatalogo()"
-          class="rounded-lg px-4 py-2 text-sm font-semibold text-nogal transition-colors hover:bg-crema"
-        >
-          Productos
-        </button>
-
-        <!-- ----------------------------------------
-             CARRITO DE COMPRAS
-
-             Siempre disponible, incluso cuando
-             todavía no existe una sesión.
-        ----------------------------------------- -->
-
+      <!-- ACCIONES DERECHA (CARRITO + TOGGLE FLOWBITE) -->
+      <div class="flex items-center gap-2.5 lg:order-2">
         <a
           routerLink="/cliente/carrito"
-          class="inline-flex items-center gap-2 rounded-lg bg-terracota px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-nogal"
+          class="group relative inline-flex items-center gap-2 rounded-full bg-terracota px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-nogal hover:shadow-md focus:ring-4 focus:ring-terracota/30 focus:outline-none"
           aria-label="Abrir carrito de compras"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="19"
-            height="19"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -76,308 +51,562 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             aria-hidden="true"
+            class="transition-transform duration-300 group-hover:-rotate-6"
           >
             <circle cx="9" cy="21" r="1"></circle>
             <circle cx="20" cy="21" r="1"></circle>
-            <path
-              d="M1 1h4l2.68 13.39a2 2 0 0 0 2
-                 1.61h9.72a2 2 0 0 0
-                 2-1.61L23 6H6"
-            ></path>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
           </svg>
+          <span>Mi carrito</span>
 
-          Mi carrito
-
-          <!-- Contador de artículos -->
           @if (carrito.cantidadTotal() > 0) {
-            <span class="rounded-full bg-white px-2 py-0.5 text-xs font-bold text-terracota">
+            <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-xs font-extrabold text-terracota shadow-2xs transition-transform duration-200 group-hover:scale-110">
               {{ carrito.cantidadTotal() }}
             </span>
           }
         </a>
 
-        <!-- ========================================
-             USUARIO CON SESIÓN ACTIVA
-        ======================================== -->
+        <button
+          data-collapse-toggle="navbar-toco-madera"
+          type="button"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-nogal/15 bg-white text-nogal transition-colors hover:bg-salvia/10 hover:text-salvia focus:ring-2 focus:ring-salvia/40 focus:outline-none lg:hidden"
+          aria-controls="navbar-toco-madera"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Abrir menú principal</span>
+          <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+          </svg>
+        </button>
+      </div>
 
-        @if (auth.autenticado()) {
-          <!-- Nombre del usuario -->
-          <span class="max-w-44 truncate text-sm font-semibold text-nogal">
-            Hola, {{ auth.usuario()?.nombre }}
-          </span>
-
-          <!-- ------------------------------------
-               OPCIONES DEL CLIENTE
-          ------------------------------------- -->
-
-          @if (auth.esCliente()) {
-            <a routerLink="/cliente/mi-cuenta" class="rounded-lg border border-terracota px-4 py-3 text-sm font-semibold text-terracota transition-colors hover:bg-crema">Mi cuenta</a>
-            <a
-              routerLink="/cliente/mis-pedidos"
-              class="rounded-lg border border-terracota px-4 py-3 text-sm font-semibold text-terracota transition-colors hover:bg-crema"
-            >
-              Mis pedidos
-            </a>
-          }
-
-          <!-- ------------------------------------
-               OPCIONES DEL ADMINISTRADOR
-          ------------------------------------- -->
-
-          @if (auth.esAdministrador()) {
-            <a
-              routerLink="/admin/dashboard"
-              class="rounded-lg border border-terracota px-4 py-3 text-sm font-semibold text-terracota transition-colors hover:bg-crema"
-            >
-              Panel administrativo
-            </a>
-          }
-
-          <!-- ------------------------------------
-               CERRAR SESIÓN
-          ------------------------------------- -->
-
+      <!-- MENÚ DINÁMICO -->
+      <div class="hidden w-full items-center lg:order-1 lg:flex lg:w-auto" id="navbar-toco-madera">
+        <div class="mt-3 flex w-full flex-col gap-1.5 rounded-2xl border border-nogal/10 bg-white p-3 shadow-sm lg:mt-0 lg:w-auto lg:flex-row lg:items-center lg:gap-1 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
           <button
             type="button"
-            (click)="cerrarSesionCliente()"
-            class="rounded-lg border border-red-300 px-4 py-3 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50"
+            (click)="irAlCatalogo()"
+            class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-left text-sm font-semibold text-nogal transition-all duration-200 hover:bg-salvia/15 hover:text-nogal"
           >
-            Cerrar sesión
+            <svg class="h-4 w-4 text-salvia" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+            Productos
           </button>
-        } @else {
-          <!-- ======================================
-               USUARIO SIN SESIÓN
-          ====================================== -->
 
           <a
-            routerLink="/login"
-            class="rounded-lg border border-terracota px-4 py-3 text-sm font-semibold text-terracota transition-colors hover:bg-crema"
+            href="#nosotros"
+            class="inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-left text-sm font-semibold text-nogal transition-all duration-200 hover:bg-salvia/15 hover:text-nogal"
           >
-            Iniciar sesión
+            Nosotros
           </a>
 
-          <a
-            routerLink="/registro"
-            class="rounded-lg bg-nogal px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-terracota"
-          >
-            Crear cuenta
-          </a>
-        }
+          @if (auth.autenticado()) {
+            <span class="hidden h-5 w-px bg-nogal/15 lg:mx-2 lg:inline-block" aria-hidden="true"></span>
+
+            <span class="inline-flex items-center gap-2 rounded-full bg-salvia/15 px-3 py-1.5 text-xs font-bold text-nogal">
+              <span class="flex h-5 w-5 items-center justify-center rounded-full bg-salvia text-[11px] text-white">
+                {{ auth.usuario()?.nombre?.charAt(0)?.toUpperCase() || 'U' }}
+              </span>
+              <span class="max-w-36 truncate">Hola, {{ auth.usuario()?.nombre }}</span>
+            </span>
+
+            @if (auth.esCliente()) {
+              <a
+                routerLink="/cliente/mi-cuenta"
+                class="rounded-xl px-3.5 py-2 text-sm font-semibold text-nogal transition-colors duration-200 hover:bg-crema hover:text-terracota"
+              >
+                Mi cuenta
+              </a>
+              <a
+                routerLink="/cliente/mis-pedidos"
+                class="rounded-xl px-3.5 py-2 text-sm font-semibold text-nogal transition-colors duration-200 hover:bg-crema hover:text-terracota"
+              >
+                Mis pedidos
+              </a>
+            }
+
+            @if (auth.esAdministrador()) {
+              <a
+                routerLink="/admin/dashboard"
+                class="rounded-xl border border-salvia/40 bg-salvia/10 px-3.5 py-2 text-sm font-semibold text-nogal transition-all duration-200 hover:bg-salvia hover:text-white"
+              >
+                Panel administrativo
+              </a>
+            }
+
+            <button
+              type="button"
+              (click)="cerrarSesionCliente()"
+              class="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50/60 px-3.5 py-2 text-sm font-semibold text-red-700 transition-all duration-200 hover:border-red-300 hover:bg-red-100"
+            >
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Cerrar sesión
+            </button>
+          } @else {
+            <span class="hidden h-5 w-px bg-nogal/15 lg:mx-2 lg:inline-block" aria-hidden="true"></span>
+
+            <a
+              routerLink="/login"
+              class="rounded-xl border border-nogal/15 bg-white px-4 py-2 text-center text-sm font-semibold text-nogal transition-all duration-200 hover:border-salvia hover:bg-salvia/10"
+            >
+              Iniciar sesión
+            </a>
+
+            <a
+              routerLink="/registro"
+              class="rounded-xl bg-nogal px-4 py-2 text-center text-sm font-semibold text-white shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:bg-salvia"
+            >
+              Crear cuenta
+            </a>
+          }
+        </div>
       </div>
     </nav>
   </header>
 
   <!-- ================================================
-       2. CONTENIDO PRINCIPAL
+2. CONTENIDO PRINCIPAL
   ================================================ -->
-
-  <main class="mx-auto max-w-7xl px-6 py-16">
+  <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
     <!-- ============================================
-         PRESENTACIÓN DE LA EMPRESA
+         HERO CON PROFUNDIDAD, CARRUSEL FLOWBITE Y EFECTO PARALLAX
     ============================================ -->
+    <section class="relative mb-24">
+      <!-- Contenedor principal con textura cálida, profundidad y sombras -->
+      <div class="group/hero relative overflow-hidden rounded-[2.75rem] border border-nogal/15 bg-linear-to-br from-white via-crema/95 to-salvia/15 p-6 shadow-[0_24px_60px_-15px_rgba(62,39,35,0.14)] sm:p-10 lg:p-14">
+        <!-- Esferas difuminadas de profundidad (Parallax visual al interactuar con el hero) -->
+        <div
+          class="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-salvia/20 blur-3xl transition-transform duration-1000 ease-out group-hover/hero:-translate-x-6 group-hover/hero:translate-y-4"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="pointer-events-none absolute -bottom-28 -left-20 h-80 w-80 rounded-full bg-terracota/15 blur-3xl transition-transform duration-1000 ease-out group-hover/hero:translate-x-6 group-hover/hero:-translate-y-4"
+          aria-hidden="true"
+        ></div>
 
-    <section class="mb-16 text-center">
-      <!-- Identidad visual principal: logo a la izquierda, nombre a la derecha -->
-      <div class="mb-5 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-5">
-        <img src="/logo-icono.png" alt="" width="112" height="112"
-          class="h-24 w-24 shrink-0 object-contain sm:h-28 sm:w-28" />
-        <h1 class="font-brand text-4xl font-bold text-nogal md:text-5xl">
-          {{ nombreEmpresa }}
-        </h1>
+        <div class="relative z-10 grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+          <!-- COLUMNA IZQUIERDA: MENSAJE Y ACCIONES -->
+          <div class="space-y-6 lg:col-span-6">
+            <div class="inline-flex items-center gap-2 rounded-full border border-salvia/35 bg-white/85 px-4 py-1.5 text-xs font-bold tracking-wider text-nogal uppercase shadow-2xs backdrop-blur-xs">
+              <span class="relative flex h-2 w-2">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-salvia opacity-75"></span>
+                <span class="relative inline-flex h-2 w-2 rounded-full bg-salvia"></span>
+              </span>
+              León, Guanajuato · Taller de Madera
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="relative shrink-0">
+                <div class="absolute -inset-1 rounded-2xl bg-linear-to-tr from-terracota/30 to-salvia/30 blur-xs"></div>
+                <img
+                  src="/logo-icono.png"
+                  alt=""
+                  width="72"
+                  height="72"
+                  class="relative h-14 w-14 rounded-2xl bg-white p-2 object-contain shadow-sm ring-1 ring-nogal/10 sm:h-16 sm:w-16"
+                />
+              </div>
+              <h1 class="font-brand text-4xl font-bold tracking-tight text-nogal sm:text-5xl lg:text-6xl">
+                {{ nombreEmpresa }}
+              </h1>
+            </div>
+
+            <p class="font-brand text-xl font-semibold text-terracota sm:text-2xl">
+              {{ eslogan }}
+            </p>
+
+            <p class="max-w-xl text-base leading-relaxed text-nogal/80 sm:text-lg">
+              Fabricamos artículos de madera personalizados mediante pirograbado artesanal. Nombres, fechas y dedicatorias que transforman cada pieza en un detalle único.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                type="button"
+                (click)="irAlCatalogo()"
+                class="group inline-flex items-center gap-2.5 rounded-2xl rounded-tr-md bg-terracota px-7 py-4 text-sm font-bold text-white shadow-lg shadow-terracota/25 transition-all duration-300 hover:-translate-y-1 hover:rounded-2xl hover:bg-nogal hover:shadow-xl focus:ring-4 focus:ring-terracota/30 focus:outline-none sm:text-base"
+              >
+                <span>Explorar catálogo</span>
+                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </button>
+
+              <a
+                routerLink="/cliente/carrito"
+                class="inline-flex items-center gap-2 rounded-2xl rounded-bl-md border-2 border-salvia bg-white/80 px-6 py-3.5 text-sm font-bold text-nogal shadow-xs backdrop-blur-xs transition-all duration-300 hover:-translate-y-1 hover:rounded-2xl hover:bg-salvia hover:text-white hover:shadow-md focus:ring-4 focus:ring-salvia/25 focus:outline-none sm:text-base"
+              >
+                Ir a comprar
+              </a>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: CARRUSEL FLOWBITE CON SOMBRAS Y CAPAS PARALLAX -->
+          <div class="relative lg:col-span-6">
+            <!-- Marco trasero rotado para dar profundidad 3D -->
+            <div
+              class="pointer-events-none absolute -inset-2 rotate-2 rounded-[2.5rem_1rem_2.5rem_1rem] bg-linear-to-tr from-salvia/30 via-terracota/20 to-salvia/25 shadow-lg transition-transform duration-700 ease-out group-hover/hero:rotate-3 group-hover/hero:scale-[1.02]"
+              aria-hidden="true"
+            ></div>
+
+            @if (productos().length > 0) {
+              <!-- CARRUSEL INTERACTIVO FLOWBITE -->
+              <div
+                id="hero-carousel-toco-madera"
+                class="relative w-full overflow-hidden rounded-[2.25rem_0.85rem_2.25rem_0.85rem] border-4 border-white bg-nogal shadow-[0_22px_50px_-12px_rgba(45,30,22,0.45)]"
+                data-carousel="slide"
+              >
+                <!-- Contenedor de slides -->
+                <div class="relative h-72 overflow-hidden sm:h-88 lg:h-96">
+                  @for (prod of productos(); track prod.id_producto; let idx = $index) {
+                    <div
+                      [class]="idx === 0 ? 'duration-700 ease-in-out' : 'hidden duration-700 ease-in-out'"
+                      [attr.data-carousel-item]="idx === 0 ? 'active' : ''"
+                    >
+                      @if (imagenProducto(prod.nombre, 'ambiente'); as fotoCarrusel) {
+                        <img
+                          [src]="fotoCarrusel"
+                          [alt]="prod.nombre"
+                          class="absolute inset-0 h-full w-full scale-105 object-cover transition-transform duration-1000 ease-out hover:scale-110"
+                        />
+                      } @else {
+                        <div class="flex h-full w-full items-center justify-center bg-linear-to-br from-nogal to-terracota p-8 text-center">
+                          <span class="font-brand text-3xl font-bold text-crema">{{ prod.nombre }}</span>
+                        </div>
+                      }
+
+                      <!-- Degradado oscuro inferior para contraste legible -->
+                      <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-nogal/90 via-nogal/25 to-transparent"></div>
+
+                      <!-- Etiqueta flotante del producto en el slide -->
+                      <div class="absolute right-5 bottom-12 left-5 flex items-end justify-between gap-4 text-white">
+                        <div>
+                          <span class="inline-block rounded-full bg-salvia/90 px-3 py-0.5 text-[11px] font-bold tracking-wider text-white uppercase shadow-xs">
+                            {{ prod.permite_grabado ? 'Personalizable con grabado' : 'Pieza artesanal' }}
+                          </span>
+                          <h2 class="mt-1.5 font-brand text-xl font-bold drop-shadow-sm sm:text-2xl">
+                            {{ prod.nombre }}
+                          </h2>
+                        </div>
+                        <span class="shrink-0 rounded-xl bg-white/95 px-3.5 py-1.5 text-sm font-extrabold text-terracota shadow-md">
+                          {{ prod.precio_lista | currency: 'MXN' : 'symbol' : '1.2-2' }}
+                        </span>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <!-- Indicadores inferiores Flowbite -->
+                <div class="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 space-x-2">
+                  @for (prod of productos(); track prod.id_producto; let idx = $index) {
+                    <button
+                      type="button"
+                      class="h-2.5 w-2.5 rounded-full bg-white/60 transition-all hover:bg-white aria-[current=true]:w-6 aria-[current=true]:bg-salvia"
+                      [attr.aria-current]="idx === 0 ? 'true' : 'false'"
+                      [attr.aria-label]="'Slide ' + (idx + 1)"
+                      [attr.data-carousel-slide-to]="idx"
+                    ></button>
+                  }
+                </div>
+
+                <!-- Controles Prev / Next Flowbite -->
+                <button
+                  type="button"
+                  class="group absolute top-0 start-0 z-30 flex h-full cursor-pointer items-center justify-center px-3 focus:outline-none"
+                  data-carousel-prev
+                >
+                  <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-nogal shadow-md backdrop-blur-xs transition-all group-hover:scale-110 group-hover:bg-white group-focus:ring-4 group-focus:ring-white/50">
+                    <svg class="h-4 w-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+                    </svg>
+                    <span class="sr-only">Anterior</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  class="group absolute top-0 end-0 z-30 flex h-full cursor-pointer items-center justify-center px-3 focus:outline-none"
+                  data-carousel-next
+                >
+                  <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-nogal shadow-md backdrop-blur-xs transition-all group-hover:scale-110 group-hover:bg-white group-focus:ring-4 group-focus:ring-white/50">
+                    <svg class="h-4 w-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                    </svg>
+                    <span class="sr-only">Siguiente</span>
+                  </span>
+                </button>
+              </div>
+            } @else {
+              <!-- Respaldo visual elegante mientras cargan los productos -->
+              <div class="relative flex h-72 flex-col items-center justify-center overflow-hidden rounded-[2.25rem_0.85rem_2.25rem_0.85rem] border-4 border-white bg-linear-to-br from-crema via-white to-salvia/25 p-8 text-center shadow-2xl sm:h-88 lg:h-96">
+                <span class="rounded-full bg-salvia/20 px-4 py-1 text-xs font-bold text-nogal uppercase">Pirograbado a mano</span>
+                <p class="mt-4 font-brand text-3xl font-bold text-nogal">Madera &amp; Detalle</p>
+                <p class="mt-2 max-w-xs text-sm text-nogal/75">Piezas artesanales de pino y triplay con identidad propia</p>
+              </div>
+            }
+
+            <!-- Tarjeta flotante Parallax superior derecha -->
+            <div class="pointer-events-none absolute -top-4 -right-3 z-30 hidden items-center gap-2.5 rounded-2xl border border-nogal/10 bg-white/95 px-4 py-2.5 shadow-xl backdrop-blur-md transition-transform duration-500 group-hover/hero:-translate-y-1.5 sm:flex">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-salvia text-white">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </span>
+              <div>
+                <p class="text-xs font-extrabold text-nogal">100% Personalizable</p>
+                <p class="text-[11px] text-nogal/65">Nombres y dedicatorias</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <p class="mb-6 text-2xl text-terracota">
-        {{ eslogan }}
-      </p>
+      <!-- ============================================
+           TARJETAS DE VALOR AMPLIADAS Y MÁS VISUALES
+      ============================================ -->
+      <div class="mx-auto mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Tarjeta 1: Fabricación propia -->
+        <div class="group relative overflow-hidden rounded-[1.75rem_0.65rem_1.75rem_0.65rem] border border-nogal/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-salvia/50 hover:shadow-xl">
+          <div class="absolute -right-6 -bottom-6 h-24 w-24 rounded-full bg-salvia/10 transition-transform duration-500 group-hover:scale-150" aria-hidden="true"></div>
+          <div class="relative flex items-start gap-4">
+            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-salvia/15 text-salvia shadow-2xs ring-1 ring-salvia/25 transition-all duration-300 group-hover:scale-105 group-hover:bg-salvia group-hover:text-white">
+              <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+            </span>
+            <div>
+              <h3 class="font-brand text-lg font-bold text-nogal">Fabricación propia</h3>
+              <p class="mt-1 text-xs leading-relaxed text-nogal/70">
+                Seleccionamos madera de pino y triplay trabajada directamente en nuestro taller.
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <p class="mx-auto max-w-2xl text-lg text-gray-700">
-        Fabricamos artículos de madera personalizados mediante grabado artesanal.
-      </p>
+        <!-- Tarjeta 2: A tu gusto -->
+        <div class="group relative overflow-hidden rounded-[1.75rem_0.65rem_1.75rem_0.65rem] border border-nogal/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-terracota/50 hover:shadow-xl">
+          <div class="absolute -right-6 -bottom-6 h-24 w-24 rounded-full bg-terracota/10 transition-transform duration-500 group-hover:scale-150" aria-hidden="true"></div>
+          <div class="relative flex items-start gap-4">
+            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-terracota/15 text-terracota shadow-2xs ring-1 ring-terracota/25 transition-all duration-300 group-hover:scale-105 group-hover:bg-terracota group-hover:text-white">
+              <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </span>
+            <div>
+              <h3 class="font-brand text-lg font-bold text-nogal">A tu gusto</h3>
+              <p class="mt-1 text-xs leading-relaxed text-nogal/70">
+                Pirograbamos nombres, fechas especiales o frases con dedicatoria personalizada.
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <!-- ======================================
-           BOTONES DE PRESENTACIÓN
-      ====================================== -->
+        <!-- Tarjeta 3: Entrega en León -->
+        <div class="group relative overflow-hidden rounded-[1.75rem_0.65rem_1.75rem_0.65rem] border border-nogal/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-salvia/50 hover:shadow-xl">
+          <div class="absolute -right-6 -bottom-6 h-24 w-24 rounded-full bg-salvia/10 transition-transform duration-500 group-hover:scale-150" aria-hidden="true"></div>
+          <div class="relative flex items-start gap-4">
+            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-salvia/15 text-salvia shadow-2xs ring-1 ring-salvia/25 transition-all duration-300 group-hover:scale-105 group-hover:bg-salvia group-hover:text-white">
+              <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </span>
+            <div>
+              <h3 class="font-brand text-lg font-bold text-nogal">Entrega en León</h3>
+              <p class="mt-1 text-xs leading-relaxed text-nogal/70">
+                Recolección local programada y seguimiento de cada etapa desde nuestra tienda.
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <div class="mt-8 flex flex-wrap justify-center gap-4">
-        <!-- Desplazar directamente al catálogo -->
-        <button
-          type="button"
-          (click)="irAlCatalogo()"
-          class="rounded-lg bg-nogal px-6 py-3 font-semibold text-white transition-colors hover:bg-terracota"
-        >
-          Explorar productos
-        </button>
-
-        <!-- Acceso al carrito -->
-        <a
-          routerLink="/cliente/carrito"
-          class="rounded-lg border-2 border-terracota px-6 py-3 font-semibold text-terracota transition-colors hover:bg-white"
-        >
-          Ir a comprar
-        </a>
+        <!-- Tarjeta 4: Acabado artesanal -->
+        <div class="group relative overflow-hidden rounded-[1.75rem_0.65rem_1.75rem_0.65rem] border border-nogal/10 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-terracota/50 hover:shadow-xl">
+          <div class="absolute -right-6 -bottom-6 h-24 w-24 rounded-full bg-terracota/10 transition-transform duration-500 group-hover:scale-150" aria-hidden="true"></div>
+          <div class="relative flex items-start gap-4">
+            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-terracota/15 text-terracota shadow-2xs ring-1 ring-terracota/25 transition-all duration-300 group-hover:scale-105 group-hover:bg-terracota group-hover:text-white">
+              <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+            </span>
+            <div>
+              <h3 class="font-brand text-lg font-bold text-nogal">Acabado artesanal</h3>
+              <p class="mt-1 text-xs leading-relaxed text-nogal/70">
+                Lijado fino, sellado protector y detalle manual para que cada pieza perdure.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ================================================
-         3. CATÁLOGO DE PRODUCTOS
+3. CATÁLOGO DE PRODUCTOS
     ================================================ -->
+    <section id="catalogo" class="scroll-mt-24">
+      <div class="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-salvia/15 px-3 py-1 text-xs font-bold tracking-wider text-nogal uppercase">
+            <span class="h-2 w-2 rounded-full bg-salvia"></span>
+            Catálogo en vivo
+          </span>
+          <h2 class="mt-2 font-brand text-3xl font-bold text-nogal sm:text-4xl">Nuestros productos</h2>
+          <p class="mt-1.5 text-sm text-nogal/75 sm:text-base">
+            Conoce nuestros artículos artesanales y personalízalos a tu estilo.
+          </p>
+        </div>
 
-    <section id="catalogo" class="scroll-mt-8">
-      <!-- ======================================
-           ENCABEZADO DEL CATÁLOGO
-      ====================================== -->
-
-      <div class="mb-8">
-        <h2 class="text-3xl font-bold text-nogal">Nuestros productos</h2>
-
-        <p class="mt-2 text-gray-600">
-          Conoce nuestros artículos artesanales y personalízalos a tu estilo.
-        </p>
+        @if (!cargandoProductos() && !errorProductos() && productos().length > 0) {
+          <span class="inline-flex w-fit items-center gap-2 rounded-full border border-salvia/30 bg-white px-4 py-1.5 text-xs font-bold text-nogal shadow-2xs">
+            <span class="h-2 w-2 rounded-full bg-salvia"></span>
+            {{ productos().length }} piezas disponibles
+          </span>
+        }
       </div>
 
-      <!-- ======================================
-           ESTADO 1: CARGANDO PRODUCTOS
-      ====================================== -->
-
+      <!-- ESTADO 1: CARGANDO -->
       @if (cargandoProductos()) {
-        <div role="status" class="rounded-xl bg-white p-10 text-center shadow-sm">
-          <p class="text-lg font-semibold text-nogal">Cargando productos...</p>
+        <div role="status" class="space-y-6">
+          <div class="flex items-center justify-center gap-3 rounded-2xl border border-salvia/20 bg-white p-5 shadow-2xs">
+            <svg class="h-5 w-5 animate-spin text-salvia" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            <p class="text-sm font-bold text-nogal">Cargando productos...</p>
+          </div>
 
-          <p class="mt-2 text-sm text-gray-500">Estamos consultando nuestro catálogo.</p>
+          <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+            @for (skeleton of [1, 2, 3]; track skeleton) {
+              <div class="animate-pulse rounded-[2rem_0.85rem_2rem_0.85rem] border border-nogal/10 bg-white p-5">
+                <div class="mb-4 h-52 w-full rounded-[1.5rem_0.5rem_1.5rem_0.5rem] bg-crema"></div>
+                <div class="mb-2 h-3 w-24 rounded-full bg-salvia/20"></div>
+                <div class="mb-3 h-6 w-2/3 rounded-lg bg-crema"></div>
+                <div class="mb-5 h-10 w-full rounded-lg bg-crema/70"></div>
+                <div class="h-11 w-full rounded-xl bg-crema"></div>
+              </div>
+            }
+          </div>
         </div>
       }
 
-      <!-- ======================================
-           ESTADO 2: ERROR DE CONEXIÓN
-      ====================================== -->
-
+      <!-- ESTADO 2: ERROR -->
       @else if (errorProductos()) {
-        <div role="alert" class="rounded-xl border border-red-200 bg-red-50 p-8 text-center">
-          <h3 class="text-xl font-semibold text-red-700">No pudimos cargar el catálogo</h3>
-
-          <p class="mt-3 text-sm text-red-600">
+        <div role="alert" class="mx-auto max-w-xl rounded-[2rem_0.85rem_2rem_0.85rem] border border-red-200 bg-white p-8 text-center shadow-sm">
+          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-700">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-red-800">No pudimos cargar el catálogo</h3>
+          <p class="mt-2 text-sm text-red-600">
             {{ errorProductos() }}
           </p>
-
-          <!-- Reintentar consulta a Flask -->
           <button
             type="button"
             (click)="cargarProductos()"
-            class="mt-5 rounded-lg bg-terracota px-6 py-3 font-semibold text-white hover:bg-nogal"
+            class="mt-6 inline-flex items-center gap-2 rounded-xl bg-terracota px-6 py-3 text-sm font-bold text-white shadow-xs transition-all duration-200 hover:bg-nogal"
           >
             Intentar nuevamente
           </button>
         </div>
       }
 
-      <!-- ======================================
-           ESTADO 3: CATÁLOGO VACÍO
-      ====================================== -->
-
+      <!-- ESTADO 3: VACÍO -->
       @else if (productos().length === 0) {
-        <div class="rounded-xl bg-white p-10 text-center shadow-sm">
-          <h3 class="text-xl font-semibold text-nogal">No hay productos disponibles</h3>
-
-          <p class="mt-3 text-gray-600">
+        <div class="rounded-[2rem_0.85rem_2rem_0.85rem] border border-nogal/10 bg-white p-12 text-center shadow-xs">
+          <h3 class="font-brand text-2xl font-bold text-nogal">No hay productos disponibles</h3>
+          <p class="mt-2 text-sm text-nogal/70">
             Próximamente tendremos nuevos artículos de madera para ti.
           </p>
         </div>
       }
 
-      <!-- ======================================
-           ESTADO 4: PRODUCTOS DESDE MYSQL
-      ====================================== -->
-
+      <!-- ESTADO 4: PRODUCTOS DISPONIBLES -->
       @else {
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Recorrer productos registrados -->
+        <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           @for (producto of productos(); track producto.id_producto) {
             <article
-              class="flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition-shadow duration-200 hover:shadow-lg"
+              class="group flex flex-col overflow-hidden rounded-[2rem_0.85rem_2rem_0.85rem] border border-nogal/10 bg-white shadow-xs transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-salvia/50 hover:shadow-xl"
             >
-              <!-- Fotografía ambientada del producto, alojada en frontend/public/productos -->
-              @if (imagenProducto(producto.nombre, 'ambiente'); as foto) {
-                <img
-                  [src]="foto"
-                  [alt]="'Fotografía demostrativa artesanal de ' + producto.nombre"
-                  class="h-56 w-full bg-[#F9E9D5] object-cover"
-                  loading="lazy"
-                  width="560"
-                  height="400"
-                />
-              } @else {
-                <!-- Nombre visible si el producto no tiene fotografía asignada -->
-                <div class="flex h-56 items-center justify-center bg-[#F9E9D5] px-6 text-center">
-                  <span class="font-brand text-xl font-semibold text-nogal">
-                    {{ producto.nombre }}
+              <!-- MARCO DE FOTOGRAFÍA IRREGULAR ORGÁNICO -->
+              <div class="relative p-3 pb-0">
+                <div class="relative h-56 w-full overflow-hidden rounded-[1.5rem_0.5rem_1.5rem_0.5rem] bg-crema">
+                  @if (imagenProducto(producto.nombre, 'ambiente'); as foto) {
+                    <img
+                      [src]="foto"
+                      [alt]="'Fotografía demostrativa artesanal de ' + producto.nombre"
+                      class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                      loading="lazy"
+                      width="560"
+                      height="400"
+                    />
+                  } @else {
+                    <div class="flex h-full items-center justify-center bg-crema px-6 text-center">
+                      <span class="font-brand text-xl font-semibold text-nogal">
+                        {{ producto.nombre }}
+                      </span>
+                    </div>
+                  }
+
+                  <!-- BADGE SKU -->
+                  <span class="absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-bold tracking-wider text-nogal uppercase shadow-2xs backdrop-blur-xs">
+                    {{ producto.sku }}
                   </span>
+
+                  <!-- BADGE GRABADO CON SALVIA -->
+                  @if (producto.permite_grabado) {
+                    <span class="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-salvia px-3 py-1 text-[11px] font-bold text-white shadow-2xs">
+                      <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      </svg>
+                      Grabable
+                    </span>
+                  }
                 </div>
-              }
+              </div>
 
-              <!-- ==================================
-                   INFORMACIÓN DEL PRODUCTO
-              ================================== -->
-
-              <div class="flex flex-1 flex-col p-6">
-                <!-- SKU -->
-                <p class="mb-2 text-xs uppercase tracking-wide text-gray-500">
-                  Código: {{ producto.sku }}
-                </p>
-
-                <!-- Nombre -->
-                <h3 class="mb-3 text-xl font-semibold text-nogal">
+              <!-- CUERPO DE LA TARJETA -->
+              <div class="flex flex-1 flex-col p-6 pt-5">
+                <h3 class="mb-2 font-brand text-xl font-bold text-nogal transition-colors duration-200 group-hover:text-terracota">
                   {{ producto.nombre }}
                 </h3>
 
-                <!-- Descripción -->
-                <p class="mb-5 min-h-12 text-sm text-gray-600">
+                <p class="mb-4 min-h-10 text-sm leading-relaxed text-nogal/75">
                   {{ producto.descripcion || 'Artículo artesanal de madera.' }}
                 </p>
 
-                <!-- Precio de catálogo -->
-                <p class="mb-4 text-2xl font-bold text-terracota">
+                <p class="mb-4 text-2xl font-extrabold tracking-tight text-terracota">
                   {{ producto.precio_lista | currency: 'MXN' : 'symbol' : '1.2-2' }}
                 </p>
 
-                <!-- ==================================
-                     PERSONALIZACIÓN
-                ================================== -->
-
+                <!-- PERSONALIZACIÓN -->
                 @if (producto.permite_grabado) {
-                  <div class="rounded-md bg-crema px-3 py-2">
-                    <p class="text-sm text-nogal">Personalización con grabado disponible</p>
-
-                    <p class="mt-1 text-xs text-gray-600">
-                      Hasta
-                      {{ producto.max_caracteres_grabado }}
-                      caracteres.
+                  <div class="rounded-2xl rounded-tl-xs border border-salvia/30 bg-salvia/10 px-3.5 py-2.5">
+                    <p class="flex items-center gap-1.5 text-xs font-bold text-nogal">
+                      <span class="h-2 w-2 rounded-full bg-salvia"></span>
+                      Personalización con grabado disponible
+                    </p>
+                    <p class="mt-1 pl-3.5 text-xs text-nogal/70">
+                      Hasta {{ producto.max_caracteres_grabado }} caracteres.
                     </p>
                   </div>
                 } @else {
-                  <div class="rounded-md bg-gray-100 px-3 py-2">
-                    <p class="text-sm text-gray-600">Producto sin grabado personalizado.</p>
+                  <div class="rounded-2xl rounded-tl-xs border border-nogal/10 bg-crema/50 px-3.5 py-2.5">
+                    <p class="text-xs font-medium text-nogal/65">Producto sin grabado personalizado.</p>
                   </div>
                 }
 
-                <!-- ==================================
-                     ACCIÓN COMERCIAL
-                ================================== -->
-
+                <!-- BOTÓN DE ACCIÓN -->
                 <div class="mt-auto pt-6">
-                  <!--
-                    Abre la pantalla de carrito,
-                    donde se selecciona el producto,
-                    cantidad y grabado.
-
-                    Todavía no agrega automáticamente
-                    este artículo específico.
-                  -->
-
                   <a
                     routerLink="/cliente/carrito"
-                    class="flex w-full items-center justify-center rounded-lg bg-terracota px-5 py-3 font-semibold text-white transition-colors hover:bg-nogal"
+                    class="flex w-full items-center justify-center gap-2 rounded-xl bg-terracota px-5 py-3 text-sm font-bold text-white shadow-xs transition-all duration-300 hover:bg-salvia hover:shadow-md focus:ring-4 focus:ring-salvia/30 focus:outline-none"
                   >
-                    {{ producto.permite_grabado ? 'Comprar / Personalizar' : 'Comprar producto' }}
+                    <span>{{ producto.permite_grabado ? 'Comprar / Personalizar' : 'Comprar producto' }}</span>
+                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                   </a>
                 </div>
               </div>
@@ -386,5 +615,167 @@
         </div>
       }
     </section>
+
+    <!-- ================================================
+4. SECCIÓN NOSOTROS (INSPIRADA EN PRESENTACIÓN OFICIAL)
+    ================================================ -->
+    <section id="nosotros" class="mt-24 scroll-mt-24">
+      <div class="overflow-hidden rounded-[2.75rem] border border-nogal/15 bg-white shadow-[0_20px_50px_-15px_rgba(62,39,35,0.12)]">
+        <div class="grid lg:grid-cols-12">
+          <!-- COLUMNA IZQUIERDA: ¿QUÉ ES TOCO MADERA? (TONO ARENA CÁLIDO) -->
+          <div class="relative flex flex-col justify-between bg-[#e5d5c3] p-8 sm:p-12 lg:col-span-5 lg:p-14">
+            <!-- Pestañas decorativas redondeadas estilo separador de carpeta -->
+            <div class="pointer-events-none absolute top-14 -right-5 hidden h-28 w-10 rounded-r-3xl bg-[#e5d5c3] lg:block" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute top-40 -right-5 hidden h-28 w-10 rounded-r-3xl bg-[#ede2d5] lg:block" aria-hidden="true"></div>
+
+            <div>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-nogal/10 px-3.5 py-1 text-xs font-bold tracking-wider text-nogal uppercase">
+                Nuestra esencia
+              </span>
+
+              <h2 class="mt-4 font-brand text-3xl leading-tight font-extrabold text-[#2b1a10] sm:text-4xl lg:text-[2.65rem]">
+                ¿Qué es Toco Madera?
+              </h2>
+
+              <p class="mt-5 text-base leading-relaxed font-medium text-[#2b1a10]/85 sm:text-lg">
+                Microempresa leonesa de manufactura artesanal y comercio electrónico.
+              </p>
+            </div>
+
+            <!-- Distintivo inferior: Regalos de Madera -->
+            <div class="mt-10 flex items-center gap-4 rounded-2xl border border-nogal/10 bg-white/60 p-4 backdrop-blur-xs transition-transform duration-300 hover:scale-[1.02]">
+              <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-terracota/20 text-terracota shadow-inner">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                </svg>
+              </span>
+              <div>
+                <p class="font-brand text-lg font-bold text-[#2b1a10]">Regalos de Madera</p>
+                <p class="text-xs text-[#2b1a10]/70">Detalles únicos hechos en León, Gto.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: ¿QUÉ HACEMOS? -->
+          <div class="flex flex-col justify-center bg-crema/60 p-8 sm:p-12 lg:col-span-7 lg:p-14">
+            <h3 class="font-brand text-2xl font-bold text-nogal sm:text-3xl">
+              ¿Qué hacemos?
+            </h3>
+
+            <div class="mt-7 space-y-6">
+              <!-- BLOQUE 1: PIROGRABADO ARTESANAL (VERDE SALVIA) -->
+              <div class="group flex flex-col items-center gap-5 sm:flex-row">
+                <div class="flex-1 rounded-3xl bg-salvia p-6 text-center text-white shadow-md transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg sm:p-7 sm:text-left">
+                  <p class="text-sm leading-relaxed font-medium sm:text-base">
+                    Transformamos madera de pino y triplay en piezas funcionales con nombres, fechas o dedicatorias mediante pirograbado artesanal.
+                  </p>
+                </div>
+
+                <!-- Icono Pirograbador -->
+                <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-nogal/10 bg-white p-4 text-nogal shadow-sm transition-transform duration-300 group-hover:rotate-6">
+                  <svg class="h-12 w-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M35 9l4 4" />
+                    <path d="M27 13l8 8-11 11-8-8 11-11z" />
+                    <path d="M32 12l4-4" />
+                    <path d="M16 24c-4 4-8 6-6 11s7 3 11 0" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- BLOQUE 2: TALLER + TIENDA DIGITAL PWA (TERRACOTA / NOGAL CÁLIDO) -->
+              <div class="group flex flex-col items-center gap-5 sm:flex-row">
+                <div class="flex-1 rounded-3xl bg-terracota p-6 text-center text-white shadow-md transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg sm:p-7 sm:text-left">
+                  <p class="text-sm leading-relaxed font-medium sm:text-base">
+                    Conectamos nuestro taller físico con nuestra tienda digital que controla desde la compra de materia prima hasta la entrega local en León.
+                  </p>
+                </div>
+
+                <!-- Icono Tienda Digital / PWA -->
+                <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-salvia/25 bg-white p-3.5 text-salvia shadow-sm transition-transform duration-300 group-hover:-rotate-3">
+                  <svg class="h-12 w-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="6" y="8" width="36" height="24" rx="3" />
+                    <line x1="6" y1="14" x2="42" y2="14" />
+                    <circle cx="10" cy="11" r="1" fill="currentColor" />
+                    <circle cx="14" cy="11" r="1" fill="currentColor" />
+                    <rect x="16" y="20" width="12" height="20" rx="2" fill="white" />
+                    <circle cx="33" cy="33" r="4" />
+                    <path d="M33 27v2M33 37v2M27 33h2M37 33h2" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <!-- ================================================
+5. FOOTER DINÁMICO CON ACENTO SALVIA
+  ================================================ -->
+  <footer class="mt-20 border-t-4 border-salvia bg-nogal text-crema">
+    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div class="grid gap-10 md:grid-cols-3">
+        <div class="space-y-3">
+          <a routerLink="/" class="inline-flex items-center gap-3 font-brand text-2xl font-bold text-white">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl rounded-tr-xs bg-salvia p-1.5">
+              <img src="/logo-icono.png" alt="" width="40" height="40" class="h-full w-full object-contain" />
+            </span>
+            <span>Toco Madera</span>
+          </a>
+          <p class="font-brand text-sm italic text-salvia">
+            «Frases que vienen de raíz y se graban en el corazón.»
+          </p>
+          <p class="text-xs leading-relaxed text-crema/75">
+            Artículos de madera artesanales y grabados personalizados en León, Guanajuato, México.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="mb-3 text-xs font-bold tracking-widest text-salvia uppercase">Navegación</h3>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <button type="button" (click)="irAlCatalogo()" class="text-crema/85 transition-colors hover:text-salvia">
+                Catálogo de productos
+              </button>
+            </li>
+            <li>
+              <a href="#nosotros" class="text-crema/85 transition-colors hover:text-salvia">
+                Sobre nosotros
+              </a>
+            </li>
+            <li>
+              <a routerLink="/cliente/carrito" class="text-crema/85 transition-colors hover:text-salvia">
+                Carrito de compras
+              </a>
+            </li>
+            @if (auth.autenticado() && auth.esCliente()) {
+              <li>
+                <a routerLink="/cliente/mis-pedidos" class="text-crema/85 transition-colors hover:text-salvia">
+                  Mis pedidos
+                </a>
+              </li>
+              <li>
+                <a routerLink="/cliente/mi-cuenta" class="text-crema/85 transition-colors hover:text-salvia">
+                  Mi cuenta
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="mb-3 text-xs font-bold tracking-widest text-salvia uppercase">Taller y Entrega</h3>
+          <p class="text-sm text-crema/85">León, Guanajuato, México.</p>
+          <p class="mt-2 text-xs leading-relaxed text-crema/70">
+            Manufactura artesanal en madera de pino y triplay con seguimiento digital de pedidos.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-10 border-t border-crema/10 pt-6 text-center text-xs text-crema/60">
+        © 2026 Toco Madera · Taller de Grabado Artesanal. Todos los derechos reservados.
+      </div>
+    </div>
+  </footer>
 </div>

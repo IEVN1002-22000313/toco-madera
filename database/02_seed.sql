@@ -59,3 +59,4 @@ INSERT INTO cotizaciones_material(id_material,id_proveedor,fecha,presentacion,ca
  (10,NULL,'2026-11-11','Rodillo base',1,65,'ESTIMADA',NULL,'Validar aptitud para alimentos'),
  (11,NULL,'2026-11-11','Acabado alimentario ml',1,1.4,'ESTIMADA',NULL,'Validar ficha tecnica'),
  (12,NULL,'2026-11-11','Pirograbado consumible',1,3,'ESTIMADA',NULL,'Costo equivalente propuesto');
+

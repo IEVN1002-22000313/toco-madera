@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../../core/services/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
@@ -108,6 +109,7 @@ export class Registro {
         this.cargando.set(false);
         this.password = '';
         this.confirmarPassword = '';
+        this.alertaTerracota('¡Cuenta creada!', 'Tu registro se completó con éxito.', 'success');
         this.router.navigate(['/login'], {
           queryParams: { registrado: '1' },
         });
@@ -126,4 +128,18 @@ export class Registro {
       },
     });
   }
+  private alertaTerracota(titulo: string, texto: string, icono: 'success' | 'warning' | 'info' | 'error' = 'success'): void {
+  Swal.fire({
+    title: titulo,
+    text: texto,
+    icon: icono,
+    timer: 1800,
+    showConfirmButton: false,
+    background: '#b85d3b',
+    color: '#ffffff',
+    customClass: {
+      popup: 'rounded-[1.75rem_0.75rem_1.75rem_0.75rem] shadow-2xl border border-white/20',
+    },
+  });
+}
 }
